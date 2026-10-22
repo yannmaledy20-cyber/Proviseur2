@@ -1,0 +1,14 @@
+Ressources 3D de la visite réaliste (Proviseur, version 28)
+
+Textures (tex/), ciel HDR (ciel.hdr) et mobilier (mod/) : Poly Haven, https://polyhaven.com
+  Licence CC0 (domaine public). Textures : terrazzo_tiles, painted_plaster_wall,
+  red_laterite_soil_stones, concrete_pavement, corrugated_iron_02, asphalt_02, wood_floor_worn.
+  Ciel : qwantani_noon_puresky. Modèles : SchoolDesk_01, SchoolChair_01, ceiling_fan,
+  plastic_monobloc_chair_01, painted_wooden_bench.
+
+Personnages (persos/) : fichiers d'exemple du dépôt three.js (https://github.com/mrdoob/three.js,
+  examples/models/gltf). fille.glb = Michelle et anims.glb = Soldier (personnages et animations
+  Adobe Mixamo) ; garcon.glb = avatar Ready Player Me. Utilisation non commerciale dans ce jeu ;
+  à remplacer par des personnages sous licence libre avant toute diffusion commerciale.
+
+Chargeurs (js/) : three.js r128 (GLTFLoader, RGBELoader, SkeletonUtils), licence MIT.
