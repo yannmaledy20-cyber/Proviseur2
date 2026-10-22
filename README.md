@@ -9,7 +9,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Mobilier détaillé** : tables et chaises d'écolier, ventilateurs de plafond qui tournent, bancs en bois peint ; manguiers feuillus, palmiers et collines boisées à l'horizon.
 - **Ville en 3D réaliste** : ciel HDR, asphalte, trottoirs pavés, sol en latérite, façades enduites aux fenêtres vitrées réfléchissantes, voitures et taxis carrossés (peinture métallisée, jantes chromées, phares), passants réalistes animés, clients assis au maquis, arbres d’alignement et palmiers.
 - **Bouton « Graphismes : réalistes / classiques »** dans la visite et dans la ville. Le mode réaliste est activé par défaut sauf en qualité légère. Les détails s'affichent près du joueur et la résolution s'adapte automatiquement à l'appareil.
-- Les ressources 3D (≈ 33 Mo) sont dans `public/assets/` : elles se téléchargent seulement à l'ouverture de la visite réaliste, puis restent en cache. Licences dans `public/assets/LICENCES.txt`.
+- Les ressources 3D (≈ 11 Mo) sont dans `public/assets/` : elles se téléchargent seulement à l'ouverture de la visite réaliste, puis restent en cache. Licences dans `public/assets/LICENCES.txt`.
 
 ## Nouveautés de la version 27
 - **Vie du proviseur** : salaire mensuel sur un compte personnel, révisé à chaque bilan (−15 % à +15 %) selon les résultats et la satisfaction des supérieurs, prime de rendement, train de vie, bonheur (qui donne ou retire un point d’action), prêts bancaires. Onglet « Ma vie ».
@@ -19,7 +19,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Plan libre du campus** : bâtiments en barre, en L ou en U, jusqu’à 4 niveaux, visitables en 3D par l’escalier.
 - **Discipline en 3D** : élèves marqués d’un « ! » (bagarre, téléphone, retard, tenue, sommeil, graffitis, jeux d’argent, cigarette) et sept sanctions possibles, avec leurs conséquences.
 
-Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 4 : les joueurs reçoivent la nouvelle version au prochain chargement.
+Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 5 : les joueurs reçoivent la nouvelle version au prochain chargement.
 
 ## Lancer en local
     node server.js        # puis ouvrir http://localhost:3000

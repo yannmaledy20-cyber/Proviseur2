@@ -534,6 +534,7 @@ label.row>span{flex:1;min-width:0}
 .vie-car{width:46px;height:18px;border-radius:8px 14px 4px 4px;box-shadow:inset 0 -5px 0 rgba(0,0,0,.25),0 0 0 1px var(--line)}
 .choice .btn b{font-weight:600}
 .te-panneau .mu-act{white-space:normal;text-align:left}.te-panneau .mu-act .btn{margin:2px 0}.te-panneau .multi .tbl{font-size:.88rem}
+.v3-real{position:absolute;left:50%;top:64px;transform:translateX(-50%);max-width:min(92vw,640px);padding:8px 14px;border-radius:10px;background:rgba(15,23,42,.82);color:#fef3c7;font-size:.9rem;text-align:center;z-index:5;pointer-events:none}.v3-real.err{background:rgba(127,29,29,.9);color:#fff}
 </style>
 
 <div id="app"></div>
@@ -3355,8 +3356,8 @@ function initVisite(ov){
   else if(u.type==='prof'&&u.id!=null)A['copies-prof']({id:String(u.id)});else toast(`${u.nom} · ${u.sous}`);
  }
  /* --- Boucle --- */
- fxOmbres(scene);fxFusion(scene,THREE);POST=fxPost(renderer,scene,cam,W(),H(),{});V3.rendu=()=>{renderer.shadowMap.needsUpdate=true;rendu();};V3.gl=renderer.getContext();
- if(REALV)realVisite({T,scene,renderer,cam,persons,tn,FXV,toast,mats,matsP,XE});
+ fxOmbres(scene);fxFusion(scene,THREE);POST=REALV?null:fxPost(renderer,scene,cam,W(),H(),{});V3.rendu=()=>{renderer.shadowMap.needsUpdate=true;rendu();};V3.gl=renderer.getContext();
+ if(REALV)realVisite({T,scene,renderer,cam,persons,tn,FXV,toast,mats,matsP,XE,ov});
  const mm=document.createElement('canvas');mm.className='v3-map';mm.width=150;mm.height=150;ov.appendChild(mm);const mg=mm.getContext('2d');
  const prEl=document.createElement('div');prEl.className='v3-prompt';prEl.hidden=true;ov.appendChild(prEl);
  const mx=x=>(x+56)/(XE+60)*150,mz=z=>(z+46)/122*150;let mmT=0;
@@ -4963,8 +4964,8 @@ function initVille(ov){
   if(auto&&!enAuto){mg.fillStyle='#38bdf8';mg.fillRect(mx(auto.position.x)-2,mx(auto.position.z)-2,4,4);}
   const px=enAuto?auto.position.x:pos.x,pz=enAuto?auto.position.z:pos.z,yaw=enAuto?cap+Math.PI:look.yaw;mg.save();mg.translate(mx(px),mx(pz));mg.rotate(-yaw);mg.fillStyle='#ef4444';mg.beginPath();mg.moveTo(0,-7);mg.lineTo(5,5);mg.lineTo(-5,5);mg.closePath();mg.fill();mg.restore();}
  /* Boucle */
- fxOmbres(scene);fxFusion(scene,THREE);POST=fxPost(renderer,scene,cam,W(),H(),{});
- VL.anims=[];if(REALV)realVille({T,scene,renderer,cam,persons:VL.gens,FXV:FX,toast,cvF,anims:VL.anims,pos:()=>({x:cam.position.x,z:cam.position.z}),etage:()=>0,lieu:VL});
+ fxOmbres(scene);fxFusion(scene,THREE);POST=REALV?null:fxPost(renderer,scene,cam,W(),H(),{});
+ VL.anims=[];if(REALV)realVille({T,scene,renderer,cam,persons:VL.gens,FXV:FX,toast,cvF,ov,anims:VL.anims,pos:()=>({x:cam.position.x,z:cam.position.z}),etage:()=>0,lieu:VL});
  const lieuEl=ov.querySelector('#vl-lieu'),argEl=ov.querySelector('#vl-argent');let lieu='',tAcc=0,mmT=0,hudT=0;const clock=new T.Clock();
  const croisements=RT.flatMap(r=>[r-7.5,r+7.5]);
  const moi=VL;function frame(){
@@ -5009,7 +5010,7 @@ function basculerReal(){const n=realActif()?'0':'1';try{localStorage.setItem(CLE
 function realSonder(){
  if(REAL.dispo!==null)return Promise.resolve(REAL.dispo);
  if(typeof location==='undefined'||!/^https?:$/.test(location.protocol)||typeof fetch!=='function')return Promise.resolve(REAL.dispo=false);
- return fetch('assets/manifest.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>REAL.dispo=!!(j&&j.v===1)).catch(()=>REAL.dispo=false);
+ return fetch('assets/manifest.json',{cache:'no-cache'}).then(r=>{REAL.statut=r.status;return r.ok?r.json():null;}).then(j=>REAL.dispo=!!(j&&j.v===1)).catch(()=>{REAL.statut=0;return REAL.dispo=false;});
 }
 function realScript(f){return new Promise((ok,ko)=>{const s=document.createElement('script');s.src='assets/js/'+f;s.onload=ok;s.onerror=()=>ko(new Error(f));document.head.appendChild(s);});}
 /* Texture en niveaux de gris normalisés (pour teinter murs, sols, tôles et vêtements) */
@@ -5023,27 +5024,46 @@ function realGris(T,src,cible,flipY,masque){
 }
 function realMoyenne(T,src){const cv=document.createElement('canvas');cv.width=cv.height=8;const g=cv.getContext('2d');g.drawImage(src,0,0,8,8);const d=g.getImageData(0,0,8,8).data;let r=0,v=0,b=0;for(let i=0;i<d.length;i+=4){r+=d[i];v+=d[i+1];b+=d[i+2];}return new T.Color(r/64/255,v/64/255,b/64/255).convertSRGBToLinear();}
 const realJaune=(r,g,b)=>{const mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(mx<80||mx===mn)return false;if((mx-mn)/mx<.42)return false;let h=mx===r?(g-b)/(mx-mn)*60:mx===g?(2+(b-r)/(mx-mn))*60:(4+(r-g)/(mx-mn))*60;if(h<0)h+=360;return h>=36&&h<=72;};
-function realCharger(T,renderer){
- if(REAL.promesse)return REAL.promesse;
- REAL.promesse=(async()=>{
-  if(!await realSonder())throw new Error('ressources absentes');
-  if(!T.GLTFLoader)await realScript('GLTFLoader.js');if(!T.RGBELoader)await realScript('RGBELoader.js');if(!T.SkeletonUtils)await realScript('SkeletonUtils.js');
-  const B='assets/',tl=new T.TextureLoader(),gl=new T.GLTFLoader();
-  const img=u=>new Promise((ok,ko)=>tl.load(B+u,ok,undefined,()=>ko(new Error(u))));
-  const glb=u=>new Promise((ok,ko)=>gl.load(B+u,ok,undefined,()=>ko(new Error(u))));
+function realProgres(){const n=REAL.n||0,t=REAL.total||33;if(REAL.suivi)try{REAL.suivi(Math.min(99,Math.round(n/t*100)));}catch(e){}}
+function realCompte(pr){return pr.then(v=>{REAL.n=(REAL.n||0)+1;realProgres();return v;});}
+/* Étape 1 : ciel HDR et textures (le décor devient réaliste) */
+function realBase(T,renderer){
+ if(REAL.pBase)return REAL.pBase;
+ REAL.pBase=(async()=>{
+  if(!await realSonder())throw new Error('assets/manifest.json'+(REAL.statut?' (code '+REAL.statut+')':' (réseau)'));
+  for(const [f,ok] of[['GLTFLoader.js',()=>T.GLTFLoader],['RGBELoader.js',()=>T.RGBELoader],['SkeletonUtils.js',()=>T.SkeletonUtils]]){if(!ok())await realScript(f).catch(()=>{throw new Error('assets/js/'+f);});REAL.n=(REAL.n||0)+1;realProgres();}
+  const B='assets/',tl=new T.TextureLoader();
+  const img=u=>realCompte(new Promise((ok,ko)=>tl.load(B+u,ok,undefined,()=>ko(new Error(B+u)))));
   const demi=!!renderer.capabilities.isWebGL2;
-  const pH=new Promise((ok,ko)=>new T.RGBELoader().setDataType(demi?T.HalfFloatType:T.UnsignedByteType).load(B+'ciel.hdr',ok,undefined,()=>ko(new Error('ciel'))));
+  const pH=realCompte(new Promise((ok,ko)=>new T.RGBELoader().setDataType(demi?T.HalfFloatType:T.UnsignedByteType).load(B+'ciel.hdr',ok,undefined,()=>ko(new Error(B+'ciel.hdr')))));
   const TEX={},GRIS={enduit:.8,terrazzo:.82,tole:.72};
   const pT=Promise.all(['terrazzo','enduit','laterite','beton','tole','asphalte','bois'].map(async n=>{const [d,no,a]=await Promise.all(['diff','nor','arm'].map(s=>img(`tex/${n}_${s}.jpg`)));
    const dd=GRIS[n]?realGris(T,d.image,GRIS[n],true):d;dd.encoding=T.sRGBEncoding;for(const t of[dd,no,a]){t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=8;}TEX[n]={d:dd,n:no,a,g:GRIS[n]||0};}));
+  const [H]=await Promise.all([pH,pT]);
+  return{TEX,H};
+ })();
+ REAL.pBase.catch(()=>{REAL.pBase=null;REAL.n=0;});
+ return REAL.pBase;
+}
+/* Étape 2 : mobilier et personnages animés */
+function realCharger(T,renderer){
+ if(REAL.promesse)return REAL.promesse;
+ REAL.promesse=(async()=>{
+  const base=await realBase(T,renderer);
+  const B='assets/',gl=new T.GLTFLoader();
+  const glb=u=>realCompte(new Promise((ok,ko)=>gl.load(B+u,ok,undefined,()=>ko(new Error(B+u)))));
   const MOD={};const pM=Promise.all(['pupitre','chaise','ventilo','monobloc','banc'].map(async n=>{MOD[n]=(await glb(`mod/${n}.gltf`)).scene;}));
   const pP=Promise.all(['garcon','fille','anims'].map(n=>glb(`persos/${n}.glb`)));
-  const [H,,,[gG,gF,gA]]=await Promise.all([pH,pT,pM,pP]);
-  return REAL.res={TEX,MOD,H,P:realPrepPersos(T,gG,gF,gA)};
+  const [,[gG,gF,gA]]=await Promise.all([pM,pP]);
+  return REAL.res={...base,MOD,P:realPrepPersos(T,gG,gF,gA)};
  })();
  REAL.promesse.catch(()=>{REAL.promesse=null;});
  return REAL.promesse;
 }
+/* Bandeau d'état durable (progression, erreur) */
+function realBandeau(ov){let el=ov.querySelector('.v3-real');if(!el){el=document.createElement('div');el.className='v3-real';ov.appendChild(el);}
+ return{texte(t,err){el.textContent=t;el.className='v3-real'+(err?' err':'');el.hidden=false;},cacher(){el.hidden=true;}};}
+function realErreur(e){const f=String(e&&e.message||e);return REAL.dispo===false?`Graphismes réalistes indisponibles : le serveur ne fournit pas ${f}. Vérifiez que le dossier public/assets est bien sur GitHub, puis redéployez.`:`Graphismes réalistes : échec du téléchargement de ${f}. Vérifiez la connexion puis rouvrez la visite (bouton Graphismes).`;}
 /* ---------- Personnages : préparation, animation, poses, cuisson ---------- */
 function realPrepPersos(T,gG,gF,gA){
  const clips={};for(const c of gA.animations)clips[c.name.toLowerCase()]=c;
@@ -5121,16 +5141,20 @@ function realCuire(T,X,pose,dy,anime){
 }
 /* ---------- Mise en place dans la visite ---------- */
 async function realVisite(c){
- const {T,renderer}=c;
- c.toast('Chargement des graphismes réalistes…');
- let R;try{R=await realCharger(T,renderer);}catch(e){console.warn('réaliste',e);c.toast(REAL.dispo===false?'Graphismes réalistes absents de cette version : affichage classique.':'Graphismes réalistes indisponibles (connexion ?) : affichage classique.');return;}
+ const {T,renderer}=c;const bd=realBandeau(c.ov);
+ REAL.suivi=p=>bd.texte(`Chargement des graphismes réalistes… ${p} %`);REAL.total=33;realProgres();
+ let R;try{R=await realBase(T,renderer);}catch(e){console.warn('réaliste',e);bd.texte(realErreur(e),true);return;}
  if(!V3||V3.stop||V3.renderer!==renderer)return;V3.scene=c.scene;
- try{realCiel(c,R);realMateriaux(c,R);realPeupler(c,R);realDecor(c,R);realResolution(renderer);renderer.shadowMap.needsUpdate=true;V3.realOk=true;c.toast('Graphismes réalistes activés');}
- catch(e){console.error(e);c.toast('Graphismes réalistes : affichage partiel.');}
+ try{realCiel(c,R);realMateriaux(c,R);realDecor(c,R);realResolution(renderer);renderer.shadowMap.needsUpdate=true;}catch(e){console.error(e);}
+ try{R=await realCharger(T,renderer);}catch(e){console.warn('réaliste',e);bd.texte(realErreur(e),true);return;}
+ if(!V3||V3.stop||V3.renderer!==renderer)return;
+ try{realPeupler(c,R);renderer.shadowMap.needsUpdate=true;V3.realOk=true;REAL.suivi=null;bd.cacher();c.toast('Graphismes réalistes activés');}
+ catch(e){console.error(e);bd.texte('Graphismes réalistes : affichage partiel ('+String(e&&e.message||e).slice(0,80)+').',true);}
 }
 function realCiel(c,R){
  const {T,scene,renderer,FXV,cam}=c;
  const pm=new T.PMREMGenerator(renderer);scene.environment=pm.fromEquirectangular(R.H).texture;pm.dispose();
+ scene.traverse(m=>{if(m.isPoints&&m.material&&m.material.blending===T.AdditiveBlending&&m.userData.noShadow)m.visible=false;});
  scene.traverse(m=>{if(!m.isMesh||!m.material)return;const mt=m.material,sph=m.geometry&&m.geometry.type==='SphereGeometry';
   if(sph&&(mt.isShaderMaterial&&m.geometry.parameters.radius>=300||mt.isMeshBasicMaterial&&mt.fog===false||mt.isMeshLambertMaterial&&mt.transparent&&m.userData.noShadow))m.visible=false;});
  const ciel=new T.Mesh(new T.SphereGeometry(290,64,32),new T.MeshBasicMaterial({map:R.H,side:T.BackSide,fog:false,depthWrite:false}));ciel.renderOrder=-10;ciel.userData.noShadow=true;ciel.userData.dyn=true;scene.add(ciel);
@@ -5182,13 +5206,15 @@ function realMateriaux(c,R){
     nm=new T.MeshStandardMaterial({color:col,map:t.d,normalMap:t.n,roughnessMap:t.a,aoMap:t.a,aoMapIntensity:.75,roughness:1,metalness:ro.t==='tole'?.55:0,envMapIntensity:1});nm.userData.ech=ro.e;}
    cache[cle]=nm;}
   if(nm.map&&!realUV(m,nm.userData.ech,T))continue;m.material=nm;}
- /* Silhouettes classiques remplacées : élèves assis et pupitres provisoires */
- scene.traverse(m=>{if(m.isMesh&&exclus.has(m.material)&&(m.userData.fus||m.userData.racine&&m.userData.racine.userData.statique||m.material===mats['#92400f']))m.visible=false;});
+
 }
 /* ---------- Mobilier instancié, élèves assis et passants réalistes ---------- */
 function realInst(T,src,n,scene,ombre){src.updateMatrixWorld(true);const L=[];src.traverse(m=>{if(!m.isMesh)return;const im=new T.InstancedMesh(m.geometry,m.material,Math.max(1,n));im.castShadow=ombre!==false;im.receiveShadow=true;im.frustumCulled=false;im.count=0;im.userData.loc=m.matrixWorld.clone();im.userData.nom=m.name;scene.add(im);L.push(im);});return L;}
 function realPeupler(c,R){
  const {T,scene,persons}=c;const Q=qualite3D(),f=Q==='ultra'?1.5:Q==='legere'?.5:1;
+ {const matsP=c.matsP||{},mats=c.mats||{},exclus=new Set(Object.values(matsP));if(mats['#92400f'])exclus.add(mats['#92400f']);
+  /* Silhouettes classiques remplacées : élèves assis et pupitres provisoires */
+ scene.traverse(m=>{if(m.isMesh&&exclus.has(m.material)&&(m.userData.fus||m.userData.racine&&m.userData.racine.userData.statique||m.material===mats['#92400f']))m.visible=false;});}
  const K={meuble:Math.round(64*f),assis:Math.round(48*f),pool:Math.round(9*f),ray:Q==='legere'?24:34,int:Q==='legere'?12:Q==='ultra'?22:17};
  const m4=new T.Matrix4(),m5=new T.Matrix4(),q=new T.Quaternion(),e=new T.Euler(),p=new T.Vector3(),s=new T.Vector3(),Y=new T.Vector3(0,1,0);
  const place=(L,i,x,y,z,ry,sx,sy,sz)=>{q.setFromAxisAngle(Y,ry);m4.compose(p.set(x,y,z),q,s.set(sx,sy||sx,sz||sx));for(const im of L){m5.multiplyMatrices(m4,im.userData.loc);im.setMatrixAt(i,m5);}};
@@ -5374,14 +5400,15 @@ function realVoiture(T,coul,taxi){
 }
 /* ---------- Ville réaliste ---------- */
 async function realVille(c){
- const {T,renderer}=c;
- c.toast('Chargement des graphismes réalistes…');
- let R;try{R=await realCharger(T,renderer);}catch(e){console.warn('réaliste',e);c.toast(REAL.dispo===false?'Graphismes réalistes absents de cette version : affichage classique.':'Graphismes réalistes indisponibles (connexion ?) : affichage classique.');return;}
+ const {T,renderer}=c;const bd=realBandeau(c.ov);
+ REAL.suivi=p=>bd.texte(`Chargement des graphismes réalistes… ${p} %`);REAL.total=33;realProgres();
+ let R;try{R=await realBase(T,renderer);}catch(e){console.warn('réaliste',e);bd.texte(realErreur(e),true);return;}
  if(!VL||VL.stop||VL.renderer!==renderer)return;VL.scene=c.scene;
- try{c.brume=[90,430];realCiel(c,R);realMateriaux(c,R);
-  const Q=qualite3D(),f=Q==='ultra'?1.5:Q==='legere'?.5:1;realPool(c,R,{pool:Math.round(9*f),ray:Q==='legere'?28:40});
-  realDecor(c,R,{rayon:330,arbres:true});realResolutionC(renderer,c.anims);renderer.shadowMap.needsUpdate=true;VL.realOk=true;c.toast('Graphismes réalistes activés');}
- catch(e){console.error(e);c.toast('Graphismes réalistes : affichage partiel.');}
+ try{c.brume=[90,430];realCiel(c,R);realMateriaux(c,R);realDecor(c,R,{rayon:330,arbres:true});realResolutionC(renderer,c.anims);renderer.shadowMap.needsUpdate=true;}catch(e){console.error(e);}
+ try{R=await realCharger(T,renderer);}catch(e){console.warn('réaliste',e);bd.texte(realErreur(e),true);return;}
+ if(!VL||VL.stop||VL.renderer!==renderer)return;
+ try{const Q=qualite3D(),f=Q==='ultra'?1.5:Q==='legere'?.5:1;realPool(c,R,{pool:Math.round(9*f),ray:Q==='legere'?28:40});VL.realOk=true;REAL.suivi=null;bd.cacher();c.toast('Graphismes réalistes activés');}
+ catch(e){console.error(e);bd.texte('Graphismes réalistes : affichage partiel ('+String(e&&e.message||e).slice(0,80)+').',true);}
 }
 
 /* ================= Actions ================= */
