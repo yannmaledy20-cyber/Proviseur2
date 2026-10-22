@@ -5024,6 +5024,7 @@ function realGris(T,src,cible,flipY,masque){
 }
 function realMoyenne(T,src){const cv=document.createElement('canvas');cv.width=cv.height=8;const g=cv.getContext('2d');g.drawImage(src,0,0,8,8);const d=g.getImageData(0,0,8,8).data;let r=0,v=0,b=0;for(let i=0;i<d.length;i+=4){r+=d[i];v+=d[i+1];b+=d[i+2];}return new T.Color(r/64/255,v/64/255,b/64/255).convertSRGBToLinear();}
 const realJaune=(r,g,b)=>{const mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(mx<80||mx===mn)return false;if((mx-mn)/mx<.42)return false;let h=mx===r?(g-b)/(mx-mn)*60:mx===g?(2+(b-r)/(mx-mn))*60:(4+(r-g)/(mx-mn))*60;if(h<0)h+=360;return h>=36&&h<=72;};
+async function realEssai(f){let e;for(let k=0;k<3;k++){try{return await f(k?'?r='+Date.now():'');}catch(x){e=x;await new Promise(r=>setTimeout(r,700*(k+1)));}}throw e;}
 function realProgres(){const n=REAL.n||0,t=REAL.total||33;if(REAL.suivi)try{REAL.suivi(Math.min(99,Math.round(n/t*100)));}catch(e){}}
 function realCompte(pr){return pr.then(v=>{REAL.n=(REAL.n||0)+1;realProgres();return v;});}
 /* Étape 1 : ciel HDR et textures (le décor devient réaliste) */
@@ -5033,7 +5034,7 @@ function realBase(T,renderer){
   if(!await realSonder())throw new Error('assets/manifest.json'+(REAL.statut?' (code '+REAL.statut+')':' (réseau)'));
   for(const [f,ok] of[['GLTFLoader.js',()=>T.GLTFLoader],['RGBELoader.js',()=>T.RGBELoader],['SkeletonUtils.js',()=>T.SkeletonUtils]]){if(!ok())await realScript(f).catch(()=>{throw new Error('assets/js/'+f);});REAL.n=(REAL.n||0)+1;realProgres();}
   const B='assets/',tl=new T.TextureLoader();
-  const img=u=>realCompte(new Promise((ok,ko)=>tl.load(B+u,ok,undefined,()=>ko(new Error(B+u)))));
+  const img=u=>realCompte(realEssai(q=>new Promise((ok,ko)=>tl.load(B+u+q,ok,undefined,()=>ko(new Error(B+u))))));
   const demi=!!renderer.capabilities.isWebGL2;
   const pH=realCompte(new Promise((ok,ko)=>new T.RGBELoader().setDataType(demi?T.HalfFloatType:T.UnsignedByteType).load(B+'ciel.hdr',ok,undefined,()=>ko(new Error(B+'ciel.hdr')))));
   const TEX={},GRIS={enduit:.8,terrazzo:.82,tole:.72};
@@ -5051,11 +5052,11 @@ function realCharger(T,renderer){
  REAL.promesse=(async()=>{
   const base=await realBase(T,renderer);
   const B='assets/',gl=new T.GLTFLoader();
-  const glb=u=>realCompte(new Promise((ok,ko)=>gl.load(B+u,ok,undefined,()=>ko(new Error(B+u)))));
+  const glb=u=>realCompte(realEssai(q=>new Promise((ok,ko)=>gl.load(B+u+q,ok,undefined,e=>{console.warn('glTF',u,e);ko(new Error(B+u));}))));
   const MOD={};const pM=Promise.all(['pupitre','chaise','ventilo','monobloc','banc'].map(async n=>{MOD[n]=(await glb(`mod/${n}.gltf`)).scene;}));
-  const pP=Promise.all(['garcon','fille','anims'].map(n=>glb(`persos/${n}.glb`)));
-  const [,[gG,gF,gA]]=await Promise.all([pM,pP]);
-  return REAL.res={...base,MOD,P:realPrepPersos(T,gG,gF,gA)};
+  let P=null,errP=null;const pP=Promise.all(['garcon','fille','anims'].map(n=>glb(`persos/${n}.glb`))).then(([gG,gF,gA])=>{P=realPrepPersos(T,gG,gF,gA);}).catch(e=>{errP=e;console.warn('personnages',e);});
+  await Promise.all([pM,pP]);if(errP)REAL.promesse=null;
+  return REAL.res={...base,MOD,P,errP};
  })();
  REAL.promesse.catch(()=>{REAL.promesse=null;});
  return REAL.promesse;
@@ -5148,7 +5149,7 @@ async function realVisite(c){
  try{realCiel(c,R);realMateriaux(c,R);realDecor(c,R);realResolution(renderer);renderer.shadowMap.needsUpdate=true;}catch(e){console.error(e);}
  try{R=await realCharger(T,renderer);}catch(e){console.warn('réaliste',e);bd.texte(realErreur(e),true);return;}
  if(!V3||V3.stop||V3.renderer!==renderer)return;
- try{realPeupler(c,R);renderer.shadowMap.needsUpdate=true;V3.realOk=true;REAL.suivi=null;bd.cacher();c.toast('Graphismes réalistes activés');}
+ try{realPeupler(c,R);renderer.shadowMap.needsUpdate=true;V3.realOk=true;REAL.suivi=null;if(R.errP)bd.texte('Personnages réalistes non chargés ('+String(R.errP.message||R.errP)+') : le reste du décor est réaliste. Rouvrez la visite pour réessayer.',true);else{bd.cacher();c.toast('Graphismes réalistes activés');}}
  catch(e){console.error(e);bd.texte('Graphismes réalistes : affichage partiel ('+String(e&&e.message||e).slice(0,80)+').',true);}
 }
 function realCiel(c,R){
@@ -5212,7 +5213,7 @@ function realMateriaux(c,R){
 function realInst(T,src,n,scene,ombre){src.updateMatrixWorld(true);const L=[];src.traverse(m=>{if(!m.isMesh)return;const im=new T.InstancedMesh(m.geometry,m.material,Math.max(1,n));im.castShadow=ombre!==false;im.receiveShadow=true;im.frustumCulled=false;im.count=0;im.userData.loc=m.matrixWorld.clone();im.userData.nom=m.name;scene.add(im);L.push(im);});return L;}
 function realPeupler(c,R){
  const {T,scene,persons}=c;const Q=qualite3D(),f=Q==='ultra'?1.5:Q==='legere'?.5:1;
- {const matsP=c.matsP||{},mats=c.mats||{},exclus=new Set(Object.values(matsP));if(mats['#92400f'])exclus.add(mats['#92400f']);
+ {const matsP=c.matsP||{},mats=c.mats||{},exclus=new Set(R.P?Object.values(matsP):[]);if(mats['#92400f'])exclus.add(mats['#92400f']);
   /* Silhouettes classiques remplacées : élèves assis et pupitres provisoires */
  scene.traverse(m=>{if(m.isMesh&&exclus.has(m.material)&&(m.userData.fus||m.userData.racine&&m.userData.racine.userData.statique||m.material===mats['#92400f']))m.visible=false;});}
  const K={meuble:Math.round(64*f),assis:Math.round(48*f),pool:Math.round(9*f),ray:Q==='legere'?24:34,int:Q==='legere'?12:Q==='ultra'?22:17};
@@ -5230,7 +5231,7 @@ function realPeupler(c,R){
  const ASSIS=persons.filter(g=>g.userData.statique&&g.userData.opts);const nF=ASSIS.filter(g=>g.userData.opts.fille).length,nG=ASSIS.length-nF;
  const chaiseE=realInst(T,R.MOD.chaise,K.assis,scene,false),chaiseA=realInst(T,R.MOD.monobloc,24,scene,false);
  const P=R.P,SEAT=.5,lin=h=>new T.Color(h).convertSRGBToLinear();
- const cuit={};for(const [k,X,n] of[['G',P.G,nG],['F',P.F,nF]]){if(!n)continue;const sR=1.64/X.haut;const ck=realCuire(T,X,'assis',SEAT/sR-X.hanche);
+ const cuit={};if(P)for(const [k,X,n] of[['G',P.G,nG],['F',P.F,nF]]){if(!n)continue;const sR=1.64/X.haut;const ck=realCuire(T,X,'assis',SEAT/sR-X.hanche);
   cuit[k]={X,L:ck.parts.filter(pp=>pp.r!=='barbe').map(pp=>{const mt=pp.mat.clone();mt.skinning=false;const cap=Math.max(1,Math.min(K.assis,n)),im=new T.InstancedMesh(pp.geo,mt,cap);im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.loc=new T.Matrix4();im.userData.r=pp.r;
    if(['peau','haut','bas'].includes(pp.r)){const w=new T.Color(1,1,1);for(let i=0;i<cap;i++)im.setColorAt(i,w);}im.count=0;scene.add(im);return im;})};}
  const couleurs=(X,o)=>realCouleurs(T,P,X,o),taille=realTaille;
@@ -5258,7 +5259,7 @@ function realPeupler(c,R){
   tLOD+=dt;if(tLOD>.6||Math.hypot(pos.x-dern.x,pos.z-dern.z)>1.5||dern.e!==(V3.etage||0)){tLOD=0;dern={x:pos.x,z:pos.z,e:V3.etage||0};lod();}
   for(let i=0;i<venSel.length;i++){const v=venSel[i];place(venPales,i,v.x,v.y,v.z,t*6+i,1);}fin(venPales,venSel.length);
  });
- lod();realPool({T,scene,persons,anims:V3.anims,pos:()=>V3.pos,etage:()=>V3.etage||0},R,K);
+ lod();if(P)realPool({T,scene,persons,anims:V3.anims,pos:()=>V3.pos,etage:()=>V3.etage||0},R,K);
 }
 
 /* ---------- Végétation, horizon et plafonds ---------- */
@@ -5407,7 +5408,7 @@ async function realVille(c){
  try{c.brume=[90,430];realCiel(c,R);realMateriaux(c,R);realDecor(c,R,{rayon:330,arbres:true});realResolutionC(renderer,c.anims);renderer.shadowMap.needsUpdate=true;}catch(e){console.error(e);}
  try{R=await realCharger(T,renderer);}catch(e){console.warn('réaliste',e);bd.texte(realErreur(e),true);return;}
  if(!VL||VL.stop||VL.renderer!==renderer)return;
- try{const Q=qualite3D(),f=Q==='ultra'?1.5:Q==='legere'?.5:1;realPool(c,R,{pool:Math.round(9*f),ray:Q==='legere'?28:40});VL.realOk=true;REAL.suivi=null;bd.cacher();c.toast('Graphismes réalistes activés');}
+ try{const Q=qualite3D(),f=Q==='ultra'?1.5:Q==='legere'?.5:1;if(R.P)realPool(c,R,{pool:Math.round(9*f),ray:Q==='legere'?28:40});VL.realOk=true;REAL.suivi=null;if(R.errP)bd.texte('Passants réalistes non chargés ('+String(R.errP.message||R.errP)+') : le reste de la ville est réaliste. Rouvrez la ville pour réessayer.',true);else{bd.cacher();c.toast('Graphismes réalistes activés');}}
  catch(e){console.error(e);bd.texte('Graphismes réalistes : affichage partiel ('+String(e&&e.message||e).slice(0,80)+').',true);}
 }
 

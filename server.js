@@ -122,7 +122,7 @@ const LOGIN = err => `<!doctype html><html lang="fr"><meta charset="utf-8"><meta
 <input name="code" type="password" autocomplete="current-password" autofocus required style="padding:.7rem;border-radius:6px;border:0;font:inherit">
 ${err ? '<p style="margin:0;color:#ff8f84">Code incorrect.</p>' : ''}<button style="padding:.7rem;border:0;border-radius:6px;background:#d4951a;font:600 1rem system-ui;cursor:pointer">Entrer</button></form></body></html>`;
 function autorise(req) { return !PASSES.size || PASSES.has(cookie(req, 'pv_access')); }
-const PUBLIC_PATHS = /^\/(manifest\.webmanifest|icons\/[\w.-]+|sw\.js|config\.js)$/;
+const PUBLIC_PATHS = /^\/(manifest\.webmanifest|icons\/[\w.-]+|sw\.js|config\.js|assets\/[\w-]+(\/[\w-]+)*\.(json|txt|hdr|js|jpg|gltf|glb|bin))$/; // ressources 3D libres : sans code d'accès
 
 /* ---------- HTTP ---------- */
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
