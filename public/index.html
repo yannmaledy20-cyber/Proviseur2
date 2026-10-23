@@ -4603,8 +4603,8 @@ function tPerso(){
  const v=vie();const T=TRAINS[v.train];const p=prestige();const m=article('maison',v.maison);const car=meilleureVoiture();
  return`<div class="stack" style="gap:16px">
  <div class="statgrid"><div class="stat"><span class="eyebrow">Mon compte</span><b class="${v.argent<0?'rouge':''}">${moneyS(v.argent)}</b></div><div class="stat"><span class="eyebrow">Salaire mensuel</span><b>${moneyS(v.salaire)}</b></div><div class="stat"><span class="eyebrow">Bonheur</span><b>${Math.round(v.bonheur)}/100</b></div><div class="stat"><span class="eyebrow">Prestige</span><b>${p}</b></div><div class="stat"><span class="eyebrow">Prêt en cours</span><b>${moneyS(v.dette)}</b></div><div class="stat"><span class="eyebrow">Points d’action</span><b>${PA_MAX+bonusPA()} / sem.</b></div></div>
- <div class="card stack t-teal"><div class="row between"><h3 style="margin:0">Sortir en ville</h3><button class="btn primary" data-act="ville3d">Aller en ville en 3D</button></div>
-  <p class="small">Promenez-vous dans la ville, entrez chez le concessionnaire, à l’agence immobilière, au supermarché, à la banque ou au maquis. ${car?`Votre ${esc(car.n)} vous attend devant chez vous : approchez-vous et appuyez sur F pour conduire.`:'Sans voiture, vous circulez à pied.'}</p>
+ <div class="card stack t-teal"><div class="row between"><h3 style="margin:0">Sortir en ville</h3><span class="row" style="gap:8px"><button class="btn" data-act="vie-logement">Visiter mon logement en 3D</button><button class="btn primary" data-act="ville3d">Aller en ville en 3D</button></span></div>
+  <p class="small">Promenez-vous dans la ville, entrez chez le concessionnaire, à l’agence immobilière, au supermarché, à la banque ou au maquis. ${car?`Votre ${esc(car.n)} vous attend devant l’établissement : approchez-vous et appuyez sur F pour conduire.`:'Sans voiture, vous circulez à pied.'}</p>
   <p class="small muted">Logement : ${m?esc(m.n)+' (propriétaire)':'appartement en location (75 000 FCFA par mois)'}.</p></div>
  <div class="grid">
  <div class="card stack"><h3 style="margin:0">Train de vie</h3><p class="small muted">Il fixe vos dépenses mensuelles et fait monter ou baisser votre bonheur. Un bonheur supérieur à 80 vous donne un point d’action de plus chaque semaine ; sous 25, vous en perdez un.</p>
@@ -4809,7 +4809,7 @@ let VL=null;
 function ouvrirVille(){
  if(VL||!S)return;if(V3)fermerVisite();
  const ov=document.createElement('div');ov.id='ville3d';
- ov.innerHTML=`<div class="v3-top"><span class="v3-lieu" id="vl-lieu">Chargement de la ville…</span><span class="v3-boutons"><span class="v3-btn vl-argent" id="vl-argent"></span><button class="v3-btn" id="vl-q">Qualité : ${({legere:'légère',haute:'haute',ultra:'très élevée'})[qualite3D()]}</button><button class="v3-btn" id="vl-r" title="Textures photoréalistes, ciel HDR, voitures et passants réalistes">Graphismes : ${realActif()?'réalistes':'classiques'}</button><button class="v3-btn" id="vl-quit">Quitter la ville</button></span></div>
+ ov.innerHTML=`<div class="v3-top"><span class="v3-lieu" id="vl-lieu">Chargement de la ville…</span><span class="v3-boutons"><span class="v3-btn vl-argent" id="vl-argent"></span><button class="v3-btn" id="vl-q">Qualité : ${({legere:'légère',haute:'haute',ultra:'très élevée'})[qualite3D()]}</button><button class="v3-btn" id="vl-r" title="Textures photoréalistes, ciel HDR, voitures et passants réalistes">Graphismes : ${realActif()?'réalistes':'classiques'}</button><button class="v3-btn" id="vl-maison" title="Aller devant votre logement">Chez moi</button><button class="v3-btn" id="vl-quit">Quitter la ville</button></span></div>
  <div class="v3-cross"></div>
  <div class="v3-aide" id="vl-aide">Marcher : Z/W/↑ · S/↓ · Q/A/← · D/→ · Courir : Maj · Regarder : faire glisser la souris · E : entrer dans un lieu · F : monter dans votre voiture ou en descendre · M : grande carte · Échap : quitter</div>
  <div class="v3-pad"><button data-k="f" aria-label="Avancer">▲</button><button data-k="l" aria-label="Gauche">◀</button><button data-k="b" aria-label="Reculer">▼</button><button data-k="r" aria-label="Droite">▶</button><button data-k="e" aria-label="Action">E</button><button data-k="v" aria-label="Voiture">F</button></div>
@@ -4817,6 +4817,7 @@ function ouvrirVille(){
  document.body.appendChild(ov);VL={ov,stop:false,off:[]};
  ov.querySelector('#vl-quit').onclick=fermerVille;ov.querySelector('#vl-q').onclick=()=>{basculerQualite();fermerVille();setTimeout(ouvrirVille,60);};
  ov.querySelector('#vl-r').onclick=()=>{basculerReal();fermerVille();setTimeout(ouvrirVille,60);};
+ ov.querySelector('#vl-maison').onclick=()=>{if(VL&&VL.allerChezMoi)VL.allerChezMoi();};
  chargerThree(()=>{try{initVille(ov);}catch(e){if(/WebGL/i.test(String(e))){ov.querySelector('#vl-lieu').textContent='La 3D n’est pas disponible sur cet appareil (WebGL). Fermez puis réessayez.';return;}montrerErreur(e,'ville 3D');fermerVille();}},()=>{ov.querySelector('#vl-lieu').textContent='Impossible de charger le moteur 3D. Vérifiez votre connexion.';});
 }
 function fermerVille(){
@@ -4912,7 +4913,7 @@ function initVille(ov){
   else if(k==='appart'){immeuble(cx,z0+8,16,12,5,'#fde68a');}
   else immeuble(cx,z0+8,14,10,3,'#fecaca');
   plaque([k?'CHEZ VOUS':'RÉSIDENCE LES PALMIERS',k?article('maison',k).n:'Votre appartement en location'],10,1.8,cx,2.9,z0-.35,Math.PI,'#0f766e','#ffffff');
-  porte('maison','Chez vous',cx,z0-1.5);lieux.maison={nom:'Chez vous',a:cx-18,b:cx+18,c:z0-3,d:cz+20};}
+  porte('maison','Entrer chez vous',cx,z0-1.5);lieux.maison={nom:'Chez vous',a:cx-18,b:cx+18,c:z0-3,d:cz+20};}
  const SPEC={'-30,150':'lycee','30,90':'concession','90,90':'immo','-30,90':'superm','-90,90':'maquis','-90,30':'stade','30,30':'voyage','90,30':'banque','-30,30':'mairie','150,150':'maison'};
  const SHOPS=['Pharmacie du Rond-Point','Boulangerie La Baguette d’Or','Quincaillerie Moderne','Salon de coiffure Élégance','Cybercafé Le Clic','Boutique de pagnes','Librairie des Écoles','Mobile Money · transferts','Garage Mécanique Auto','Tailleur Couture Chic','Pressing Express','Alimentation Générale'];
  const PAL=['#f5d0a9','#fca5a5','#fde68a','#a7f3d0','#bfdbfe','#ddd6fe','#fecdd3','#e5e7eb','#fdba74','#99f6e4'];
@@ -4929,6 +4930,36 @@ function initVille(ov){
     if(z-d/2<bz-15){box(w-1,.15,2.2,pick(['#dc2626','#16a34a','#2563eb','#f59e0b']),x,3,z-d/2-1.1);plaque([SHOPS[Math.floor(r()*SHOPS.length)]],Math.min(w-1,9),1,x,3.8,z-d/2-.1,Math.PI,'#111827','#fef3c7');}}
    if(r()<.6)palmier(bx+(r()-.5)*30,bz+17);}}
  if(REALV)for(const r of RT)for(let t=-L+15;t<L-5;t+=20){if(RT.some(q=>Math.abs(t-q)<13))continue;for(const [x,z] of[[r-9.5,t],[t,r-9.5]]){if(portes.some(p=>Math.hypot(p.x-x,p.z-z)<6))continue;VL.alignement.push([x,z]);solide(x-.3,x+.3,z-.3,z+.3);}}
+ /* Logement : intérieur visitable selon votre standing (construit hors de la carte) */
+ const IX=560,IZ=0;
+ {const k=v.maison||'loc',[w,d]={loc:[9,7],appart:[13,9],duplex:[15,10],villa:[19,12]}[k]||[9,7],h=3,x0=IX-w/2,x1=IX+w/2,z0=IZ-d/2,z1=IZ+d/2,a=o=>v.objets.includes(o),grand=k!=='loc';
+  VL.int={a:x0-.5,b:x1+.5,c:z0-.5,d:z1+.5};
+  box(w,.1,d,'sol|'+({villa:'#b9a07a',duplex:'#a8977c',appart:'#9fa8b4'}[k]||'#a39e95'),IX,-.05,IZ);const cm=({villa:'#ecdcbc',duplex:'#e2d6c0',appart:'#dfe3e8'}[k]||'#e4ddcf');
+  const plaf=new T.Mesh(G(w,.1,d),new T.MeshLambertMaterial({color:0xf5f2ea,emissive:0x9a968e}));plaf.position.set(IX,h+.05,IZ);plaf.userData.dyn=plaf.userData.noShadow=true;scene.add(plaf);
+  const mur=(xa,xb,za,zb,col)=>{box(Math.max(.16,xb-xa),h,Math.max(.16,zb-za),col||cm,(xa+xb)/2,h/2,(za+zb)/2);solide(xa,xb,za,zb);};
+  mur(x0-.2,x1+.2,z0-.2,z0);mur(x0-.2,x1+.2,z1,z1+.2);mur(x0-.2,x0,z0,z1);mur(x1,x1+.2,z0,z1);
+  box(1.1,2.2,.08,'#78350f',IX,1.1,z1-.05);box(.08,.08,.12,'#facc15',IX+.4,1.05,z1-.12);
+  const xc=x0+Math.min(4.2,w*.38);mur(xc-.08,xc+.08,z0,IZ-.6,'#e7dfcf');mur(xc-.08,xc+.08,IZ+.6,z1,'#e7dfcf');
+  /* chambre */
+  const bx=(x0+xc)/2;box(1.7,.35,2.1,'#78350f',bx,.18,z0+1.15);box(1.6,.22,2,'#f1f5f9',bx,.46,z0+1.15);box(1.4,.12,.4,'#ffffff',bx,.62,z0+.4);box(1.62,.06,1.2,grand?'#7c3aed':'#1d4ed8',bx,.6,z0+1.55);solide(bx-.85,bx+.85,z0,z0+2.2);
+  box(.45,.5,.4,'#92400e',bx+1.15,.25,z0+.3);box(1.2,2.1,.6,'#7c2d12',x0+.7,1.05,z1-.45);solide(x0,x0+1.3,z1-.8,z1);
+  if(a('pc')){box(1,.75,.5,'#92400e',xc-.65,.38,z1-.35);box(.36,.02,.25,'#111827',xc-.65,.77,z1-.35);box(.36,.24,.02,'#1f2937',xc-.65,.9,z1-.47);solide(xc-1.15,xc-.15,z1-.65,z1);}
+  if(a('clim')){box(.9,.3,.22,'#f8fafc',bx,2.5,z0+.15);box(.9,.3,.22,'#f8fafc',(xc+x1)/2,2.5,z0+.15);}
+  /* salon */
+  const sx=x1-2.3;box(1.8,.5,.45,'#5b3a1a',sx,.25,z0+.35);solide(sx-.9,sx+.9,z0,z0+.6);
+  if(a('tv'))box(1.5,.85,.06,'#0f172a',sx,1.05,z0+.12);else box(.8,.5,.35,'#1f2937',sx,.75,z0+.35);
+  box(2.6,.02,1.8,'#9f1239',sx,.01,IZ+.6);box(1.1,.4,.6,'#92400e',sx,.2,IZ+.3);solide(sx-.55,sx+.55,IZ,IZ+.6);
+  if(a('phone'))box(.08,.012,.16,'#111827',sx+.3,.41,IZ+.3);
+  box(2.2,.42,.85,'#57534e',sx,.21,IZ+1.6);box(2.2,.5,.2,'#57534e',sx,.67,IZ+1.95);for(const s of[-1.15,1.15])box(.2,.6,.85,'#57534e',sx+s,.3,IZ+1.6);solide(sx-1.25,sx+1.25,IZ+1.15,IZ+2.05);
+  if(k==='villa'||k==='duplex'){for(const s of[-1,1]){box(.85,.42,.85,'#78716c',sx+s*2.05,.21,IZ+.4);box(.85,.5,.18,'#78716c',sx+s*2.05+s*.33,.67,IZ+.4).rotation.y=Math.PI/2;solide(sx+s*2.05-.45,sx+s*2.05+.45,IZ-.05,IZ+.85);}}
+  box(1.4,.9,.6,'#e5e7eb',xc+.95,.45,z0+.35);box(1.4,.04,.62,'#475569',xc+.95,.92,z0+.35);box(.7,1.8,.7,'#f8fafc',x1-.45,.9,z0+.45);solide(xc+.25,xc+1.65,z0,z0+.7);solide(x1-.8,x1,z0,z0+.8);
+  if(grand){box(1.3,.75,.85,'#92400e',xc+1.5,.38,IZ+1.6);for(const [dx,dz] of[[-.45,-.6],[.45,-.6],[-.45,.6],[.45,.6]])box(.42,.45,.42,'#78350f',xc+1.5+dx,.23,IZ+1.6+dz);solide(xc+.85,xc+2.15,IZ+1.15,IZ+2.05);}
+  if(a('groupe')){box(.9,.6,.6,'#facc15',x1-.55,.3,z1-.45);solide(x1-1,x1,z1-.75,z1);}
+  {const pt=new T.Mesh(sg('pot',()=>new T.CylinderGeometry(.22,.17,.45,12)),M('#b45309'));pt.position.set(xc+.45,.23,z1-.45);scene.add(pt);const fe=new T.Mesh(sg('feu',()=>new T.SphereGeometry(.45,12,10)),M('#15803d'));fe.position.set(xc+.45,.85,z1-.45);scene.add(fe);}
+  for(const [tx,tz,c] of[[sx,z1-.03,'#b45309'],[bx,z1-.03,'#0f766e']]){box(1.1,.75,.04,'#451a03',tx,1.7,tz);box(.95,.6,.05,c,tx,1.7,tz-.01);}
+  for(const [lx,lz] of[[sx,IZ],[bx,IZ]]){const lp=new T.PointLight(0xfff1dc,.9,12,2);lp.position.set(lx,2.7,lz);scene.add(lp);const ab=new T.Mesh(sg('abat',()=>new T.SphereGeometry(.18,10,8)),new T.MeshBasicMaterial({color:0xfff7e0}));ab.position.set(lx,2.85,lz);scene.add(ab);}
+  const mm=article('maison',v.maison);lieux.interieur={nom:`Chez vous · ${mm?mm.n:'appartement en location'}`,a:x0,b:x1,c:z0,d:z1};
+  portes.push({k:'sortie',nom:'Sortir dans la rue',x:IX,z:z1-.9});portes.push({k:'repos',nom:'Passer une soirée tranquille',x:bx+1.2,z:z0+2.6});}
  /* Piétons et circulation */
  const pietons=[];
  for(let i=0;i<46;i++){const axe=R()<.5?'x':'z',ligne=pick(RT)+(R()<.5?-7.5:7.5),t=(R()-.5)*2*L*.95;const p=pieton(axe==='x'?t:ligne,axe==='x'?ligne:t,{peau:peauR(),haut:pick(habits),bas:pick(['#1f2937','#1e3a8a','#78350f','#f8fafc']),fille:R()<.5});p.userData.axe=axe;p.userData.ligne=ligne;p.userData.dir=R()<.5?1:-1;p.userData.v=1+R()*.6;pietons.push(p);}
@@ -4940,11 +4971,12 @@ function initVille(ov){
  function majVoiture(){const c=meilleureVoiture();if(!c){if(auto){scene.remove(auto);auto=null;}return;}if(auto&&auto.userData.k===c.k)return;const p=auto?auto.position.clone():null;if(auto)scene.remove(auto);
   auto=vehicule(c.c,c.k==='moto'?'moto':'car');auto.userData.k=c.k;if(VL.achatIci){VL.achatIci=false;let q=[pos.x,pos.z-7];for(const [dx,dz] of [[0,-5],[5,0],[-5,0],[0,5],[6,-6],[-6,-6],[0,-9],[9,0],[-9,0]]){if(!bloque(pos.x+dx,pos.z+dz,1.8)){q=[pos.x+dx,pos.z+dz];break;}}auto.position.set(q[0],0,q[1]);toast(`Votre ${c.n} vous attend juste à côté : appuyez sur F pour la conduire.`);}else if(p)auto.position.copy(p);else auto.position.set(-26.2,0,125.3);auto.rotation.y=Math.PI/2;cap=Math.PI/2;}
  majVoiture();VL.majVoiture=()=>{VL.achatIci=true;majVoiture();};
- if(auto){look.yaw=-.95;const nv=meilleureVoiture();setTimeout(()=>{if(VL&&!VL.stop)toast(`Votre véhicule${nv?' ('+nv.n+')':''} vous attend juste devant l’établissement : appuyez sur F pour le conduire.`);},1500);}
- const bloque=(x,z,r)=>{r=r||.35;if(x<-L-25||x>L+25||z<-L-25||z>L+25)return true;return murs.some(w=>x>w.a-r&&x<w.b+r&&z>w.c-r&&z<w.d+r);};
+ if(auto){look.yaw=-.95;const nv=meilleureVoiture();setTimeout(()=>{if(VL&&!VL.stop&&!VL.dansLogement)toast(`Votre véhicule${nv?' ('+nv.n+')':''} vous attend juste devant l’établissement : appuyez sur F pour le conduire.`);},1500);}
+ const bloque=(x,z,r)=>{r=r||.35;if((x<-L-25||x>L+25||z<-L-25||z>L+25)&&!(VL.int&&x>VL.int.a&&x<VL.int.b&&z>VL.int.c&&z<VL.int.d))return true;return murs.some(w=>x>w.a-r&&x<w.b+r&&z>w.c-r&&z<w.d+r);};
  const toast=t=>{const el=ov.querySelector('#vl-toast');el.textContent=t;el.hidden=false;clearTimeout(VL.tt);VL.tt=setTimeout(()=>{el.hidden=true;},3200);};
  function porteProche(){let best=null,bd=4.2;for(const p of portes){const d=Math.hypot(p.x-pos.x,p.z-pos.z);if(d<bd){bd=d;best=p;}}return best;}
- function action(){if(enAuto)return;const p=porteProche();if(!p)return;if(p.k==='lycee'){fermerVille();setTimeout(ouvrirVisite,60);return;}UI.vieMsg='';UI.modal={type:'boutique',k:p.k};render();}
+ function action(){if(enAuto)return;const p=porteProche();if(!p)return;if(p.k==='lycee'){fermerVille();setTimeout(ouvrirVisite,60);return;}
+  if(p.k==='maison'){entrerLogement();return;}if(p.k==='sortie'){sortirLogement();return;}if(p.k==='repos'){toast(reposMaison());try{save();}catch(e){}return;}UI.vieMsg='';UI.modal={type:'boutique',k:p.k};render();}
  function voiture(){if(!auto)return toast('Vous n’avez pas encore de véhicule : passez chez le concessionnaire.');
   if(enAuto){enAuto=false;const sx=Math.cos(cap)*2.2,sz=-Math.sin(cap)*2.2;pos.x=auto.position.x+sx;pos.z=auto.position.z+sz;if(bloque(pos.x,pos.z)){pos.x=auto.position.x-sx;pos.z=auto.position.z-sz;}vit=0;look.yaw=cap+Math.PI;return toast('Vous descendez du véhicule.');}
   if(Math.hypot(auto.position.x-pos.x,auto.position.z-pos.z)<6){enAuto=true;cap=auto.rotation.y;vit=0;toast('Au volant ! Z/S pour accélérer et freiner, Q/D pour tourner.');}else toast('Approchez-vous de votre véhicule pour le prendre.');}
@@ -4982,9 +5014,14 @@ function initVille(ov){
  const gene=(g,u)=>{if(!auto)return false;const a=g.rotation.y;return penetre(cerclesV(g.position.x+Math.sin(a)*1.6,g.position.z+Math.cos(a)*1.6,a,u.moto),monAuto())>0;};
  let tChoc=0;const toastC=t=>{if(performance.now()-tChoc>2500){tChoc=performance.now();toast(t);}};
  function choc(h){const v0=Math.abs(vit);vit=-vit*.3;if(v0<1.2)return;VL.sec=Math.min(.5,v0*.04);try{SON.tambour(Math.min(1,.3+v0*.05));}catch(e){}
-  if(h.type==='pieton'){h.p.userData.peur=1.2;toastC('Attention ! Vous avez failli renverser un piéton.');}
+  if(h.type==='pieton'){const u=h.p.userData;if(v0>3&&!u.chute){u.chute={t:0,cap};toastC('Vous avez renversé un piéton ! Il se relève, sonné. Ralentissez.');}else{u.peur=1.2;toastC('Attention ! Vous avez failli renverser un piéton.');}}
   else if(h.type==='auto'){h.g.userData.arret=2.5;toastC(v0>8?'Accrochage avec un autre véhicule !':'Vous avez heurté un véhicule.');}
   else if(v0>6)toastC('Choc ! Ralentissez.');}
+ const porteMaison=portes.find(p=>p.k==='maison');
+ function entrerLogement(){if(enAuto){toast('Garez-vous d’abord : F pour descendre du véhicule.');return;}VL.dansLogement=true;pos.x=IX;pos.z=VL.int.d-1.6;look.yaw=0;look.pitch=-.05;toast('Bienvenue chez vous ! E près du lit pour vous reposer, E près de la porte pour sortir.');}
+ function sortirLogement(){VL.dansLogement=false;pos.x=porteMaison.x;pos.z=porteMaison.z-1.5;look.yaw=Math.PI;look.pitch=.05;}
+ VL.allerChezMoi=()=>{if(!porteMaison)return;const px=porteMaison.x,pz=porteMaison.z;if(auto){auto.position.set(px+3.5,0,pz-4.6);cap=Math.PI/2;auto.rotation.y=cap;vit=0;}if(enAuto){toast('Vous voici devant chez vous. F pour descendre, puis E devant la porte pour entrer.');return;}
+  pos.x=px;pos.z=pz-2.6;look.yaw=Math.PI;look.pitch=.08;toast('Vous voici devant chez vous : appuyez sur E pour entrer.');};
  /* Boucle */
  fxOmbres(scene);fxFusion(scene,THREE);POST=REALV?null:fxPost(renderer,scene,cam,W(),H(),{});
  VL.anims=[];if(REALV)realVille({T,scene,renderer,cam,persons:VL.gens,FXV:FX,toast,cvF,ov,anims:VL.anims,pos:()=>({x:cam.position.x,z:cam.position.z}),etage:()=>0,lieu:VL});
@@ -5001,7 +5038,7 @@ function initVille(ov){
   const cx=enAuto&&auto?auto.position.x:pos.x,cz=enAuto&&auto?auto.position.z:pos.z;
   FX.update(tAcc,dt,{x:cx,z:cz});for(const tf of VL.tissus||[])tf.update(tAcc);if(VL.fumee){const k=tAcc*.4%1;VL.fumee.position.y=1.6+k*2;VL.fumee.material.opacity=.4*(1-k);}
   for(const g of VL.vitrine||[])g.rotation.y+=dt*.3;
-  for(const p of pietons){const u=p.userData;if(Math.hypot(p.position.x-cx,p.position.z-cz)>140)continue;if(u.peur>0){u.peur-=dt;p.position.y=u.peur>0?Math.abs(Math.sin(u.peur*14))*.3:0;continue;}const old=u.axe==='x'?p.position.x:p.position.z;let nv=old+u.dir*u.v*dt;
+  for(const p of pietons){const u=p.userData;if(Math.hypot(p.position.x-cx,p.position.z-cz)>140)continue;if(u.chute){const c=u.chute;c.t+=dt;p.rotation.order='YXZ';p.rotation.y=c.cap;const k=c.t<.35?c.t/.35:c.t<3.4?1:Math.max(0,1-(c.t-3.4)/.6);p.rotation.x=k*Math.PI/2;p.position.y=.12*k;u.jambes.forEach(l=>l.rotation.x=0);if(c.t>4){u.chute=null;p.rotation.x=0;p.rotation.order='XYZ';p.position.y=0;}continue;}if(u.peur>0){u.peur-=dt;p.position.y=u.peur>0?Math.abs(Math.sin(u.peur*14))*.3:0;continue;}const old=u.axe==='x'?p.position.x:p.position.z;let nv=old+u.dir*u.v*dt;
    for(const c of croisements)if((old-c)*(nv-c)<0&&R()<.3){const ancienne=u.ligne;u.ligne=c;u.axe=u.axe==='x'?'z':'x';u.dir=R()<.5?1:-1;nv=ancienne;break;}
    if(Math.abs(nv)>L-2)u.dir*=-1;if(u.axe==='x'){p.position.x=u.axe==='x'&&nv!==undefined?nv:p.position.x;p.position.z=u.ligne;p.rotation.y=u.dir>0?Math.PI/2:-Math.PI/2;}else{p.position.z=nv;p.position.x=u.ligne;p.rotation.y=u.dir>0?0:Math.PI;}
    u.jambes.forEach((l,i)=>l.rotation.x=Math.sin(tAcc*7+i*Math.PI)*.45);}
@@ -5017,7 +5054,7 @@ function initVille(ov){
   for(const fa of VL.anims)fa(tAcc,dt);
   rendu();
  }
- lieuEl.textContent=`Devant ${S.nom}`;frame();
+ lieuEl.textContent=`Devant ${S.nom}`;if(UI.entrerLogement){UI.entrerLogement=false;entrerLogement();}frame();
  setTimeout(()=>{const a=ov.querySelector('#vl-aide');if(a)a.classList.add('v3-fade');},10000);
 }
 
@@ -5564,6 +5601,7 @@ const A={
 };
 Object.assign(A,{
  'ville3d':()=>{if(V3)fermerVisite();ouvrirVille();},
+ 'vie-logement':()=>{if(V3)fermerVisite();UI.entrerLogement=true;if(VL){fermerVille();setTimeout(ouvrirVille,60);}else ouvrirVille();},
  'vie-train':d=>{if(TRAINS[d.k]){vie().train=d.k;save();render();}},
  'vie-achat':d=>{UI.vieMsg=acheter(d.cat,d.k);save();try{if(VL&&VL.majVoiture&&d.cat==='voiture')VL.majVoiture();}catch(e){}render();},
  'vie-vendre':d=>{UI.vieMsg=vendre(d.cat,d.k);save();try{if(VL&&VL.majVoiture)VL.majVoiture();}catch(e){}render();},
