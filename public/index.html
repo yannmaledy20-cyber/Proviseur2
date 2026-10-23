@@ -535,6 +535,7 @@ label.row>span{flex:1;min-width:0}
 .choice .btn b{font-weight:600}
 .te-panneau .mu-act{white-space:normal;text-align:left}.te-panneau .mu-act .btn{margin:2px 0}.te-panneau .multi .tbl{font-size:.88rem}
 .v3-real{position:absolute;left:50%;top:64px;transform:translateX(-50%);max-width:min(92vw,640px);padding:8px 14px;border-radius:10px;background:rgba(15,23,42,.82);color:#fef3c7;font-size:.9rem;text-align:center;z-index:5;pointer-events:none}.v3-real.err{background:rgba(127,29,29,.9);color:#fff}
+.v3-entretien{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);width:min(92vw,680px);background:rgba(15,23,42,.92);color:#f8fafc;border-radius:14px;padding:14px 16px;z-index:6;box-shadow:0 10px 30px rgba(0,0,0,.4)}.v3-entretien p{margin:.4em 0 .6em}.v3-choix{display:flex;flex-wrap:wrap;gap:8px}.ordi-mail{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:8px;background:var(--soft)}.ordi-mail.bad{border-left:3px solid #dc2626}.ordi-mail.good{border-left:3px solid #16a34a}.ordi-accueil{padding:14px;border-radius:10px;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#e0f2fe}
 </style>
 
 <div id="app"></div>
@@ -2951,10 +2952,54 @@ function initVisite(ov){
  /* --- Administration --- */
  const pm=profMap();
  const bp=salle(-15,-36,10,9,'S','Bureau du Proviseur','#a8a29e');
- {const [x,z]=pt(bp,0,1.6);box(2.2,.8,1,'#78350f',x,.4,z);box(.6,.05,.4,'#111827',x,.83,z);box(.04,.35,.4,'#1f2937',x,1.0,z-.18);const [fx,fz]=pt(bp,3.6,3.4);box(.06,2.2,.06,'#6b7280',fx,1.1,fz);box(.3,.5,.02,'#16a34a',fx+.15,1.9,fz);box(.3,.5,.02,'#dc2626',fx+.45,1.9,fz);box(.3,.5,.02,'#facc15',fx+.75,1.9,fz);const [sx,sz]=pt(bp,-3.8,3.6);box(.6,2.2,1.6,'#92400e',sx,1.1,sz);panneau(['Le Proviseur',S.nom],x,1.25,z+.52,1.1,.28,'#fefce8','#1f2937');}
+ /* Bureau du proviseur : mobilier de direction, ordinateur, fauteuils visiteurs (orienté porte au sud) */
+ {const X=u=>bp.cx-u,Z=v=>bp.cz-v,CU='#4a2c1a',BO='#4a2f17';
+  const deco=(x,y,z,w,h,d,c)=>box(w,h,d,c,x,y,z);const mur=(a,b,c,d)=>walls.push({a,b,c,d});
+  const plante2=(x,z,s)=>{s=s||1;const p=new T.Mesh(sg('pot2',()=>new T.CylinderGeometry(.22,.17,.42,14)),M('#e7e5e4'));p.position.set(x,.21*s,z);p.scale.setScalar(s);scene.add(p);
+   for(let k=0;k<9;k++){const f=new T.Mesh(sg('feuille2',()=>new T.SphereGeometry(.5,8,6)),M(k%2?'#2f8f3a':'#3f8f3a'));const a=k/9*6.28;f.scale.set(.07*s,.5*s,.16*s);f.position.set(x+Math.cos(a)*.18*s,(.75+(k%3)*.12)*s,z+Math.sin(a)*.18*s);f.rotation.set(Math.sin(a)*.6,0,-Math.cos(a)*.6);scene.add(f);}mur(x-.25,x+.25,z-.25,z+.25);};
+  box(9.9,.02,8.9,'parquet|#a87445',bp.cx,.05,bp.cz);box(3.4,.012,2.6,'#7f1d1d',X(0),.065,Z(.6));
+  /* bureau de direction */
+  deco(X(0),.78,Z(1.8),2.6,.07,1.1,'#5b3a1a');deco(X(0),.4,Z(1.27),2.6,.7,.06,BO);for(const u of[-1.05,1.05])deco(X(u),.37,Z(1.8),.5,.72,1,BO);mur(X(1.3),X(-1.3),Z(2.35),Z(1.25));
+  deco(X(.85),.94,Z(2.05),.06,.25,.06,'#111827');deco(X(.85),1.2,Z(2.05),.68,.42,.04,'#0b0f19');deco(X(.85),.83,Z(2.25),.48,.025,.16,'#1f2937');deco(X(.4),.83,Z(2.25),.07,.025,.11,'#111827');
+  {const ec=new T.Mesh(new T.PlaneGeometry(.62,.36),new T.MeshBasicMaterial({map:texte(['PROVISEUR-OS',S.nom,'E : utiliser l’ordinateur'],512,300,'#0f172a','#38bdf8',44)}));ec.position.set(X(.85),1.2,Z(2.075));ec.rotation.y=Math.PI;ec.userData.dyn=true;scene.add(ec);}
+  deco(X(.9),.86,Z(1.55),.18,.04,.12,'#111827');deco(X(-.95),.82,Z(1.6),.12,.02,.12,'#1f2937');deco(X(-.95),1.02,Z(1.6),.03,.4,.03,'#9ca3af');deco(X(-.95),1.2,Z(1.68),.18,.1,.18,'#facc15');
+  deco(X(0),.9,Z(1.3),.7,.18,.04,'#facc15');{const pq=new T.Mesh(new T.PlaneGeometry(.66,.16),new T.MeshBasicMaterial({map:texte(['LE PROVISEUR'],512,128,'#1f2937','#facc15',60)}));pq.position.set(X(0),.9,Z(1.275));pq.userData.dyn=true;scene.add(pq);}
+  /* fauteuil du proviseur */
+  deco(X(0),.5,Z(2.75),.62,.12,.6,CU);deco(X(0),1,Z(3.05),.62,.85,.12,CU);for(const u of[-.33,.33])deco(X(u),.68,Z(2.75),.06,.06,.5,'#111827');deco(X(0),.27,Z(2.75),.06,.42,.06,'#111827');deco(X(0),.05,Z(2.75),.62,.04,.62,'#111827');
+  /* fauteuils visiteurs face au bureau */
+  for(const u of[-.62,.62]){deco(X(u),.46,Z(.55),.56,.1,.56,'#3f2a1d');deco(X(u),.82,Z(.29),.56,.62,.08,'#3f2a1d');for(const s of[-.24,.24])for(const t of[-.24,.24])deco(X(u+s),.21,Z(.55+t),.05,.42,.05,'#1f2937');mur(X(u+.3),X(u-.3),Z(.85),Z(.25));}
+  /* crédence, bibliothèque, coin salon, plantes, décor mural, fenêtre */
+  deco(X(0),.38,Z(4.2),2.4,.75,.5,BO);mur(X(1.2),X(-1.2),Z(4.5),Z(3.95));for(let i=0;i<7;i++)deco(X(-1+i*.3),.98,Z(4.2),.08,.32,.24,['#1d4ed8','#b91c1c','#15803d','#ca8a04','#0f766e','#7c3aed','#1e3a8a'][i]);
+  {const bx=bp.cx-4.75;deco(bx,1.1,Z(3.1),.4,2.2,1.6,BO);for(let e=0;e<4;e++){deco(bx-.02,.38+e*.5,Z(3.1),.36,.04,1.52,'#3b2410');for(let l=0;l<9;l++)deco(bx-.05,.56+e*.5,Z(2.5+l*.14),.24,.28+((l+e)%3)*.04,.1,['#7f1d1d','#1e3a8a','#14532d','#a16207','#3730a3'][(l+e)%5]);}mur(bx-.25,bx+.25,Z(3.95),Z(2.25));}
+  {const sx=bp.cx+4.4;deco(sx,.21,Z(-2.6),.85,.42,2,CU);deco(sx+.33,.67,Z(-2.6),.2,.5,2,CU);for(const v of[-1.65,-3.55])deco(sx,.3,Z(v),.85,.6,.2,CU);deco(sx-1,.2,Z(-2.6),.6,.4,1,'#5b3a1a');mur(sx-1.35,sx+.45,Z(-1.55),Z(-3.65));}
+  plante2(X(4.4),Z(-3.9),1.2);plante2(X(-4.3),Z(-3.9),1.1);plante2(X(2.2),Z(4.1),1);
+  for(const [v,c] of[[.6,'#f8fafc'],[1.5,'#fef3c7']]){box(.04,.55,.75,'#5b3a1a',bp.cx-4.97,1.75,Z(v));box(.05,.45,.65,c,bp.cx-4.95,1.75,Z(v));}
+  {const h=new T.Mesh(new T.CylinderGeometry(.22,.22,.05,24),M('#f8fafc'));h.rotation.x=Math.PI/2;h.position.set(X(-2.2),2.45,Z(4.45));scene.add(h);deco(X(-2.2),2.45,Z(4.42),.02,.16,.02,'#111827');}
+  {const cv=document.createElement('canvas');cv.width=512;cv.height=256;const g=cv.getContext('2d');const gr=g.createLinearGradient(0,0,0,256);gr.addColorStop(0,'#5aa9e6');gr.addColorStop(.7,'#cfe8f7');g.fillStyle=gr;g.fillRect(0,0,512,256);
+   g.fillStyle='#4d7c3a';g.beginPath();g.moveTo(0,190);for(let x=0;x<=512;x+=32)g.lineTo(x,170+Math.sin(x/60)*18);g.lineTo(512,256);g.lineTo(0,256);g.fill();g.fillStyle='#2f5d1e';g.fillRect(0,215,512,41);
+   g.strokeStyle='#3f2a14';g.lineWidth=6;for(const px of[80,420]){g.beginPath();g.moveTo(px,230);g.quadraticCurveTo(px+8,170,px+4,120);g.stroke();g.fillStyle='#1f5f20';for(let k=0;k<7;k++){g.save();g.translate(px+4,120);g.rotate(-Math.PI/2+(k-3)*.45);g.beginPath();g.ellipse(26,0,30,7,0,0,7);g.fill();g.restore();}}
+   const tx=new T.CanvasTexture(cv);const fen=new T.Mesh(new T.PlaneGeometry(3,1.5),new T.MeshBasicMaterial({map:tx}));fen.position.set(X(0),1.85,bp.cz-4.34);fen.userData.dyn=true;scene.add(fen);
+   for(const [w,h,dx,dy] of[[3.2,.08,0,.78],[3.2,.08,0,-.78],[.08,1.6,1.56,0],[.08,1.6,-1.56,0],[.06,1.5,0,0]])box(w,h,.08,'#e5e7eb',X(0)+dx,1.85+dy,bp.cz-4.3);}
+  box(.9,.3,.22,'#f8fafc',X(2.2),2.6,bp.cz+4.38);
+  {const lp=new T.PointLight(0xfff1dc,.7,10,2);lp.position.set(bp.cx,2.7,bp.cz);scene.add(lp);}
+  V3.bureau={cx:X(0),cz:Z(2.75),sortie:[X(-1.7),Z(2.6)],vis:[[X(.62),Z(.55)],[X(-.62),Z(.55)]],rot:rotF(bp.f)};
+  V3.asseoir=()=>{const b=V3.bureau,p=V3.pos;V3.siege=true;p.x=b.cx;p.z=b.cz;V3.look.yaw=rotF(bp.f);V3.look.pitch=-.16;toast('Vous êtes assis·e à votre bureau. E : ordinateur · S ou ▼ : vous lever.');};
+  V3.lever=()=>{const b=V3.bureau,p=V3.pos;V3.siege=false;p.x=b.sortie[0];p.z=b.sortie[1];};
+  V3.renvoyer=()=>{for(const g of V3.visiteurs||[]){scene.remove(g);const i=persons.indexOf(g);if(i>=0)persons.splice(i,1);const j=clickables.indexOf(g);if(j>=0)clickables.splice(j,1);}V3.visiteurs=[];const el=ov.querySelector('.v3-entretien');if(el)el.remove();};
+  V3.convoquer=(qui,o)=>{V3.renvoyer();if(!V3.siege)V3.asseoir();const B=V3.bureau,L=[];
+   const assied=(x,z,opts)=>{const g=perso3(x,z,{...opts,rot:B.rot});g.userData.assisFig=true;g.position.y=-.36;(g.userData.jambes||[]).forEach(l=>l.rotation.x=-1.5);L.push(g);return g;};
+   if(qui==='parents'){const fam=String(o.nom).split(' ')[0];assied(B.vis[0][0],B.vis[0][1],adulteOpts('M. '+fam,'Parent de '+o.nom,o.id*7+1,{fille:false}));assied(B.vis[1][0],B.vis[1][1],adulteOpts('Mme '+fam,'Parent de '+o.nom,o.id*7+2,{fille:true}));}
+   else if(qui==='eleve')assied(B.vis[0][0],B.vis[0][1],eleveOpts(o));
+   else assied(B.vis[0][0],B.vis[0][1],{...adulteOpts(o.nom,MATIERES[o.mat]||'Enseignant',o.id),id:o.id,type3:'prof'});
+   V3.visiteurs=L;const E=entretienSujet(qui,o);const el=document.createElement('div');el.className='v3-entretien';
+   el.innerHTML=`<b>${esc(E.titre)}</b><p>${esc(E.texte)}</p><div class="v3-choix">${E.choix.map((c,i)=>`<button class="v3-btn" data-i="${i}">${esc(c.l)}</button>`).join('')}</div>`;
+   el.querySelectorAll('button[data-i]').forEach(bt=>bt.onclick=()=>{const r=E.choix[+bt.dataset.i].f();try{save();}catch(e){}el.innerHTML=`<b>${esc(E.titre)}</b><p>${esc(r)}</p><div class="v3-choix"><button class="v3-btn" data-fin="1">Raccompagner</button></div>`;el.querySelector('[data-fin]').onclick=()=>{V3.renvoyer();toast('Entretien terminé.');};});
+   ov.appendChild(el);toast(qui==='parents'?'Les parents entrent et s’installent face à vous.':qui==='prof'?'L’enseignant·e entre et s’assoit.':'L’élève entre et s’assoit.');};
+ }
  const bc=salle(-5,-36,10,9,'S','Bureau du censeur','#a8a29e',S.censeur?.nom);
  {const [x,z]=pt(bc,0,1.6);box(2,.8,.9,'#78350f',x,.4,z);const [px,pz]=pt(bc,0,2.6);perso3(px,pz,{...adulteOpts(S.censeur.nom,'Censeur · '+(TRAIT_C[S.censeur.trait]||''),3,{peau:S.censeur.peau,fille:S.censeur.f}),rot:rotF(bc.f)+Math.PI,type3:'censeur'});}
  const sp=salle(5,-36,12,9,'S','Salle des professeurs','#a8a29e');
+ {const c=sp.cx,z=sp.cz;box(11.9,.02,8.9,'parquet|#9c6b3f',c,.05,z);for(let i=0;i<6;i++)box(.5,1.9,.5,'#64748b',c+5.65,.95,z-3.2+i*.55);walls.push({a:c+5.35,b:c+5.95,c:z-3.5,d:z+.1});box(1.6,.9,.6,'#e5e7eb',c-5.1,.45,z+3.9);box(.3,.42,.3,'#111827',c-5.4,1.11,z+3.9);box(.25,.5,.25,'#bae6fd',c-4.75,1.15,z+3.9);walls.push({a:c-5.95,b:c-4.25,c:z+3.55,d:z+4.45});box(.04,1,1.8,'#a16207',c-5.95,1.6,z);for(let k=0;k<6;k++)box(.05,.25,.2,k%2?'#f8fafc':'#fde68a',c-5.92,1.4+(k%2)*.35,z-.6+Math.floor(k/2)*.45);box(2.2,.42,.85,'#4a2c1a',c+3.6,.21,z+3.9);box(2.2,.5,.2,'#4a2c1a',c+3.6,.67,z+4.3);walls.push({a:c+2.4,b:c+4.8,c:z+3.4,d:z+4.4});{const pot=new T.Mesh(new T.CylinderGeometry(.24,.18,.45,12),M('#e7e5e4'));pot.position.set(c+5.5,.23,z+4);scene.add(pot);const fo=new T.Mesh(new T.SphereGeometry(.42,10,8),M('#2f8f3a'));fo.scale.set(1,1.4,1);fo.position.set(c+5.5,.95,z+4);scene.add(fo);}}
  V3.anims=[];panneau(['Correction des copies en cours','Approchez-vous d’un professeur pour voir ses copies'],pt(sp,0,4)[0],2.7,pt(sp,0,4)[1],3.4,.85,'#7f1d1d','#fef3c7');
  {const [x,z]=pt(sp,0,1);box(7,.78,2,'#92400e',x,.39,z);
   S.profs.slice(0,12).forEach((p,i)=>{const side=i%2?1:-1;const u=-3+Math.floor(i/2)*1.2;const [px,pz]=pt(sp,u,1+side*1.5);perso3(px,pz,{...adulteOpts(p.nom,`${MATIERES[p.mat]}${p.trait&&p.connu?' · '+TRAITS[p.trait]:''}`,p.id),assis:true,rot:rotF(sp.f)+(side>0?Math.PI:0),id:p.id,type3:'prof'});
@@ -3330,6 +3375,9 @@ function initVisite(ov){
  V3.promptLieu=()=>{const p=V3.pos;const s=V3.escalierProche();if(s)return V3.etage<s.max?`E : monter au niveau ${V3.etage+1}`:'E : redescendre au rez-de-chaussée';if(p&&p.z>49&&Math.abs(p.x)<7&&!V3.etage)return'E : sortir en ville';return'';};
  V3.actionLieu=()=>{const p=V3.pos;const s=V3.escalierProche();if(s){V3.etage=V3.etage<s.max?V3.etage+1:0;p.x=s.lx;p.z=s.lz;toast(V3.etage?`Niveau ${V3.etage}`:'Rez-de-chaussée');return true;}
   if(p&&p.z>49&&Math.abs(p.x)<7&&!V3.etage){fermerVisite();setTimeout(ouvrirVille,60);return true;}return false;};
+ {const pl0=V3.promptLieu,al0=V3.actionLieu;
+  V3.promptLieu=()=>{const b=V3.bureau,p=V3.pos;if(b&&!V3.etage){if(V3.siege)return ov.querySelector('.v3-entretien')?'Entretien en cours':'E : utiliser l’ordinateur · S : vous lever';if(p&&Math.hypot(p.x-b.cx,p.z-b.cz)<2.1)return'E : vous asseoir à votre bureau';}return pl0();};
+  V3.actionLieu=()=>{const b=V3.bureau,p=V3.pos;if(b&&!V3.etage){if(ov.querySelector('.v3-entretien'))return true;if(V3.siege){A['ordi']();return true;}if(p&&Math.hypot(p.x-b.cx,p.z-b.cz)<2.1){V3.asseoir();return true;}}return al0();};}
  V3.anims.push(()=>{if(pad.e&&!V3.padE){V3.padE=true;if(!V3.actionLieu())parler();}if(!pad.e)V3.padE=false;});
 
  /* --- Joueur --- */
@@ -3373,8 +3421,9 @@ function initVisite(ov){
   const sp=(keys['shift']?7.5:3.8)*dt;let f=0,s=0;
   if(keys['z']||keys['w']||keys['arrowup']||pad.f)f+=1;if(keys['s']||keys['arrowdown']||pad.b)f-=1;
   if(keys['q']||keys['a']||keys['arrowleft']||pad.l)s-=1;if(keys['d']||keys['arrowright']||pad.r)s+=1;
+  if(V3.siege){if(f<0)V3.lever();f=0;s=0;}
   if(f||s){const sy=Math.sin(look.yaw),cy=Math.cos(look.yaw);const dx=(-sy*f+cy*s)*sp,dz=(-cy*f-sy*s)*sp;if(!bloque(pos.x+dx,pos.z))pos.x+=dx;if(!bloque(pos.x,pos.z+dz))pos.z+=dz;}
-  let jy=0;if(V3.saut){V3.saut.t+=dt/.6;if(V3.saut.t>=1)V3.saut=null;else jy=Math.sin(V3.saut.t*Math.PI)*1.05;}cam.position.set(pos.x,1.62+(V3.etage||0)*HF_V+jy+(f||s?Math.sin(tAcc*9)*.03:0),pos.z);
+  let jy=0;if(V3.saut){V3.saut.t+=dt/.6;if(V3.saut.t>=1)V3.saut=null;else jy=Math.sin(V3.saut.t*Math.PI)*1.05;}cam.position.set(pos.x,1.62-(V3.siege?.45:0)+(V3.etage||0)*HF_V+jy+(f||s?Math.sin(tAcc*9)*.03:0),pos.z);
   FXV.update(tAcc,dt,{x:pos.x,z:pos.z});V3.tissu&&V3.tissu.update(tAcc);
   if(f||s){V3.pas=(V3.pas||0)+dt*(keys['shift']?3.2:2.1);if(V3.pas>1){V3.pas=0;SONV.pas();}}
   V3.cl=(V3.cl||0)+dt;if(V3.cl>80){V3.cl=0;SONV.cloche(3);toast('Sonnerie : changement de cours !');}
@@ -3387,7 +3436,7 @@ function initVisite(ov){
   for(const g of persons){const u=g.userData;if(u.lab)u.lab.visible=false;if((u.etage||0)!==(V3.etage||0)||!g.visible)continue;const dx=g.position.x-pos.x,dz=g.position.z-pos.z,d=Math.hypot(dx,dz);
    if(d<9&&d>.3){const ang=Math.acos(clamp((dx*fx+dz*fz)/d,-1,1));if(ang<.32)vus.push({g,d,ang});}}
   vus.sort((a,b)=>a.ang*3+a.d*.15-(b.ang*3+b.d*.15)).slice(0,3).forEach(({g,d})=>{const u=g.userData;if(!u.lab){u.lab=etiquette(u.nom,u.sous);u.lab.position.set(0,2.1,0);u.lab.scale.set(1.15,.29,1);g.add(u.lab);}u.lab.visible=true;u.lab.material.opacity=clamp((9-d)/2,0,1);});
-  {const pr=vus.filter(v=>v.d<3.2).sort((a,b)=>a.d-b.d)[0];prEl.hidden=!pr;if(pr)prEl.textContent=pr.g.userData.faute?`E ou clic : sanctionner ${pr.g.userData.nom} (${(FAUTES[pr.g.userData.faute]||'').toLowerCase()})`:`E ou clic : rencontrer ${pr.g.userData.nom}`;if(!pr&&V3.promptLieu){const t=V3.promptLieu();if(t){prEl.hidden=false;prEl.textContent=t;}}}
+  {const pr=V3.siege?null:vus.filter(v=>v.d<3.2).sort((a,b)=>a.d-b.d)[0];prEl.hidden=!pr;if(pr)prEl.textContent=pr.g.userData.faute?`E ou clic : sanctionner ${pr.g.userData.nom} (${(FAUTES[pr.g.userData.faute]||'').toLowerCase()})`:`E ou clic : rencontrer ${pr.g.userData.nom}`;if(!pr&&V3.promptLieu){const t=V3.promptLieu();if(t){prEl.hidden=false;prEl.textContent=t;}}}
   const z=zones.find(z=>(z.f==null||z.f===(V3.etage||0))&&pos.x>z.a&&pos.x<z.b&&pos.z>z.c&&pos.z<z.d);const nom=z?z.nom:(pos.x>-38&&pos.x<38&&pos.z>-24&&pos.z<24?'Cour de récréation':pos.x>97?'Pôle vie scolaire · amphithéâtre, internat, cantine':pos.x>52?'Esplanade est · gymnase et administration':'Allées du campus');
   const nom2=nom+(V3.etage?` · niveau ${V3.etage}`:'');if(nom2!==lieu){lieu=nom2;lieuEl.textContent=nom2;}
   rendu();
@@ -4094,7 +4143,7 @@ function canvasCopie(cd,w){
 }
 
 /* ================= V22 : écran titre et menu principal ================= */
-const VERSION_JEU='Version 29';
+const VERSION_JEU='Version 30';
 const CLE_AMB='proviseur-ambiance',CLE_PALM='proviseur-cm-v1-palmares';
 const ASTUCES=[
  'Le BEPC se passe en 3e, le Probatoire en 1ère et le Baccalauréat en Terminale. Dans le sous-système anglophone : GCE O Level en Form Five, GCE A Level en Upper Sixth.',
@@ -4934,7 +4983,7 @@ function initVille(ov){
  const IX=560,IZ=0;
  {const k=v.maison||'loc',[w,d]={loc:[9,7],appart:[13,9],duplex:[15,10],villa:[19,12]}[k]||[9,7],h=3,x0=IX-w/2,x1=IX+w/2,z0=IZ-d/2,z1=IZ+d/2,a=o=>v.objets.includes(o),grand=k!=='loc';
   VL.int={a:x0-.5,b:x1+.5,c:z0-.5,d:z1+.5};
-  box(w,.1,d,'sol|'+({villa:'#b9a07a',duplex:'#a8977c',appart:'#9fa8b4'}[k]||'#a39e95'),IX,-.05,IZ);const cm=({villa:'#ecdcbc',duplex:'#e2d6c0',appart:'#dfe3e8'}[k]||'#e4ddcf');
+  box(w,.1,d,(k==='villa'||k==='duplex'?'parquet|':'sol|')+({villa:'#b07a48',duplex:'#a0703f',appart:'#9fa8b4'}[k]||'#a39e95'),IX,-.05,IZ);{const cv=document.createElement('canvas');cv.width=512;cv.height=256;const g=cv.getContext('2d');const gr=g.createLinearGradient(0,0,0,256);gr.addColorStop(0,'#5aa9e6');gr.addColorStop(.75,'#d6ecf8');g.fillStyle=gr;g.fillRect(0,0,512,256);g.fillStyle='#4d7c3a';g.beginPath();g.moveTo(0,200);for(let x=0;x<=512;x+=32)g.lineTo(x,180+Math.sin(x/50)*16);g.lineTo(512,256);g.lineTo(0,256);g.fill();const fw=Math.min(4,(w-6)*.6+2.2),fen=new T.Mesh(new T.PlaneGeometry(fw,1.4),new T.MeshBasicMaterial({map:new T.CanvasTexture(cv)}));fen.position.set(IX+w*.18,1.75,IZ-d/2+.06);fen.userData.dyn=true;scene.add(fen);for(const [bw,bh,dx,dy] of[[fw+.16,.08,0,.74],[fw+.16,.08,0,-.74],[.08,1.56,fw/2+.04,0],[.08,1.56,-fw/2-.04,0]])box(bw,bh,.06,'#e5e7eb',IX+w*.18+dx,1.75+dy,IZ-d/2+.08);}const cm=({villa:'#ecdcbc',duplex:'#e2d6c0',appart:'#dfe3e8'}[k]||'#e4ddcf');
   const plaf=new T.Mesh(G(w,.1,d),new T.MeshLambertMaterial({color:0xf5f2ea,emissive:0x9a968e}));plaf.position.set(IX,h+.05,IZ);plaf.userData.dyn=plaf.userData.noShadow=true;scene.add(plaf);
   const mur=(xa,xb,za,zb,col)=>{box(Math.max(.16,xb-xa),h,Math.max(.16,zb-za),col||cm,(xa+xb)/2,h/2,(za+zb)/2);solide(xa,xb,za,zb);};
   mur(x0-.2,x1+.2,z0-.2,z0);mur(x0-.2,x1+.2,z1,z1+.2);mur(x0-.2,x0,z0,z1);mur(x1,x1+.2,z0,z1);
@@ -5277,11 +5326,12 @@ function realCiel(c,R){
  renderer.toneMappingExposure=.92;scene.fog=new T.Fog(0xd4e2ee,c.brume?c.brume[0]:70,c.brume?c.brume[1]:280);
 }
 /* ---------- Matériaux PBR texturés ---------- */
-const R_BOIS=new Set(['#92400e','#78350f','#7c2d12','#7c4a1e','#8b5a2b','#5b3a1a','#451a03','#6b4a2a','#b45309','#c98b4f','#b97a42']);
+const R_BOIS=new Set(['#4a2f17','#3b2410','#92400e','#78350f','#7c2d12','#7c4a1e','#8b5a2b','#5b3a1a','#451a03','#6b4a2a','#b45309','#c98b4f','#b97a42']);
 const R_VERRE=new Set(['#93c5fd','#bae6fd']),R_METAL=new Set(['#6b7280','#4b5563','#9ca3af','#64748b','#475569','#374151','#334155']),R_VERT=new Set(['#15803d','#22c55e','#2f8f3a','#3fa34a','#3f8f3a','#14532d','#16a34a','#4ade80']);
 const R_SOLS={'#a9a59d':['laterite',3.5,1],'#c4c1ba':['beton',2.6,1],'#d6d3cd':['beton',2,1],'#9a968e':['beton',2,.7],'#3f4652':['asphalte',4,1],'#b9a68a':['laterite',4,1],'#cfc8bb':['beton',2,1],'#8d939c':['tole',1.4,'c']};
 function realRole(hex,role){
  if(role==='sol')return{t:'terrazzo',e:1.5,k:'c'};
+ if(role==='parquet')return{t:'bois',e:1.4,k:'b'};
  if(hex==='#4a2c1a')return{cuir:1};
  if(R_SOLS[hex]){const [t,e,k]=R_SOLS[hex];return{t,e,k};}
  if(R_VERRE.has(hex))return{verre:1};if(R_BOIS.has(hex))return{t:'bois',e:1.3,k:'b'};if(R_METAL.has(hex))return{metal:1};if(R_VERT.has(hex))return{plante:1};
@@ -5423,7 +5473,7 @@ function realDecor(c,R,o){
   AL.forEach(([x,z],i)=>{const s=.85+rnd()*.35;q.setFromAxisAngle(Y,rnd()*6.28);m4.compose(new T.Vector3(x,3.7*s,z),q,sv.set(s,s,s));iF.setMatrixAt(i,m4);iC.setMatrixAt(i,m4);m4.compose(new T.Vector3(x,0,z),q,sv.set(s,s,s));iT.setMatrixAt(i,m4);});
   for(const im of[iF,iT,iC]){im.castShadow=im.receiveShadow=true;scene.add(im);}}
  /* Plafonds blancs dans les salles */
- const pl=new T.MeshStandardMaterial({map:R.TEX.enduit.d,normalMap:R.TEX.enduit.n,roughness:.9,color:0xf4f1ea});
+ const pl=new T.MeshStandardMaterial({map:R.TEX.enduit.d,normalMap:R.TEX.enduit.n,roughness:.9,color:0xf4f1ea,emissive:0x5a5750});
  for(const p of LIEU.plafonds||[]){const m=new T.Mesh(new T.PlaneGeometry(p.w,p.d),pl);m.rotation.x=Math.PI/2;m.position.set(p.cx,p.y,p.cz);m.receiveShadow=true;scene.add(m);}
 }
 
@@ -5520,6 +5570,54 @@ async function realVille(c){
  try{const Q=qualite3D(),f=Q==='ultra'?1.5:Q==='legere'?.5:1;if(R.P)realPool(c,R,{pool:Math.round(9*f),ray:Q==='legere'?28:40});VL.realOk=true;REAL.suivi=null;if(R.errP)bd.texte('Passants réalistes non chargés ('+String(R.errP.message||R.errP)+') : le reste de la ville est réaliste. Rouvrez la ville pour réessayer.',true);else{bd.cacher();c.toast('Graphismes réalistes activés');}}
  catch(e){console.error(e);bd.texte('Graphismes réalistes : affichage partiel ('+String(e&&e.message||e).slice(0,80)+').',true);}
 }
+
+/* ================= V30 : bureau du proviseur, ordinateur, convocations ================= */
+/* Sujet d'un entretien dans le bureau (parents, élève seul ou professeur) */
+function entretienSujet(qui,o){
+ if(qui==='prof'){const p=o,m=Math.round(p.motiv);return{titre:`Entretien avec ${p.nom}`,texte:`${p.nom} (${MATIERES[p.mat]||'enseignant'}, ${p.grade}) s’assoit face à vous. Motivation : ${m}/100${p.trait&&p.connu?' · réputé·e '+String(TRAITS[p.trait]||'').toLowerCase():''}.`,choix:[
+  {l:'Le ou la féliciter pour son travail',f:()=>{p.motiv=clamp(p.motiv+(m<85?7:2),0,100);log(`Entretien : vous félicitez ${p.nom}.`,'good');return m<85?'Touché·e par vos encouragements, l’enseignant·e repart motivé·e.':'L’enseignant·e apprécie, même s’il ou elle était déjà très investi·e.';}},
+  {l:'Exiger plus de rigueur (préparation, ponctualité)',f:()=>{p.motiv=clamp(p.motiv-4,0,100);if(R()<.25)p.q=Math.min(5,p.q+1);disc(.4);log(`Entretien : rappel à l’ordre de ${p.nom}.`);return'Le message est passé. Petite moue, mais promesse de se reprendre.';}},
+  {l:'Verser une prime d’encouragement (50 000 FCFA)',f:()=>{mvt(`Prime d’encouragement : ${p.nom}`,-50000);p.motiv=clamp(p.motiv+12,0,100);return'Remerciements chaleureux : la prime arrive au bon moment.';}},
+  {l:'Financer une formation pédagogique (120 000 FCFA)',f:()=>{mvt(`Formation pédagogique : ${p.nom}`,-120000);const gain=R()<.6;if(gain)p.q=Math.min(5,p.q+1);p.motiv=clamp(p.motiv+4,0,100);return gain?'Formation suivie à l’ENS pendant les congés : ses cours sont nettement meilleurs.':'La formation est intéressante, mais sans effet visible pour l’instant.';}}]};}
+ const e=o,moy=lastMoy(e),abs=e.abs||0,fam=String(e.nom).split(' ')[0];
+ const etat=moy==null?'Aucune note encore cette année.':moy<9?`Résultats inquiétants : ${f2(moy)}/20 de moyenne.`:moy>=14?`Parmi les meilleurs élèves : ${f2(moy)}/20 de moyenne.`:`Résultats moyens : ${f2(moy)}/20 de moyenne.`;
+ const absT=abs>3?` ${abs} absences cette année.`:'';const fa=V3&&V3.parId&&V3.parId[e.id]&&V3.parId[e.id].userData.faute;const fT=fa?` Surpris·e récemment : ${String(FAUTES[fa]||'').toLowerCase()}.`:'';
+ const H=d=>{e.humeur=clamp((e.humeur||55)+d,0,100);};
+ if(qui==='parents')return{titre:`Les parents de ${e.nom}`,texte:`M. et Mme ${fam} s’installent face à votre bureau pour parler de ${e.nom} (${e.div||e.level}). ${etat}${absT}${fT}`,choix:[
+  {l:'Les féliciter et les encourager',f:()=>{if(moy!=null&&moy>=12){rel('parents',2);e.base=clamp(e.base+.1,2,19);H(8);log(`Entretien : félicitations aux parents de ${e.nom}.`,'good');return'Les parents repartent fiers ; leur enfant redouble d’efforts.';}rel('parents',.5);return'Les parents s’attendaient à des reproches : l’effet sur l’élève reste limité.';}},
+  {l:'Mettre en place un suivi personnalisé (soutien)',f:()=>{e.base=clamp(e.base+(moy!=null&&moy<12?.3:.1),2,19);e.assid=clamp(e.assid+.04,.3,1);rel('parents',1);log(`Entretien : suivi personnalisé pour ${e.nom}.`);return'Accord trouvé : soutien deux soirs par semaine et cahier de liaison signé chaque vendredi.';}},
+  {l:'Faire signer un contrat d’assiduité et de discipline',f:()=>{e.assid=clamp(e.assid+.08,.3,1);e.abs=Math.max(0,abs-1);disc(.5);rel('parents',moy!=null&&moy>=12?-1:.5);return'Contrat signé. Au prochain manquement, la famille sera de nouveau convoquée.';}},
+  {l:'Avertir : prochaine faute = conseil de discipline',f:()=>{disc(1);e.assid=clamp(e.assid+.05,.3,1);rel('parents',-1);H(-6);return'Les parents sont inquiets : la discussion à la maison sera sérieuse.';}}]};
+ return{titre:`Entretien avec ${e.nom}`,texte:`${e.nom} (${e.div||e.level}) s’assoit, un peu intimidé·e. ${etat}${absT}${fT}`,choix:[
+  {l:'L’encourager et lui fixer un objectif',f:()=>{e.base=clamp(e.base+.12,2,19);H(6);return'L’élève repart avec un objectif clair pour la prochaine séquence.';}},
+  {l:'Le ou la nommer responsable de classe',f:()=>{H(10);disc(.3);rel('parents',1);return'Fier ou fière de cette confiance, l’élève veillera sur l’ordre en classe.';}},
+  {l:'Avertissement verbal',f:()=>{e.assid=clamp(e.assid+.05,.3,1);disc(.4);H(-4);return'Message reçu : yeux baissés et promesse de se tenir.';}},
+  {l:'Punition : travaux d’intérêt général pendant une semaine',f:()=>{disc(.8);H(-10);return'Une semaine à balayer la cour et ranger la bibliothèque.';}}]};
+}
+/* Ordinateur du proviseur */
+function renderOrdi(m){
+ const apps=[['accueil','Accueil'],['messages','Messagerie'],['convoc','Convocations'],['tableau','Tableau de bord']];
+ const nav=`<div class="row" style="gap:6px;flex-wrap:wrap">${apps.map(([k,l])=>`<button class="btn sm ${m.app===k?'primary':''}" data-act="ordi-app" data-k="${k}">${l}</button>`).join('')}</div>`;
+ let corps='';const pa=S.pa||0;
+ if(m.app==='messages'){const L=(S.journal||[]).slice(0,14);corps=`<div class="stack" style="gap:6px">${L.map(j=>`<div class="ordi-mail ${j.k||''}"><span class="small muted">${esc(j.d)} · ${j.k==='bad'?'Urgent':j.k==='good'?'Bonne nouvelle':'Information'}</span><span>${esc(j.t)}</span></div>`).join('')||'<p class="muted">Boîte de réception vide.</p>'}</div>`;}
+ else if(m.app==='convoc'){const f=m.filtre||'difficulte',F=[['difficulte','Élèves en difficulté'],['absents','Élèves absents ou indisciplinés'],['meilleurs','Meilleurs élèves'],['profs','Enseignants']];
+  let rows='';
+  if(f==='profs')rows=S.profs.slice().sort((a,b)=>a.motiv-b.motiv).slice(0,14).map(p=>`<tr><td>${esc(p.nom)}<br><span class="small muted">${esc(MATIERES[p.mat]||'')} · motivation ${Math.round(p.motiv)}</span></td><td class="mu-act"><button class="btn sm" data-act="convoquer" data-q="prof" data-id="${p.id}" ${pa<1?'disabled':''}>Convoquer</button></td></tr>`).join('');
+  else{const E=S.eleves.filter(e=>e.div);const L=f==='meilleurs'?E.filter(e=>lastMoy(e)!=null).sort((a,b)=>lastMoy(b)-lastMoy(a)):f==='absents'?E.slice().sort((a,b)=>((b.abs||0)+(V3&&V3.parId&&V3.parId[b.id]&&V3.parId[b.id].userData.faute?20:0))-((a.abs||0)+(V3&&V3.parId&&V3.parId[a.id]&&V3.parId[a.id].userData.faute?20:0))):E.filter(e=>lastMoy(e)!=null).sort((a,b)=>lastMoy(a)-lastMoy(b));
+   rows=(L.length?L:E).slice(0,14).map(e=>{const mo=lastMoy(e);return`<tr><td>${esc(e.nom)}<br><span class="small muted">${esc(e.div||e.level)}${mo!=null?' · '+f2(mo)+'/20':''}${e.abs?' · '+e.abs+' abs.':''}</span></td><td class="mu-act"><button class="btn sm" data-act="convoquer" data-q="eleve" data-id="${e.id}" ${pa<1?'disabled':''}>L’élève</button> <button class="btn sm" data-act="convoquer" data-q="parents" data-id="${e.id}" ${pa<1?'disabled':''}>Ses parents</button></td></tr>`;}).join('');}
+  corps=`<p class="small muted">Chaque convocation coûte 1 point d’action (il vous en reste ${pa}). La personne convoquée vient s’asseoir en face de vous.</p><div class="row" style="gap:6px;flex-wrap:wrap">${F.map(([k,l])=>`<button class="btn sm ${f===k?'primary':''}" data-act="ordi-filtre" data-k="${k}">${l}</button>`).join('')}</div><div class="scroll"><table class="tbl mu-tbl"><tbody>${rows||'<tr><td class="muted">Personne à convoquer.</td></tr>'}</tbody></table></div>`;}
+ else if(m.app==='tableau'){const moys=S.eleves.map(lastMoy).filter(x=>x!=null);const h=S.hist.at(-1);
+  corps=`<div class="statgrid"><div class="stat"><span class="eyebrow">Élèves</span><b>${S.eleves.length}</b></div><div class="stat"><span class="eyebrow">Moyenne générale</span><b>${moys.length?f2(avg(moys)):'—'}</b></div><div class="stat"><span class="eyebrow">Dernier taux de réussite</span><b>${h&&h.taux!=null?Math.round(h.taux)+' %':'—'}</b></div><div class="stat"><span class="eyebrow">Trésorerie</span><b>${moneyS(S.tresor)}</b></div><div class="stat"><span class="eyebrow">Moral des profs</span><b>${Math.round(moral())}</b></div><div class="stat"><span class="eyebrow">Discipline</span><b>${Math.round(S.discipline)}</b></div></div>${typeof cardMission==='function'?cardMission():''}`;}
+ else corps=`<div class="ordi-accueil"><b>Bonjour, Monsieur le Proviseur.</b><p>${esc(S.nom)} · année scolaire ${S.annee}–${S.annee+1}${S.semaine>=1&&S.semaine<=36?' · semaine '+S.semaine:''}</p><p class="small muted">${(S.journal||[]).length} messages dans la messagerie · ${pa} point(s) d’action cette semaine.</p></div>`;
+ return form('Ordinateur du proviseur','PROVISEUR-OS',`${nav}${m.note?`<p class="note">${esc(m.note)}</p>`:''}${corps}`,'<button class="btn primary" data-act="close-ui">Éteindre</button>');
+}
+const ACTIONS_V30={
+ 'ordi':()=>{UI.modal={type:'ordi',app:'accueil'};render();},
+ 'ordi-app':d=>{if(UI.modal&&UI.modal.type==='ordi'){UI.modal.app=d.k;UI.modal.note='';render();}},
+ 'ordi-filtre':d=>{if(UI.modal&&UI.modal.type==='ordi'){UI.modal.filtre=d.k;render();}},
+ 'convoquer':d=>{if(!V3||!V3.convoquer)return;if((S.pa||0)<1){UI.modal.note='Plus de points d’action cette semaine.';render();return;}
+  const o=d.q==='prof'?S.profs.find(p=>String(p.id)===String(d.id)):S.eleves.find(e=>String(e.id)===String(d.id));if(!o)return;S.pa--;UI.modal=null;render();V3.convoquer(d.q,o);save();}
+};
 
 /* ================= V29 : lettre de mission, anciens élèves, Génie en herbe, nouveaux objets ================= */
 /* ---------- Nouveaux objets pour la maison (tous visibles dans le logement en 3D) ---------- */
@@ -5813,7 +5911,7 @@ const A={
 };
 Object.assign(A,{
  'ville3d':()=>{if(V3)fermerVisite();ouvrirVille();},
- ...ACTIONS_V29,'vie-logement':()=>{if(V3)fermerVisite();UI.entrerLogement=true;if(VL){fermerVille();setTimeout(ouvrirVille,60);}else ouvrirVille();},
+ ...ACTIONS_V29,...ACTIONS_V30,'vie-logement':()=>{if(V3)fermerVisite();UI.entrerLogement=true;if(VL){fermerVille();setTimeout(ouvrirVille,60);}else ouvrirVille();},
  'vie-train':d=>{if(TRAINS[d.k]){vie().train=d.k;save();render();}},
  'vie-achat':d=>{UI.vieMsg=acheter(d.cat,d.k);save();try{if(VL&&VL.majVoiture&&d.cat==='voiture')VL.majVoiture();}catch(e){}render();},
  'vie-vendre':d=>{UI.vieMsg=vendre(d.cat,d.k);save();try{if(VL&&VL.majVoiture)VL.majVoiture();}catch(e){}render();},
@@ -6174,6 +6272,7 @@ function renderModal(){
  else if(m.type==='copiesProf') el.innerHTML=renderCopiesProf(m);
  else if(m.type==='duel') el.innerHTML=renderDuel(m);
  else if(m.type==='genie') el.innerHTML=renderGenie(m);
+ else if(m.type==='ordi') el.innerHTML=renderOrdi(m);
  else if(m.type==='boutique') el.innerHTML=renderBoutique(m);
  else if(m.type==='sanction') el.innerHTML=renderSanction(m);
  else if(m.type==='defi') el.innerHTML=renderDefiForm(m);

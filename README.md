@@ -2,6 +2,12 @@
 
 Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligue en ligne, défis, salle des proviseurs, joueurs en ligne, applaudissements. Les codes de lycée (hors ligne) fonctionnent toujours.
 
+## Nouveautés de la version 30 : votre bureau de proviseur
+- **Bureau réaliste** : parquet, bureau de direction en bois avec ordinateur, fauteuil en cuir, fauteuils visiteurs, bibliothèque, coin salon, plantes, diplômes, baie vitrée.
+- **Asseyez-vous** (E près du fauteuil) et **utilisez l’ordinateur** (E une fois assis) : messagerie, tableau de bord, lettre de mission, convocations.
+- **Convocations** (1 point d’action) : les parents d’un élève, l’élève seul ou un enseignant viennent s’asseoir face à vous en 3D ; l’entretien a des effets réels (résultats, assiduité, discipline, relations avec les parents, motivation des enseignants).
+- **Décor** : salle des professeurs avec parquet, coin café, casiers, tableau d’affichage et canapé ; logement avec parquet (duplex, villa) et baie vitrée.
+
 ## Nouveautés de la version 29 : un jeu qui se renouvelle
 - **Lettre de mission annuelle** : chaque rentrée, le Ministère (ou le promoteur) fixe trois objectifs adaptés à votre établissement (examens, discipline, effectifs, trésorerie, équipements…). Prime pour chaque objectif atteint, dotation d’un million de FCFA si les trois le sont. Suivi en direct sur le tableau de bord.
 - **Anciens élèves** : vos meilleurs bacheliers sont suivis année après année (études, premiers emplois, métiers). Nouvel onglet « Anciens élèves » et cinq nouveaux événements : journée carrières, ancien devenu célèbre, stages, gala de l’association, proposition douteuse.
@@ -26,7 +32,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Plan libre du campus** : bâtiments en barre, en L ou en U, jusqu’à 4 niveaux, visitables en 3D par l’escalier.
 - **Discipline en 3D** : élèves marqués d’un « ! » (bagarre, téléphone, retard, tenue, sommeil, graffitis, jeux d’argent, cigarette) et sept sanctions possibles, avec leurs conséquences.
 
-Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 11 : les joueurs reçoivent la nouvelle version au prochain chargement.
+Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 12 : les joueurs reçoivent la nouvelle version au prochain chargement.
 
 ## Lancer en local
     node server.js        # puis ouvrir http://localhost:3000
