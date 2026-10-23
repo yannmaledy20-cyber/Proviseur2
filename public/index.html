@@ -4938,8 +4938,9 @@ function initVille(ov){
  /* Joueur et voiture personnelle */
  const pos={x:-30,z:124},look={yaw:0,pitch:.04};const keys={};const pad={};let auto=null,enAuto=false,vit=0,cap=0;VL.pos=pos;VL.look=look;
  function majVoiture(){const c=meilleureVoiture();if(!c){if(auto){scene.remove(auto);auto=null;}return;}if(auto&&auto.userData.k===c.k)return;const p=auto?auto.position.clone():null;if(auto)scene.remove(auto);
-  auto=vehicule(c.c,c.k==='moto'?'moto':'car');auto.userData.k=c.k;if(VL.achatIci){VL.achatIci=false;let q=[pos.x,pos.z-7];for(const [dx,dz] of [[0,-5],[5,0],[-5,0],[0,5],[6,-6],[-6,-6],[0,-9],[9,0],[-9,0]]){if(!bloque(pos.x+dx,pos.z+dz,1.8)){q=[pos.x+dx,pos.z+dz];break;}}auto.position.set(q[0],0,q[1]);toast(`Votre ${c.n} vous attend juste à côté : appuyez sur F pour la conduire.`);}else if(p)auto.position.copy(p);else auto.position.set(150,0,124.5);auto.rotation.y=Math.PI/2;cap=Math.PI/2;}
+  auto=vehicule(c.c,c.k==='moto'?'moto':'car');auto.userData.k=c.k;if(VL.achatIci){VL.achatIci=false;let q=[pos.x,pos.z-7];for(const [dx,dz] of [[0,-5],[5,0],[-5,0],[0,5],[6,-6],[-6,-6],[0,-9],[9,0],[-9,0]]){if(!bloque(pos.x+dx,pos.z+dz,1.8)){q=[pos.x+dx,pos.z+dz];break;}}auto.position.set(q[0],0,q[1]);toast(`Votre ${c.n} vous attend juste à côté : appuyez sur F pour la conduire.`);}else if(p)auto.position.copy(p);else auto.position.set(-26.2,0,125.3);auto.rotation.y=Math.PI/2;cap=Math.PI/2;}
  majVoiture();VL.majVoiture=()=>{VL.achatIci=true;majVoiture();};
+ if(auto){look.yaw=-.95;const nv=meilleureVoiture();setTimeout(()=>{if(VL&&!VL.stop)toast(`Votre véhicule${nv?' ('+nv.n+')':''} vous attend juste devant l’établissement : appuyez sur F pour le conduire.`);},1500);}
  const bloque=(x,z,r)=>{r=r||.35;if(x<-L-25||x>L+25||z<-L-25||z>L+25)return true;return murs.some(w=>x>w.a-r&&x<w.b+r&&z>w.c-r&&z<w.d+r);};
  const toast=t=>{const el=ov.querySelector('#vl-toast');el.textContent=t;el.hidden=false;clearTimeout(VL.tt);VL.tt=setTimeout(()=>{el.hidden=true;},3200);};
  function porteProche(){let best=null,bd=4.2;for(const p of portes){const d=Math.hypot(p.x-pos.x,p.z-pos.z);if(d<bd){bd=d;best=p;}}return best;}
