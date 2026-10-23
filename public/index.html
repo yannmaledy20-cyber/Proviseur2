@@ -1072,11 +1072,11 @@ function bilan(){
  const cov=couverture();
  if(cov.ratio<.85){rel('inspection',-6);}else rel('inspection',2);
  const recettes=sum(S.ledger.filter(l=>l.montant>0).map(l=>l.montant)),depenses=-sum(S.ledger.filter(l=>l.montant<0).map(l=>l.montant));
- const atteints=checkObjectifs();
+ const atteints=checkObjectifs();let MIS=null;try{MIS=missionEval(taux,rangDep,tbx);}catch(e){console.warn(e);}
  S.hist.push({annee:S.annee,BEPC:res.BEPC?pct(res.BEPC.admis,res.BEPC.candidats):null,Probatoire:res.Probatoire?pct(res.Probatoire.admis,res.Probatoire.candidats):null,Bac:res['Baccalauréat']?pct(res['Baccalauréat'].admis,res['Baccalauréat'].candidats):null,'GCE O Level':res['GCE O Level']?pct(res['GCE O Level'].admis,res['GCE O Level'].candidats):null,'GCE A Level':res['GCE A Level']?pct(res['GCE A Level'].admis,res['GCE A Level'].candidats):null,taux,rangDep,rangReg,eff:S.eleves.length,tresor:S.tresor,rep:S.reputation});
  log(`Bilan ${S.annee}–${S.annee+1} : ${taux!=null?Math.round(taux)+' % de réussite globale, ':''}${rangDep?rangDep+'e au classement régional, '+rangReg+'e au classement national. ':''}Réputation ${dr>=0?'+':''}${dr.toFixed(1).replace('.',',')}.`);
  coupeFinale();try{palmaresMaj();}catch(e){}try{if(S.ligueOn)publierLigue(true);}catch(e){}S.pending={type:'bilan',dr,taux,recettes,depenses,atteints,cov:cov.ratio,attente};
- try{S.queue.push({type:'msg',titre:'Révision de votre salaire',html:esc(revisionSalaire(taux,attente,rangDep)),img:'argent'});}catch(e){}
+ if(MIS)S.queue.push({type:'msg',titre:'Lettre de mission : le verdict',html:MIS});try{S.queue.push({type:'msg',titre:'Révision de votre salaire',html:esc(revisionSalaire(taux,attente,rangDep)),img:'argent'});}catch(e){}
  // Fin de partie
  let over=null;
  if(taux!=null&&S.hist.length>1){
@@ -1116,7 +1116,7 @@ function nouvelleAnnee(){
   }
   if(fate==='stay'){e.redouble++;e.base=clamp(e.base+gauss(.4,.3),2,19);out.redoublants++;}
   if(e.fig&&['oriente','parti','exclu','abandon'].includes(fate)) log(`${e.nom} (${FIG[e.fig.t].l}) quitte l’établissement : ${({oriente:'orienté·e vers un autre lycée',parti:'sans place après un second échec',exclu:'exclu·e',abandon:'abandon'})[fate]}.`,'bad');
-  if(fate==='bachelier'){out.bacheliers++;if(e.fig||e.star)ancien(e);continue;}
+  if(fate==='bachelier'){out.bacheliers++;if(e.fig||e.star)ancien(e);else if(['Excellent','Très Bien'].includes(e.examen?.mention)||(e.examen?.mention==='Bien'&&R()<.5)||R()<.02)ancien(e,true);continue;}
   if(e.star&&!e.fig&&['oriente','parti','exclu','abandon'].includes(fate)) log(`★ ${e.nom} quitte l’établissement (${({oriente:'orientation',parti:'second échec',exclu:'exclusion',abandon:'abandon'})[fate]}).`,'bad');
   if(fate==='oriente'){out.orientes++;continue;}
   if(fate==='parti'){out.partis++;continue;}
@@ -1141,7 +1141,7 @@ function nouvelleAnnee(){
   for(let i=0;i<k;i++){const m=R()<S.rel.inspection/100&&manque.length?pick(manque):pick(Object.keys(MATIERES).filter(x=>x!=='PHILO'&&x!=='LIT'||S.bat.bloc));const p=newProf(m,'fonctionnaire');S.profs.push(p);arrives.push(`${p.nom} (${MATIERES[m]})`);}
  }
  S.resultatsPrec=S.resultats;S.resultats=null;S.blancs=null;
- S.annee++;S.phase=0;S.coupe={};S.gouv=null;S.rattrap={};S.ledger=[];S.semaine=0;S.pa=PA_MAX;S.acc=accVide();S.paradeQ=0;S.ossucam=0;S.prepAnnee=0;S.mois=null;S.prep={soutien:false,sensib:false};
+ S.annee++;try{missionNouvelle(true);}catch(e){console.warn(e);}S.phase=0;S.coupe={};S.gouv=null;S.rattrap={};S.ledger=[];S.semaine=0;S.pa=PA_MAX;S.acc=accVide();S.paradeQ=0;S.ossucam=0;S.prepAnnee=0;S.mois=null;S.prep={soutien:false,sensib:false};
  S.flags={};
  S.evUsed=[];S.actions={seminaire:false,demande:false,fav:{},vis:{}};S.recoursFait=false;S.recoursMsg='';S.seqFaites=0;S.trimFaits=0;
  S.divisions.forEach(d=>d.ids=[]);
@@ -1290,7 +1290,7 @@ const EVENTS=[
  {id:'affectation',w:.7,when:()=>S.type==='public'&&PH().id==='seq',titre:'Nouvelle affectation',
   texte:()=>'La Délégation régionale vous affecte un enseignant fraîchement sorti de l’ENS.',
   choix:()=>[{l:'L’accueillir',f:()=>{const c=couverture();const manque=Object.entries(c.by).filter(([,o])=>o.cov<o.need).map(([s])=>s);const p=newProf(manque.length?pick(manque):pick(['FR','MATH','ANG']),'fonctionnaire');p.grade='PCEG';S.profs.push(p);affecter();return`${p.nom} rejoint l’équipe pour enseigner ${MATIERES[p.mat]}.`;}}]},
- {id:'genie',w:5,when:()=>S.clubs?.genie&&S.semaine>=27&&S.semaine<=30,ctx:()=>({r:pick(S.rivaux).nom}),titre:'Tournoi régional de Génie en herbe',
+ {id:'genie',w:5,when:()=>(S.clubs?.genie||S.genie?.qualifReg===S.annee)&&S.semaine>=27&&S.semaine<=30,ctx:()=>({r:pick(S.rivaux).nom}),titre:'Tournoi régional de Génie en herbe',
   texte:c=>`Votre équipe est qualifiée pour le tournoi régional de Génie en herbe, retransmis à la radio. Le favori est ${c.r}. Comment composer l’équipe ?`,
   choix:()=>[['Miser sur les scientifiques','sci'],['Miser sur les littéraires','lit'],['Une équipe équilibrée','eq']].map(([l,k])=>({l,f:()=>genieTournoi(k)}))},
  {id:'journal',w:2,when:()=>S.clubs?.journal&&S.integrite<50&&PH().id!=='examens',titre:'Le journal de l’établissement enquête',
@@ -1452,11 +1452,11 @@ function choisirFigures(n,pool){
   faireFigure(e,t);log(`Élève à suivre : ${e.nom} (${e.level}), ${FIG[t].l.toLowerCase()}.`);
  }
 }
-function ancien(e){
+function ancien(e,discret){
  const m=e.examen?.mention;const top=['Excellent','Très Bien','Bien'].includes(m);
  const dev=e.fig?.t==='sportif'?pick(['footballeur professionnel','entraîneur national','handballeur international']):top?pick(['médecin','ingénieur·e en télécommunications','magistrat·e','chercheur·se','pilote de ligne']):pick(['enseignant·e','commerçant·e','fonctionnaire','entrepreneur·e','journaliste']);
- S.alumni.push({nom:e.nom,annee:S.annee+1,t:e.fig?.t||'suivi',devenir:dev,don:false});
- log(`★ ${e.nom} quitte l’établissement avec son Bac. Dans quelques années : ${dev}.`,'good');
+ S.alumni.push({nom:e.nom,annee:S.annee+1,t:e.fig?.t||'suivi',devenir:dev,don:false,classe:e.div||e.level,mention:e.examen?.mention||null});if(S.alumni.length>60){const i=S.alumni.findIndex(a=>a.t==='suivi'&&!a.don&&!a.celebre);if(i>=0)S.alumni.splice(i,1);}
+ if(!discret)log(`★ ${e.nom} quitte l’établissement avec son Bac. Dans quelques années : ${dev}.`,'good');
 }
 const FIGEV={
  genie:{titre:e=>e.fig.bourse?'Olympiades de mathématiques':'Un génie menacé d’abandon',
@@ -1714,7 +1714,7 @@ const DISCOURS={moral:['Moral','Encourager élèves et enseignants : moral et as
 const MERCREDI={revision:['Révisions scientifiques','Maths, PCT, SVT et informatique progressent.'],sport:['Sport et OSSUCAM','EPS, discipline et préparation des jeux OSSUCAM.'],clubs:['Clubs et culture','Lettres et langues progressent, les parents apprécient.']};
 const PARADE={intense:['Répétitions intensives','−10 % sur les notes de la séquence, défilé brillant.'],modere:['Répétitions modérées','−5 % sur les notes, défilé honorable.'],aucune:['Pas de répétition','Aucun effet sur les notes, défilé raté.']};
 function semaineSuivante(){
- const w=S.semaine,sp=specialSem(w),h=S.hebdo,A=S.acc;
+ const w=S.semaine,sp=specialSem(w),h=S.hebdo,A=S.acc;if(w===24)try{genieAnnonce();}catch(e){console.warn(e);}
  effetsSemaine(w,A);if(h.discours==='moral'){motivAll(.7);A.assid+=.05;humeurAll(.6);}
  else if(h.discours==='discipline'){disc(1.5);motivAll(-.2);}
  else{A.notes+=.25;motivAll(-.6);disc(.5);humeurAll(-.6);}
@@ -1972,7 +1972,7 @@ function cardClubs(){
 }
 function genieTournoi(k){
  const theme=pick(['sci','lit','eq']);const top=S.eleves.slice().sort((a,b)=>b.base-a.base).slice(0,5);const niv=avg(top.map(e=>e.base))||12;
- const p=clamp(.45+(niv-13)/12+(k===theme?.12:k==='eq'?.05:0)+(S.clubs?.sciences&&k==='sci'?.05:0)+(S.clubs?.theatre&&k==='lit'?.05:0),.2,.85);
+ const p=clamp(.45+(niv-13)/12+(S.genie?.qualifReg===S.annee?.08:0)+(k===theme?.12:k==='eq'?.05:0)+(S.clubs?.sciences&&k==='sci'?.05:0)+(S.clubs?.theatre&&k==='lit'?.05:0),.2,.85);
  let i=0;while(i<3&&R()<p)i++;
  const th={sci:'les sciences',lit:'les lettres et l’histoire',eq:'la culture générale'}[theme];
  if(i===3){rep(6);rel('parents',4);S.stats.genie=true;return`Les questions portaient surtout sur ${th}. Votre équipe remporte la finale ! Le trophée régional trône désormais dans votre bureau.`;}
@@ -4094,7 +4094,7 @@ function canvasCopie(cd,w){
 }
 
 /* ================= V22 : écran titre et menu principal ================= */
-const VERSION_JEU='Version 28';
+const VERSION_JEU='Version 29';
 const CLE_AMB='proviseur-ambiance',CLE_PALM='proviseur-cm-v1-palmares';
 const ASTUCES=[
  'Le BEPC se passe en 3e, le Probatoire en 1ère et le Baccalauréat en Terminale. Dans le sous-système anglophone : GCE O Level en Form Five, GCE A Level en Upper Sixth.',
@@ -4950,14 +4950,28 @@ function initVille(ov){
   if(a('tv'))box(1.5,.85,.06,'#0f172a',sx,1.05,z0+.12);else box(.8,.5,.35,'#1f2937',sx,.75,z0+.35);
   box(2.6,.02,1.8,'#9f1239',sx,.01,IZ+.6);box(1.1,.4,.6,'#92400e',sx,.2,IZ+.3);solide(sx-.55,sx+.55,IZ,IZ+.6);
   if(a('phone'))box(.08,.012,.16,'#111827',sx+.3,.41,IZ+.3);
-  box(2.2,.42,.85,'#57534e',sx,.21,IZ+1.6);box(2.2,.5,.2,'#57534e',sx,.67,IZ+1.95);for(const s of[-1.15,1.15])box(.2,.6,.85,'#57534e',sx+s,.3,IZ+1.6);solide(sx-1.25,sx+1.25,IZ+1.15,IZ+2.05);
-  if(k==='villa'||k==='duplex'){for(const s of[-1,1]){box(.85,.42,.85,'#78716c',sx+s*2.05,.21,IZ+.4);box(.85,.5,.18,'#78716c',sx+s*2.05+s*.33,.67,IZ+.4).rotation.y=Math.PI/2;solide(sx+s*2.05-.45,sx+s*2.05+.45,IZ-.05,IZ+.85);}}
+  const SOF=a('canape')?'#4a2c1a':'#57534e';box(2.2,.42,.85,SOF,sx,.21,IZ+1.6);box(2.2,.5,.2,SOF,sx,.67,IZ+1.95);for(const s of[-1.15,1.15])box(.2,.6,.85,SOF,sx+s,.3,IZ+1.6);solide(sx-1.25,sx+1.25,IZ+1.15,IZ+2.05);
+  if(k==='villa'||k==='duplex'||a('canape')){for(const s of[-1,1]){box(.85,.42,.85,a('canape')?'#4a2c1a':'#78716c',sx+s*2.05,.21,IZ+.4);box(.18,.5,.85,a('canape')?'#4a2c1a':'#78716c',sx+s*2.05+s*.33,.67,IZ+.4);solide(sx+s*2.05-.45,sx+s*2.05+.45,IZ-.05,IZ+.85);}}
   box(1.4,.9,.6,'#e5e7eb',xc+.95,.45,z0+.35);box(1.4,.04,.62,'#475569',xc+.95,.92,z0+.35);box(.7,1.8,.7,'#f8fafc',x1-.45,.9,z0+.45);solide(xc+.25,xc+1.65,z0,z0+.7);solide(x1-.8,x1,z0,z0+.8);
   if(grand){box(1.3,.75,.85,'#92400e',xc+1.5,.38,IZ+1.6);for(const [dx,dz] of[[-.45,-.6],[.45,-.6],[-.45,.6],[.45,.6]])box(.42,.45,.42,'#78350f',xc+1.5+dx,.23,IZ+1.6+dz);solide(xc+.85,xc+2.15,IZ+1.15,IZ+2.05);}
-  if(a('groupe')){box(.9,.6,.6,'#facc15',x1-.55,.3,z1-.45);solide(x1-1,x1,z1-.75,z1);}
+  if(a('groupe')){box(.9,.6,.6,'#facc15',IX+1.05,.3,z1-.4);solide(IX+.6,IX+1.5,z1-.7,z1);}
   {const pt=new T.Mesh(sg('pot',()=>new T.CylinderGeometry(.22,.17,.45,12)),M('#b45309'));pt.position.set(xc+.45,.23,z1-.45);scene.add(pt);const fe=new T.Mesh(sg('feu',()=>new T.SphereGeometry(.45,12,10)),M('#15803d'));fe.position.set(xc+.45,.85,z1-.45);scene.add(fe);}
   for(const [tx,tz,c] of[[sx,z1-.03,'#b45309'],[bx,z1-.03,'#0f766e']]){box(1.1,.75,.04,'#451a03',tx,1.7,tz);box(.95,.6,.05,c,tx,1.7,tz-.01);}
   for(const [lx,lz] of[[sx,IZ],[bx,IZ]]){const lp=new T.PointLight(0xfff1dc,.9,12,2);lp.position.set(lx,2.7,lz);scene.add(lp);const ab=new T.Mesh(sg('abat',()=>new T.SphereGeometry(.18,10,8)),new T.MeshBasicMaterial({color:0xfff7e0}));ab.position.set(lx,2.85,lz);scene.add(ab);}
+  /* objets achetés : chacun a sa place */
+  if(a('lit')){box(2.3,1.2,.12,'#5b3a1a',bx,.6,z0+.06);box(1.66,.08,1.3,'#b45309',bx,.62,z0+1.5);}
+  if(a('costume')){box(.05,1.5,.05,'#78350f',x0+1.65,.75,z1-.35);box(.5,.06,.06,'#78350f',x0+1.65,1.5,z1-.35);box(.46,.62,.16,'#b45309',x0+1.65,1.15,z1-.35);box(.12,.62,.17,'#15803d',x0+1.65,1.15,z1-.35);solide(x0+1.4,x0+1.9,z1-.6,z1);}
+  if(a('velo')){box(.25,.08,1,'#334155',x0+.6,.08,IZ+.4);box(.08,.75,.08,'#334155',x0+.6,.45,IZ+.75);box(.3,.08,.25,'#111827',x0+.6,.85,IZ+.75);box(.08,.9,.08,'#334155',x0+.6,.5,IZ);box(.45,.06,.06,'#111827',x0+.6,.95,IZ);box(.1,.35,.35,'#64748b',x0+.6,.3,IZ+.15);solide(x0+.35,x0+.85,IZ-.15,IZ+.95);}
+  if(a('cinema')){box(2.1,1.15,.06,'#0b1220',sx,1.3,z0+.1);for(const s of[-1.25,1.25])box(.3,1.1,.3,'#111827',sx+s,.55,z0+.25);box(1.2,.1,.12,'#111827',sx,.55,z0+.5);}
+  if(a('console')){box(.42,.08,.3,'#111827',sx+.55,.54,z0+.35);box(.16,.04,.1,'#1f2937',sx-.2,.42,IZ+.25);box(.16,.04,.1,'#1e3a8a',sx+.15,.42,IZ+.35);}
+  if(a('biblio')){box(.4,2.1,1.4,'#7c2d12',x1-.22,1.05,IZ-1);const cl=['#b91c1c','#1d4ed8','#15803d','#ca8a04','#7c3aed','#0f766e','#9a3412'];for(let e=0;e<4;e++){box(.36,.04,1.32,'#5b2412',x1-.24,.35+e*.48,IZ-1);for(let l=0;l<9;l++)box(.24,.3+((l*7+e)%3)*.04,.11,cl[(l+e)%cl.length],x1-.27,.54+e*.48,IZ-1.6+l*.14);}solide(x1-.45,x1,IZ-1.75,IZ-.25);}
+  if(a('piano')){box(1.45,1.2,.55,'#111111',x1-1,.6,z1-.32);box(1.3,.05,.22,'#f8fafc',x1-1,.8,z1-.7);for(let t=0;t<9;t++)box(.05,.02,.12,'#111111',x1-1.55+t*.14,.83,z1-.72);box(.8,.45,.35,'#111111',x1-1,.23,z1-1.05);solide(x1-1.75,x1-.25,z1-1.25,z1);}
+  if(a('cuisine')){box(.46,.28,.34,'#d1d5db',xc+.55,1.08,z0+.3);box(.06,.2,.02,'#111827',xc+.55,1.08,z0+.48);box(.6,.6,.04,'#111827',xc+1.25,.45,z0+.68);box(.9,.06,.5,'#94a3b8',xc+.95,2.1,z0+.28);for(const dx of[.55,1.3]){box(.32,.05,.32,'#78350f',xc+dx,.72,z0+1.08);box(.05,.7,.05,'#475569',xc+dx,.35,z0+1.08);}solide(xc+.35,xc+1.5,z0+.9,z0+1.25);}
+  if(a('aquarium')){box(.5,.8,1.2,'#1f2937',xc+.38,.4,z0+1.9);box(.44,.06,1.12,'#e7d3a1',xc+.38,.83,z0+1.9);const vit=new T.Mesh(new T.BoxGeometry(.46,.56,1.16),new T.MeshStandardMaterial({color:0x5fb6dc,transparent:true,opacity:.38,roughness:.05,metalness:.1}));vit.position.set(xc+.38,1.08,z0+1.9);vit.userData.dyn=true;scene.add(vit);
+   const poi=[];for(let f=0;f<6;f++){const pm=new T.Mesh(sg('pois',()=>new T.BoxGeometry(.03,.05,.1)),new T.MeshBasicMaterial({color:[0xf97316,0xfacc15,0x38bdf8,0xef4444,0xa855f7,0x22c55e][f]}));pm.userData.dyn=true;scene.add(pm);poi.push(pm);}
+   (VL.anims0||(VL.anims0=[])).push(t=>poi.forEach((pm,f)=>{const u=t*(.4+f*.07)+f*1.7;pm.position.set(xc+.38+Math.sin(u*1.3)*.1,1.0+Math.sin(u*.9+f)*.13,z0+1.9+Math.sin(u)*.45);pm.rotation.y=Math.cos(u)>0?0:Math.PI;}));solide(xc+.1,xc+.66,z0+1.3,z0+2.5);}
+  if(a('oeuvre')){const cv=document.createElement('canvas');cv.width=384;cv.height=256;const g=cv.getContext('2d');g.fillStyle='#7c2d12';g.fillRect(0,0,384,256);const C=['#f59e0b','#15803d','#b91c1c','#fde68a','#0f766e','#1e3a8a','#facc15'];for(let n=0;n<26;n++){g.fillStyle=C[n%C.length];g.beginPath();const cx2=20+((n*97)%344),cy2=20+((n*53)%216),r2=12+(n*7)%38;if(n%3)g.arc(cx2,cy2,r2,0,7);else{g.moveTo(cx2,cy2-r2);g.lineTo(cx2+r2,cy2+r2);g.lineTo(cx2-r2,cy2+r2);}g.fill();}g.strokeStyle='#111827';g.lineWidth=5;for(let n=0;n<6;n++){g.beginPath();g.moveTo(0,40+n*40);g.bezierCurveTo(120,n*30,260,256-n*30,384,40+n*40);g.stroke();}
+   const tx=new T.CanvasTexture(cv);tx.encoding=T.sRGBEncoding;box(1.9,1.3,.05,'#b45309',(x1+xc)/2+.4,1.75,z1-.03);const toile=new T.Mesh(new T.PlaneGeometry(1.75,1.15),new T.MeshStandardMaterial({map:tx,roughness:.8}));toile.position.set((x1+xc)/2+.4,1.75,z1-.07);toile.rotation.y=Math.PI;toile.userData.dyn=true;scene.add(toile);}
   const mm=article('maison',v.maison);lieux.interieur={nom:`Chez vous · ${mm?mm.n:'appartement en location'}`,a:x0,b:x1,c:z0,d:z1};
   portes.push({k:'sortie',nom:'Sortir dans la rue',x:IX,z:z1-.9});portes.push({k:'repos',nom:'Passer une soirée tranquille',x:bx+1.2,z:z0+2.6});}
  /* Piétons et circulation */
@@ -5024,7 +5038,7 @@ function initVille(ov){
   pos.x=px;pos.z=pz-2.6;look.yaw=Math.PI;look.pitch=.08;toast('Vous voici devant chez vous : appuyez sur E pour entrer.');};
  /* Boucle */
  fxOmbres(scene);fxFusion(scene,THREE);POST=REALV?null:fxPost(renderer,scene,cam,W(),H(),{});
- VL.anims=[];if(REALV)realVille({T,scene,renderer,cam,persons:VL.gens,FXV:FX,toast,cvF,ov,anims:VL.anims,pos:()=>({x:cam.position.x,z:cam.position.z}),etage:()=>0,lieu:VL});
+ VL.anims=VL.anims0||[];VL.anims0=null;if(REALV)realVille({T,scene,renderer,cam,persons:VL.gens,FXV:FX,toast,cvF,ov,anims:VL.anims,pos:()=>({x:cam.position.x,z:cam.position.z}),etage:()=>0,lieu:VL});
  const lieuEl=ov.querySelector('#vl-lieu'),argEl=ov.querySelector('#vl-argent');let lieu='',tAcc=0,mmT=0,hudT=0;const clock=new T.Clock();
  const croisements=RT.flatMap(r=>[r-7.5,r+7.5]);
  const moi=VL;function frame(){
@@ -5268,6 +5282,7 @@ const R_VERRE=new Set(['#93c5fd','#bae6fd']),R_METAL=new Set(['#6b7280','#4b5563
 const R_SOLS={'#a9a59d':['laterite',3.5,1],'#c4c1ba':['beton',2.6,1],'#d6d3cd':['beton',2,1],'#9a968e':['beton',2,.7],'#3f4652':['asphalte',4,1],'#b9a68a':['laterite',4,1],'#cfc8bb':['beton',2,1],'#8d939c':['tole',1.4,'c']};
 function realRole(hex,role){
  if(role==='sol')return{t:'terrazzo',e:1.5,k:'c'};
+ if(hex==='#4a2c1a')return{cuir:1};
  if(R_SOLS[hex]){const [t,e,k]=R_SOLS[hex];return{t,e,k};}
  if(R_VERRE.has(hex))return{verre:1};if(R_BOIS.has(hex))return{t:'bois',e:1.3,k:'b'};if(R_METAL.has(hex))return{metal:1};if(R_VERT.has(hex))return{plante:1};
  return{t:'enduit',e:2.2,k:'c'};
@@ -5291,6 +5306,7 @@ function realMateriaux(c,R){
   let nm=cache[cle];
   if(!nm){
    if(ro.verre)nm=new T.MeshStandardMaterial({color:0x9fbfd8,roughness:.05,metalness:.1,transparent:true,opacity:.42,envMapIntensity:1.8,depthWrite:false});
+   else if(ro.cuir)nm=new T.MeshStandardMaterial({color:lin(hex).multiplyScalar(1.4),roughness:.42,metalness:0,envMapIntensity:.8});
    else if(ro.metal)nm=new T.MeshStandardMaterial({color:lin(hex),roughness:.36,metalness:.85});
    else if(ro.plante)nm=new T.MeshStandardMaterial({color:lin(hex).multiplyScalar(.75),roughness:.85});
    else{const t=R.TEX[ro.t];let col;
@@ -5505,6 +5521,202 @@ async function realVille(c){
  catch(e){console.error(e);bd.texte('Graphismes réalistes : affichage partiel ('+String(e&&e.message||e).slice(0,80)+').',true);}
 }
 
+/* ================= V29 : lettre de mission, anciens élèves, Génie en herbe, nouveaux objets ================= */
+/* ---------- Nouveaux objets pour la maison (tous visibles dans le logement en 3D) ---------- */
+CATALOGUE.objet.push(
+ {k:'canape',n:'Salon en cuir avec fauteuils',p:900000,bon:4,pres:1},
+ {k:'lit',n:'Lit king size et tête de lit sculptée',p:700000,bon:4},
+ {k:'biblio',n:'Bibliothèque garnie de classiques',p:350000,bon:3,pres:1},
+ {k:'console',n:'Console de jeux et manettes',p:300000,bon:4},
+ {k:'aquarium',n:'Aquarium tropical',p:450000,bon:4,pres:1},
+ {k:'piano',n:'Piano droit',p:1800000,bon:5,pres:2},
+ {k:'oeuvre',n:'Toile d’un peintre camerounais',p:1200000,bon:2,pres:3},
+ {k:'cinema',n:'Home cinéma et grand écran',p:1500000,bon:5,pres:1},
+ {k:'velo',n:'Vélo d’appartement',p:250000,bon:3},
+ {k:'cuisine',n:'Cuisine équipée (four, micro-ondes, tabourets)',p:1100000,bon:4,pres:1}
+);
+/* ---------- Lettre de mission annuelle ---------- */
+const nbBat=()=>Object.keys(S.bat||{}).filter(k=>S.bat[k]).length;
+const MISSIONS=[
+ {id:'taux',ex:1,t:c=>`Atteindre ${c} % de réussite globale aux examens officiels`,cible:()=>{const h=S.hist.at(-1);return Math.round(clamp((h&&h.taux!=null?h.taux:55)+4,50,90));},val:R=>R&&R.taux},
+ {id:'bepc',ex:1,when:()=>S.hist.some(h=>h.BEPC!=null),t:c=>`${c} % d’admis au BEPC`,cible:()=>Math.round(clamp((S.hist.at(-1)?.BEPC??60)+4,55,92)),val:R=>R&&R.res.BEPC},
+ {id:'bac',ex:1,when:()=>S.hist.some(h=>h.Bac!=null),t:c=>`${c} % d’admis au Baccalauréat`,cible:()=>Math.round(clamp((S.hist.at(-1)?.Bac??55)+4,50,90)),val:R=>R&&R.res.Bac},
+ {id:'rang',ex:1,inv:1,when:()=>S.hist.length>0,t:c=>`Finir dans les ${c} premiers du département`,cible:()=>(S.hist.at(-1)?.rangDep||9)>4?5:3,val:R=>R&&R.rangDep},
+ {id:'mentions',ex:1,t:c=>`Décrocher ${c} mentions Très Bien ou Excellent`,cible:()=>Math.max(2,Math.round(S.eleves.length/120)),val:R=>R&&R.tbx},
+ {id:'disc',t:c=>`Discipline à ${c}/100 ou plus en fin d’année`,cible:()=>Math.round(clamp(S.discipline+10,55,90)),val:()=>S.discipline},
+ {id:'parents',t:c=>`Relation avec les parents (APEE) à ${c}/100`,cible:()=>Math.round(clamp(S.rel.parents+8,55,90)),val:()=>S.rel.parents},
+ {id:'moral',t:c=>`Moral des enseignants à ${c}/100`,cible:()=>Math.round(clamp(moral()+8,55,88)),val:()=>moral()},
+ {id:'etat',t:c=>`Bâtiments en bon état : ${c}/100`,cible:()=>Math.round(clamp(S.etat+10,60,92)),val:()=>S.etat},
+ {id:'eff',t:c=>`Accueillir ${c} élèves`,cible:()=>Math.round(Math.max(150,S.eleves.length)*1.06),val:()=>S.eleves.length},
+ {id:'tresor',t:c=>`Terminer l’année avec ${moneyS(c)} FCFA en caisse`,cible:()=>Math.max(500000,Math.round((Math.max(0,S.tresor)+1500000)/100000)*100000),val:()=>S.tresor},
+ {id:'bati',t:()=>'Inaugurer un nouvel équipement (onglet Infrastructure)',cible:()=>nbBat()+1,val:()=>nbBat()},
+ {id:'integ',t:c=>`Intégrité à ${c}/100`,cible:()=>Math.round(clamp(S.integrite+8,55,92)),val:()=>S.integrite}
+];
+function missionNouvelle(annonce){
+ const pool=MISSIONS.filter(m=>!m.when||m.when()),r=rng(S.annee*97+S.eleves.length*13+7),pk=a=>a.splice(Math.floor(r()*a.length),1)[0];
+ const ex=pool.filter(m=>m.ex),au=pool.filter(m=>!m.ex),L=[];if(ex.length)L.push(pk(ex));while(L.length<3&&au.length)L.push(pk(au));
+ S.mission={annee:S.annee,L:L.map(m=>({id:m.id,cible:m.cible()})),eval:null};
+ if(annonce)pushModal({type:'msg',titre:`Lettre de mission ${S.annee}–${S.annee+1}`,html:`${S.type==='prive'?'Le promoteur':'Le Ministre'} vous fixe trois objectifs pour l’année :<ul>${S.mission.L.map(x=>`<li>${esc(missionTexte(x))}</li>`).join('')}</ul>Chaque objectif atteint vous vaut une prime d’un quart de salaire et de la réputation. Les trois ensemble : une dotation spéciale d’un million de FCFA pour l’établissement.`});
+}
+const missionDef=x=>MISSIONS.find(m=>m.id===x.id);
+const missionTexte=x=>{const m=missionDef(x);return m?m.t(x.cible):x.id;};
+function missionAssure(){if(!S.mission||S.mission.annee!==S.annee)missionNouvelle(false);}
+function missionOk(x,R){const m=missionDef(x);if(!m)return false;const v=m.val(R);if(v==null)return false;return m.inv?v<=x.cible:v>=x.cible;}
+function missionEval(taux,rangDep,tbx){
+ const M=S.mission;if(!M||M.annee!==S.annee||M.eval)return null;
+ const res=S.resultats||{},P=k=>res[k]?pct(res[k].admis,res[k].candidats):null;
+ const R={taux,rangDep,tbx,res:{BEPC:P('BEPC'),Bac:P('Baccalauréat')}};let ok=0;const v=vie(),prime=Math.max(25000,Math.round(v.salaire*.25/1000)*1000);
+ const lignes=M.L.map(x=>{const r=missionOk(x,R);if(r){ok++;rep(1.5);mvtPerso(`Prime d’objectif : ${missionTexte(x)}`,prime);}else rel('inspection',-2);return`<li>${r?'✅':'❌'} ${esc(missionTexte(x))}</li>`;});
+ M.eval={ok};
+ if(ok===M.L.length&&ok){rep(2);rel('inspection',5);mvt('Dotation spéciale : lettre de mission remplie',1000000);S.missionsParfaites=(S.missionsParfaites||0)+1;log('Lettre de mission remplie à 100 % : félicitations officielles et dotation spéciale.','good');}
+ else log(`Lettre de mission : ${ok} objectif(s) sur ${M.L.length} atteint(s).`,ok?'good':'bad');
+ return`<ul>${lignes.join('')}</ul>${ok?`Primes versées sur votre compte : ${money(prime*ok)}.`:''}${ok===M.L.length?' Les trois objectifs sont atteints : félicitations du Ministère et dotation spéciale d’un million de FCFA pour l’établissement.':' Les objectifs manqués refroidissent un peu l’inspection.'}`;
+}
+function cardMission(){
+ missionAssure();const M=S.mission;
+ return`<div class="card t-teal stack"><div class="row between"><h3 style="margin:0">Lettre de mission ${S.annee}–${S.annee+1}</h3><span class="chip ${M.eval?(M.eval.ok===3?'ok':'warn'):''}">${M.eval?M.eval.ok+'/3 atteints':'En cours'}</span></div>
+  <p class="small muted">Fixée par ${S.type==='prive'?'le promoteur':'le Ministère'}, évaluée au bilan de fin d’année. Prime pour chaque objectif atteint ; dotation d’un million de FCFA si les trois le sont.</p>
+  ${M.L.map(x=>{const m=missionDef(x);if(!m)return'';let etat;if(m.ex)etat='<span class="small muted">Verdict aux examens de juin</span>';else{const v=m.val(null),ok=missionOk(x,null);etat=`<span class="chip ${ok?'ok':'warn'}">${x.id==='tresor'?moneyS(v):Math.round(v)} / ${x.id==='tresor'?moneyS(x.cible):x.cible}</span>`;}return`<div class="row between" style="gap:8px"><span>${esc(missionTexte(x))}</span>${etat}</div>`;}).join('')}</div>`;
+}
+/* ---------- Anciens élèves : parcours, page dédiée, événements ---------- */
+const ETUDES=[[/médecin/,'étudie la médecine à la FMSB de Yaoundé'],[/ingénieur/,'est élève ingénieur à l’École polytechnique de Yaoundé'],[/magistrat/,'étudie le droit à l’université de Douala'],[/chercheur/,'étudie les sciences à l’université de Buea'],[/pilote/,'suit une école d’aviation civile'],[/footballeur|handballeur|entraîneur|sportif/,'s’entraîne dans un centre de formation sportive'],[/enseignant/,'étudie à l’École normale supérieure de Yaoundé'],[/journaliste/,'étudie le journalisme à l’ESSTIC de Yaoundé'],[/entrepreneur|commerçant/,'étudie la gestion à l’ESSEC de Douala']];
+function etapeAncien(a){const n=S.annee-(a.annee||S.annee),et=(ETUDES.find(([re])=>re.test(a.devenir||''))||[0,'étudie à l’université de Yaoundé I'])[1];
+ if(n<=0)return'vient d’obtenir son diplôme';if(n<=3)return et;if(n<=5)return'termine sa formation et fait ses premiers pas professionnels';return`aujourd’hui ${a.devenir||'dans la vie active'}`;}
+function tAnciens(){
+ const L=(S.alumni||[]).slice().sort((a,b)=>b.annee-a.annee);const dons=L.filter(a=>a.don).length,cel=L.filter(a=>a.celebre).length;
+ return`<div class="stack" style="gap:16px"><div class="statgrid"><div class="stat"><span class="eyebrow">Anciens suivis</span><b>${L.length}</b></div><div class="stat"><span class="eyebrow">Donateurs</span><b>${dons}</b></div><div class="stat"><span class="eyebrow">Célébrités</span><b>${cel}</b></div><div class="stat"><span class="eyebrow">Plus ancienne promotion</span><b>${L.length?Math.min(...L.map(a=>a.annee)):'—'}</b></div></div>
+ <div class="card"><h3>Le mur des anciens</h3><p class="small muted">Vos meilleurs bacheliers et vos élèves suivis continuent leur vie après l’établissement. Les années passant, ils deviennent médecins, ingénieurs, sportifs… et reviennent parfois vous aider.</p>
+ ${L.length?`<div class="grid">${L.map(a=>`<div class="fig"><span class="av" style="background:${a.celebre?'#b45309':a.don?'#0f766e':'#334155'}">${initiales(a.nom)}</span><span class="fig-t"><b>${esc(a.nom)}</b><span class="small muted">Promotion ${a.annee}${a.classe?' · '+esc(a.classe):''}${a.mention?' · mention '+esc(a.mention):''}</span><span class="small">${esc(etapeAncien(a))}</span>${a.don||a.celebre?`<span class="small">${a.celebre?'⭐ Célébrité ':''}${a.don?'🤝 A aidé l’établissement':''}</span>`:''}</span></div>`).join('')}</div>`:'<p class="muted">Vos premiers bacheliers apparaîtront ici après les examens de fin d’année.</p>'}</div></div>`;
+}
+const ancQ=(n,f)=>(S.alumni||[]).filter(a=>S.annee-a.annee>=n&&(!f||f(a)));
+const ancT=c=>(S.alumni||[]).find(a=>a.nom===c.n);
+EVENTS.push(
+ {id:'al_conf',w:.7,when:()=>ancQ(3).length>0,ctx:()=>({n:pick(ancQ(3)).nom}),titre:'Une ancienne élève revient parler aux terminales',
+  texte:c=>{const a=ancT(c);return`${a?.nom} (promotion ${a?.annee}), ${etapeAncien(a||{})}, propose une journée « métiers » à vos élèves de première et de terminale.`;},
+  choix:c=>[{l:'Organiser la journée carrières (60 000 FCFA)',f:()=>{mvt('Journée carrières des anciens',-60000);humeurAll(1.5);S.eleves.forEach(e=>{if(['1ère','Tle','Lower 6th','Upper 6th'].includes(e.level))e.base=clamp(e.base+.1,2,19);});rep(1);return'L’amphi est plein. Les élèves posent des questions pendant deux heures : la motivation remonte.';}},
+   {l:'Remercier mais décliner : le programme est chargé',f:()=>'L’ancien élève comprend et promet de revenir une autre année.'}]},
+ {id:'al_celebre',w:.5,when:()=>ancQ(6,a=>!a.celebre).length>0,ctx:()=>({n:pick(ancQ(6,a=>!a.celebre)).nom}),titre:'Un ancien élève fait la une',
+  texte:c=>{const a=ancT(c);return`${a?.nom}, ${a?.devenir}, est à la une de la presse nationale. Dans une interview télévisée, il cite votre établissement : « Tout a commencé là-bas. »`;},
+  choix:c=>[{l:'L’inviter à présider la remise des prix (150 000 FCFA)',f:()=>{const a=ancT(c);if(a)a.celebre=true;mvt('Réception d’un ancien élève célèbre',-150000);rep(4);rel('parents',3);humeurAll(2);return'La cérémonie attire la télévision. Les inscriptions de l’an prochain s’annoncent nombreuses.';}},
+   {l:'Lui adresser une lettre de félicitations',f:()=>{const a=ancT(c);if(a)a.celebre=true;rep(1.5);return'Sa réponse chaleureuse est affichée dans le hall d’entrée.';}}]},
+ {id:'al_stage',w:.6,when:()=>ancQ(5).length>=2,ctx:()=>({n:pick(ancQ(5)).nom}),titre:'Des stages pour vos élèves',
+  texte:c=>{const a=ancT(c);return`${a?.nom}, ${a?.devenir}, propose d’accueillir dix de vos élèves en stage d’observation pendant les vacances.`;},
+  choix:()=>[{l:'Accepter avec enthousiasme',f:()=>{rel('parents',4);rep(1);return'Les familles apprécient : leurs enfants découvrent le monde du travail.';}},{l:'Réserver les places aux meilleurs élèves',f:()=>{rel('parents',2);S.eleves.slice().sort((x,y)=>(lastMoy(y)??0)-(lastMoy(x)??0)).slice(0,10).forEach(e=>e.base=clamp(e.base+.15,2,19));return'Les dix premiers de la classe reviennent très motivés.';}}]},
+ {id:'al_gala',w:.5,when:()=>(S.alumni||[]).length>=5&&S.galaAn!==S.annee,titre:'Gala de l’association des anciens',
+  texte:()=>`L’association des anciens élèves (${S.alumni.length} membres suivis) propose d’organiser un gala de collecte au profit de l’établissement.`,
+  choix:()=>[{l:'Organiser le gala dans la cour (100 000 FCFA de frais)',f:()=>{S.galaAn=S.annee;const g=Math.min(2500000,150000*S.alumni.length);mvt('Frais du gala des anciens',-100000);mvt('Collecte du gala des anciens',g);rep(1);return`Musique, discours et tombola : la collecte rapporte ${money(g)}.`;}},
+   {l:'Laisser l’association gérer seule',f:()=>{S.galaAn=S.annee;const g=Math.min(900000,60000*S.alumni.length);mvt('Don de l’association des anciens',g);return`L’association vous remet ${money(g)}.`;}}]},
+ {id:'al_piston',w:.4,when:()=>ancQ(6).length>0,ctx:()=>({n:pick(ancQ(6)).nom}),titre:'Un coup de pouce discret',
+  texte:c=>{const a=ancT(c);return`${a?.nom}, aujourd’hui en poste dans une administration, propose de « faire avancer » votre dossier de subvention… contre l’admission sans concours de deux enfants de ses amis.`;},
+  choix:()=>[{l:'Accepter l’arrangement',f:()=>{mvt('Subvention débloquée',1200000);integ(-1.5);return'La subvention arrive en un mois. Deux élèves entrent sans concours.';}},{l:'Refuser poliment : le concours est le même pour tous',f:()=>{integ(1);rel('inspection',2);return'Votre réputation d’homme ou de femme intègre se renforce.';}}]}
+);
+SUCCES.push(
+ {k:'geniequiz',l:'Champion départemental',d:'Remporter le tournoi départemental de Génie en herbe.',t:()=>(S.genie?.titres||0)>=1},
+ {k:'mission',l:'Mission accomplie',d:'Atteindre les trois objectifs d’une lettre de mission.',t:()=>(S.missionsParfaites||0)>=1},
+ {k:'anciens10',l:'Une grande famille',d:'Suivre 10 anciens élèves.',t:()=>(S.alumni||[]).length>=10},
+ {k:'interieur',l:'Comme un roi',d:'Équiper votre logement de 8 objets.',t:()=>(S.vie?.objets||[]).length>=8}
+);
+/* ---------- Génie en herbe : tournoi annuel de culture générale (jouable) ---------- */
+const GQ=[
+ ['Quelle est la capitale politique du Cameroun ?','Yaoundé','Douala','Garoua','Bafoussam','Cameroun'],
+ ['Quelle ville est la capitale économique du Cameroun ?','Douala','Yaoundé','Limbé','Kribi','Cameroun'],
+ ['À quelle date le Cameroun sous administration française devient-il indépendant ?','1er janvier 1960','20 mai 1972','1er octobre 1961','11 février 1961','Histoire'],
+ ['À quelle date est célébrée la fête nationale du Cameroun ?','20 mai','1er janvier','11 février','1er octobre','Cameroun'],
+ ['Quelle fête est célébrée le 11 février au Cameroun ?','La fête de la jeunesse','La fête nationale','La fête du travail','L’indépendance','Cameroun'],
+ ['Combien de régions compte le Cameroun ?','10','8','12','14','Cameroun'],
+ ['Quelle est la devise du Cameroun ?','Paix – Travail – Patrie','Unité – Travail – Progrès','Union – Discipline – Travail','Travail – Liberté – Patrie','Cameroun'],
+ ['Quel est le point culminant du Cameroun ?','Le mont Cameroun','Le mont Manengouba','Le mont Oku','Les monts Bamboutos','Géographie'],
+ ['Quel est le plus long fleuve du Cameroun ?','La Sanaga','Le Wouri','Le Nyong','La Bénoué','Géographie'],
+ ['Quel est le chef-lieu de la région de l’Extrême-Nord ?','Maroua','Garoua','Ngaoundéré','Mokolo','Géographie'],
+ ['Quel est le chef-lieu de la région de l’Adamaoua ?','Ngaoundéré','Garoua','Bertoua','Meiganga','Géographie'],
+ ['Quel est le chef-lieu de la région de l’Est ?','Bertoua','Batouri','Abong-Mbang','Ebolowa','Géographie'],
+ ['Quel est le chef-lieu de la région du Sud-Ouest ?','Buea','Limbé','Kumba','Bamenda','Géographie'],
+ ['Quel est le chef-lieu de la région du Nord-Ouest ?','Bamenda','Buea','Kumbo','Bafoussam','Géographie'],
+ ['Quel est le chef-lieu de la région du Sud ?','Ebolowa','Kribi','Sangmélima','Bertoua','Géographie'],
+ ['Quel est le chef-lieu de la région de l’Ouest ?','Bafoussam','Dschang','Bamenda','Foumban','Géographie'],
+ ['Quelles sont les deux langues officielles du Cameroun ?','Le français et l’anglais','Le français et l’arabe','L’anglais et le pidgin','Le français et l’allemand','Cameroun'],
+ ['Quel lac le Cameroun partage-t-il avec le Tchad, le Niger et le Nigeria ?','Le lac Tchad','Le lac Victoria','Le lac Nyos','Le lac Barombi','Géographie'],
+ ['Près de quelle ville se trouvent les chutes de la Lobé, qui se jettent dans la mer ?','Kribi','Limbé','Douala','Campo','Géographie'],
+ ['Qui fut le premier président de la République du Cameroun ?','Ahmadou Ahidjo','Paul Biya','John Ngu Foncha','André-Marie Mbida','Histoire'],
+ ['Quelle était l’organisation politique de Ruben Um Nyobè ?','L’UPC','Le RDPC','Le SDF','L’UNC','Histoire'],
+ ['Quel est le surnom de l’équipe nationale de football du Cameroun ?','Les Lions Indomptables','Les Super Eagles','Les Éléphants','Les Lions de la Teranga','Sport'],
+ ['Quel joueur camerounais est le meilleur buteur de l’histoire de la Coupe d’Afrique des nations ?','Samuel Eto’o','Roger Milla','Patrick Mboma','Vincent Aboubakar','Sport'],
+ ['Quel Camerounais a marqué les esprits en dansant près du poteau de corner lors de la Coupe du monde 1990 ?','Roger Milla','Thomas N’Kono','Samuel Eto’o','Rigobert Song','Sport'],
+ ['Qui a écrit « Une vie de boy » ?','Ferdinand Oyono','Mongo Beti','Camara Laye','Calixthe Beyala','Littérature'],
+ ['Sous quel pseudonyme Mongo Beti a-t-il publié « Ville cruelle » ?','Eza Boto','Guillaume Oyono','Francis Bebey','René Philombe','Littérature'],
+ ['Qui a écrit « L’Enfant noir » ?','Camara Laye','Ferdinand Oyono','Léopold Sédar Senghor','Chinua Achebe','Littérature'],
+ ['Quel est le plus long fleuve d’Afrique ?','Le Nil','Le Congo','Le Niger','Le Zambèze','Afrique'],
+ ['Quel est le plus haut sommet d’Afrique ?','Le Kilimandjaro','Le mont Kenya','Le mont Cameroun','Le Ruwenzori','Afrique'],
+ ['Quelle est la capitale du Nigeria ?','Abuja','Lagos','Kano','Ibadan','Afrique'],
+ ['Quelle est la capitale du Gabon ?','Libreville','Port-Gentil','Franceville','Oyem','Afrique'],
+ ['Quelle est la capitale du Tchad ?','N’Djamena','Moundou','Abéché','Sarh','Afrique'],
+ ['En quelle année Nelson Mandela devient-il président de l’Afrique du Sud ?','1994','1990','1985','2000','Histoire'],
+ ['Quelle est la formule chimique de l’eau ?','H₂O','CO₂','O₂','NaCl','Sciences'],
+ ['Quelle planète est la plus proche du Soleil ?','Mercure','Vénus','Mars','la Terre','Sciences'],
+ ['Quelle est la plus grande planète du système solaire ?','Jupiter','Saturne','Neptune','la Terre','Sciences'],
+ ['Quel est le symbole chimique du fer ?','Fe','Fr','F','Ir','Sciences'],
+ ['Quel est le symbole chimique de l’or ?','Au','Or','Ag','Go','Sciences'],
+ ['Quel est le symbole chimique du sodium ?','Na','So','S','Sd','Sciences'],
+ ['En quelle unité mesure-t-on une force ?','Le newton','Le joule','Le watt','Le pascal','Sciences'],
+ ['En quelle unité mesure-t-on une résistance électrique ?','L’ohm','Le volt','L’ampère','Le watt','Sciences'],
+ ['Quel est l’os le plus long du corps humain ?','Le fémur','Le tibia','L’humérus','Le radius','Sciences'],
+ ['Combien de chromosomes compte une cellule humaine ordinaire ?','46','23','44','48','Sciences'],
+ ['Quel gaz est le plus abondant dans l’air ?','Le diazote','Le dioxygène','Le dioxyde de carbone','L’argon','Sciences'],
+ ['Quel gaz les plantes rejettent-elles lors de la photosynthèse ?','Le dioxygène','Le dioxyde de carbone','Le diazote','L’hydrogène','Sciences'],
+ ['Combien vaut la somme des angles d’un triangle ?','180°','90°','360°','270°','Mathématiques'],
+ ['Quel est le seul nombre premier pair ?','2','4','0','1','Mathématiques'],
+ ['Quelle est la racine carrée de 144 ?','12','14','11','16','Mathématiques'],
+ ['Quelle est une valeur approchée de π ?','3,14','3,41','2,71','1,61','Mathématiques'],
+ ['Quel est le pluriel de « cheval » ?','chevaux','chevals','chevaus','chevales','Français'],
+ ['Conjuguez « aller » à la 1re personne du pluriel du futur simple.','nous irons','nous allerons','nous irions','nous allons','Français'],
+ ['Quel est le contraire de « généreux » ?','avare','gentil','riche','prudent','Français'],
+ ['What is the past tense of the verb “to go”?','went','goed','gone','going','English'],
+ ['What is the opposite of “expensive”?','cheap','dear','costly','rich','English'],
+ ['Which word is a synonym of “happy”?','glad','sad','angry','tired','English'],
+ ['How do you say « bibliothèque » in English?','library','bookshop','librairy','biblioteca','English']
+];
+function gqCalcul(seed){const r=rng(seed),t=Math.floor(r()*4);let q,a;
+ if(t===0){const x=12+Math.floor(r()*18),y=3+Math.floor(r()*7);q=`Calcul mental : combien font ${x} × ${y} ?`;a=x*y;}
+ else if(t===1){const x=11+Math.floor(r()*14);q=`Calcul mental : quel est le carré de ${x} ?`;a=x*x;}
+ else if(t===2){const p=[10,20,25,50][Math.floor(r()*4)],n=(Math.floor(r()*18)+2)*20;q=`Calcul mental : combien font ${p} % de ${n} ?`;a=n*p/100;}
+ else{const x=Math.floor(r()*40)+15,y=Math.floor(r()*40)+15;q=`Résolvez : x − ${y} = ${x}. Combien vaut x ?`;a=x+y;}
+ const f=[...new Set([a+1,a-1,a+2,a+10,a-10,a+5,a-3,a+20].filter(v=>v>0&&v!==a))].sort(()=>r()-.5).slice(0,3);
+ return[q,String(a),...f.map(String),'Calcul mental'];}
+function gqQuestion(id){return typeof id==='number'?GQ[id]:gqCalcul(+String(id).slice(1));}
+function gqOptions(id){const q=gqQuestion(id),r=rng(String(id).split('').reduce((s,c)=>s*31+c.charCodeAt(0),7)+S.annee);return q.slice(1,5).map((t,i)=>({t,ok:i===0})).sort(()=>r()-.5);}
+const GTOURS=['Quart de finale','Demi-finale','Finale départementale'];
+function genieAnnonce(){
+ S.genie=S.genie||{titres:0,annee:null,hist:[]};if(S.genie.annee===S.annee)return;S.genie.annee=S.annee;
+ pushModal({type:'msg',titre:'Tournoi départemental de Génie en herbe',html:`Le tournoi départemental de culture générale commence. Votre équipe affronte trois établissements d’affilée : quart de finale, demi-finale et finale. C’est vous qui répondez à sa place : cinq questions par manche. Le champion est qualifié pour le tournoi régional d’avril.${S.clubs?.genie?' Votre club Génie en herbe vous offre un joker : une seconde chance sur une mauvaise réponse.':''}<div class="row" style="margin-top:12px"><button class="btn primary" data-act="genie-go">Disputer le tournoi</button></div><p class="small muted">« Continuer » sans jouer revient à déclarer forfait.</p>`});
+}
+function genieTour(m){const vus=new Set(m.vus||[]);const dispo=GQ.map((_,i)=>i).filter(i=>!vus.has(i)&&!(S.genie.vus||[]).includes(i)).sort(()=>R()-.5);const pool=dispo.length>=4?dispo:GQ.map((_,i)=>i).sort(()=>R()-.5);
+ const q=[...pool.slice(0,4),'g'+Math.floor(R()*1e6)].sort(()=>R()-.5);q.forEach(x=>{if(typeof x==='number')vus.add(x);});m.vus=[...vus];
+ const riv=(S.rivaux||[]).slice().sort((a,b)=>a.niveau-b.niveau);const adv=riv[Math.min(riv.length-1,Math.floor(riv.length*(.35+m.tour*.3)))]||{nom:'Lycée de la ville',niveau:60};
+ Object.assign(m,{q,i:0,nous:0,eux:0,rep:null,adv:adv.nom,force:clamp(.3+adv.niveau/230+m.tour*.06,.3,.85),fin:false,depart:false});}
+function genieFinManche(m){let e=0;for(let k=0;k<5;k++)if(R()<m.force)e++;m.eux=e;m.fin=true;if(m.nous===m.eux&&!m.depart){m.depart=true;m.fin=false;m.q.push('g'+Math.floor(R()*1e6));}}
+function genieBilan(m){
+ const g=S.genie;const gagnes=m.gagnes||0;(g.hist||(g.hist=[])).push({annee:S.annee,tours:gagnes});g.vus=[...new Set([...(g.vus||[]),...(m.vus||[])])].slice(-40);
+ if(gagnes>=3){g.titres=(g.titres||0)+1;g.qualifReg=S.annee;rep(4);rel('parents',3);humeurAll(2);mvt('Prix du tournoi départemental de Génie en herbe',500000);log(`Champion départemental de Génie en herbe (titre n° ${g.titres}) : qualifié pour le tournoi régional d’avril.`,'good');return'Champions départementaux ! La coupe trône dans le bureau du proviseur, le prix de 500 000 FCFA rejoint la caisse, et votre équipe est qualifiée pour le tournoi régional d’avril, avec un avantage.';}
+ if(gagnes===2){rep(2);humeurAll(1);log('Génie en herbe : votre équipe s’incline en finale.','good');return'Finalistes ! Une très belle aventure, saluée par tout l’établissement.';}
+ if(gagnes===1){rep(1);log('Génie en herbe : élimination en demi-finale.');return'Demi-finalistes : un parcours honorable.';}
+ log('Génie en herbe : élimination dès le quart de finale.','bad');return'Éliminés dès le premier tour. Il faudra mieux se préparer l’an prochain.';}
+function renderGenie(m){
+ const T=GTOURS[m.tour]||'';
+ if(m.termine)return form('Génie en herbe','Fin du tournoi',`<p>${esc(m.bilan||'')}</p><p class="small muted">Titres remportés : ${S.genie?.titres||0}.</p>`,'<button class="btn primary" data-act="close-ui">Fermer</button>');
+ const tete=`<div class="row between"><span class="chip">${esc(T)}</span><span><b>${esc(S.nom)}</b> ${m.nous} · ${m.fin?m.eux:'?'} <b>${esc(m.adv)}</b></span></div>`;
+ if(m.fin){const g=m.nous>m.eux;return form('Génie en herbe',g?'Manche gagnée !':'Manche perdue',`${tete}<p>${g?(m.tour>=2?'Votre équipe remporte la finale !':`Qualifiés pour la ${GTOURS[m.tour+1].toLowerCase()} !`):'Votre équipe est éliminée.'}</p>`,`<button class="btn primary" data-act="gq-suite">${g&&m.tour<2?'Manche suivante':'Voir le bilan'}</button>`);}
+ const id=m.q[m.i],q=gqQuestion(id),ops=gqOptions(id);
+ const corps=`${tete}<p class="small muted">Question ${m.i+1}/${m.q.length}${m.depart&&m.i>=5?' · question de départage':''} · ${esc(q[5])}</p><p style="font-size:1.1rem"><b>${esc(q[0])}</b></p>`+
+  (m.jokerMsg&&!m.rep?'<p class="note">❌ Raté… mais le joker du club vous donne une seconde chance !</p>':'')+(m.rep?`<p class="note">${m.rep.ok?'✅ Bonne réponse !':`❌ Raté. La bonne réponse était : ${esc(q[1])}.`}</p>`:`<div class="choice">${ops.map((o,k)=>`<button class="btn" data-act="gq" data-k="${k}">${esc(o.t)}</button>`).join('')}</div>`);
+ return form('Génie en herbe',`${T} contre ${m.adv}`,corps,m.rep?'<button class="btn primary" data-act="gq-next">Suite</button>':'');
+}
+const ACTIONS_V29={
+ 'genie-go':()=>{closePending();const m={type:'genie',tour:0,gagnes:0,vus:[],joker:S.clubs?.genie?1:0};genieTour(m);UI.modal=m;save();render();},
+ 'gq':d=>{const m=UI.modal;if(!m||m.type!=='genie'||m.rep)return;const o=gqOptions(m.q[m.i])[+d.k];if(!o)return;if(!o.ok&&m.joker>0){m.joker--;m.jokerMsg=true;render();return;}m.jokerMsg=false;m.rep={ok:o.ok};if(o.ok)m.nous++;render();},
+ 'gq-next':()=>{const m=UI.modal;if(!m||m.type!=='genie')return;m.rep=null;m.i++;if(m.depart&&m.i>=m.q.length){m.fin=true;if(m.nous===m.eux)m.eux=m.nous+1;}else if(m.i>=5&&!m.depart)genieFinManche(m);render();},
+ 'gq-suite':()=>{const m=UI.modal;if(!m||m.type!=='genie')return;if(m.nous>m.eux){m.gagnes++;if(m.tour<2){m.tour++;genieTour(m);render();return;}}m.bilan=genieBilan(m);m.termine=true;save();render();}
+};
+
 /* ================= Actions ================= */
 const A={
  avancer,
@@ -5601,7 +5813,7 @@ const A={
 };
 Object.assign(A,{
  'ville3d':()=>{if(V3)fermerVisite();ouvrirVille();},
- 'vie-logement':()=>{if(V3)fermerVisite();UI.entrerLogement=true;if(VL){fermerVille();setTimeout(ouvrirVille,60);}else ouvrirVille();},
+ ...ACTIONS_V29,'vie-logement':()=>{if(V3)fermerVisite();UI.entrerLogement=true;if(VL){fermerVille();setTimeout(ouvrirVille,60);}else ouvrirVille();},
  'vie-train':d=>{if(TRAINS[d.k]){vie().train=d.k;save();render();}},
  'vie-achat':d=>{UI.vieMsg=acheter(d.cat,d.k);save();try{if(VL&&VL.majVoiture&&d.cat==='voiture')VL.majVoiture();}catch(e){}render();},
  'vie-vendre':d=>{UI.vieMsg=vendre(d.cat,d.k);save();try{if(VL&&VL.majVoiture)VL.majVoiture();}catch(e){}render();},
@@ -5763,12 +5975,12 @@ function renderAction(){
  return`<section class="action"><div class="what"><div class="eyebrow muted">Prochaine étape · ${ph.mois} ${ph.id==='rentree'||ph.mois.startsWith('Oct')||ph.mois.startsWith('Nov')||ph.mois.startsWith('Déc')?S.annee:S.annee+1}</div><h2>${ph.nom}</h2><p class="small muted">${DESC[ph.id]}</p>${S.derniere?`<p class="last">${esc(S.derniere)}</p>`:''}</div>
  ${ph.id==='examens'||ph.id==='blanc'?'<button class="btn" data-act="c3d" data-k="examen">Voir les candidats composer en 3D</button>':''}<button class="btn primary" data-act="avancer" ${S.pending?'disabled':''}>${BTN[ph.id]}</button></section>`;
 }
-const TABS=[['dash','Tableau de bord'],['classes','Classes'],['vie','Vie scolaire'],['tenue','Tenue'],['peda','Pédagogie'],['personnel','Personnel'],['reseau','Réseau'],['finances','Finances'],['infra','Infrastructure'],['examens','Examens'],['classement','Classement'],['trophees','Trophées'],['perso','Ma vie'],['multi','Multijoueur'],['regles','Règles'],['journal','Journal']];
+const TABS=[['dash','Tableau de bord'],['classes','Classes'],['vie','Vie scolaire'],['tenue','Tenue'],['peda','Pédagogie'],['personnel','Personnel'],['reseau','Réseau'],['finances','Finances'],['infra','Infrastructure'],['examens','Examens'],['classement','Classement'],['trophees','Trophées'],['perso','Ma vie'],['anciens','Anciens élèves'],['multi','Multijoueur'],['regles','Règles'],['journal','Journal']];
 function renderTabs(){
  const cov=couverture();const manque=cov.need-cov.cov;
  return`<nav class="tabs" role="tablist">${TABS.map(([k,l])=>`<button class="tab" role="tab" aria-selected="${UI.tab===k}" data-act="tab" data-tab="${k}">${l}${k==='personnel'&&manque?`<span class="badge">${manque}</span>`:''}${k==='vie'&&nonLus()?`<span class="badge">${nonLus()}</span>`:''}</button>`).join('')}</nav>`;
 }
-function renderTab(){return({dash:tDash,classes:tClasses,vie:tVie,tenue:tTenue,peda:tPeda,personnel:tPersonnel,reseau:tReseau,finances:tFinances,infra:tInfra,examens:tExamens,classement:tClassement,trophees:tTrophees,perso:tPerso,multi:tMulti,regles:tRegles,journal:tJournal}[UI.tab]||tDash)();}
+function renderTab(){return({dash:tDash,classes:tClasses,vie:tVie,tenue:tTenue,peda:tPeda,personnel:tPersonnel,reseau:tReseau,finances:tFinances,infra:tInfra,examens:tExamens,classement:tClassement,trophees:tTrophees,perso:tPerso,anciens:tAnciens,multi:tMulti,regles:tRegles,journal:tJournal}[UI.tab]||tDash)();}
 
 function tDash(){
  const cov=couverture();const cur=OBJECTIFS.find(o=>!S.obj[o.id]);
@@ -5787,7 +5999,7 @@ function tDash(){
  return`<div class="stack" style="gap:16px">
  ${alertes.length?`<div class="row">${alertes.join('')}</div>`:''}
  <div class="grid">
-  ${cardConseil()}<div class="card t-blue"><h3>Relations</h3><div class="stack">${meter(S.reputation,'Réputation')}${meter(S.rel.parents,'Parents d’élèves (APEE)')}${meter(S.rel.inspection,S.type==='public'?'Inspection et MINESEC':'Inspection et autorités')}${meter(moral(),'Moral des enseignants')}${meter(S.discipline,'Discipline')}${meter(S.etat,'État des bâtiments')}${meter(S.integrite,'Intégrité · '+integLabel())}</div></div>
+  ${cardMission()}${cardConseil()}<div class="card t-blue"><h3>Relations</h3><div class="stack">${meter(S.reputation,'Réputation')}${meter(S.rel.parents,'Parents d’élèves (APEE)')}${meter(S.rel.inspection,S.type==='public'?'Inspection et MINESEC':'Inspection et autorités')}${meter(moral(),'Moral des enseignants')}${meter(S.discipline,'Discipline')}${meter(S.etat,'État des bâtiments')}${meter(S.integrite,'Intégrité · '+integLabel())}</div></div>
   <div class="card t-violet"><h3>Objectifs</h3><ul class="obj">${OBJECTIFS.map(o=>`<li class="${S.obj[o.id]?'done':o===cur?'cur':''}"><span class="box">${S.obj[o.id]?'✓':''}</span><span>${o.t}${S.obj[o.id]?` <span class="small">(${S.obj[o.id]})</span>`:''}</span></li>`).join('')}</ul></div>
   ${cardLycee()}${cardFigures()}${cardUne()}<div class="card t-teal"><h3>Dernières nouvelles</h3><ul class="journal">${S.journal.slice(0,6).map(j=>`<li class="${j.k}"><span class="d">${j.d}</span>${esc(j.t)}</li>`).join('')}</ul></div>
  </div>
@@ -5961,6 +6173,7 @@ function renderModal(){
  else if(m.type==='copie') el.innerHTML=renderCopieModal(m);
  else if(m.type==='copiesProf') el.innerHTML=renderCopiesProf(m);
  else if(m.type==='duel') el.innerHTML=renderDuel(m);
+ else if(m.type==='genie') el.innerHTML=renderGenie(m);
  else if(m.type==='boutique') el.innerHTML=renderBoutique(m);
  else if(m.type==='sanction') el.innerHTML=renderSanction(m);
  else if(m.type==='defi') el.innerHTML=renderDefiForm(m);

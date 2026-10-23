@@ -2,6 +2,13 @@
 
 Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligue en ligne, défis, salle des proviseurs, joueurs en ligne, applaudissements. Les codes de lycée (hors ligne) fonctionnent toujours.
 
+## Nouveautés de la version 29 : un jeu qui se renouvelle
+- **Lettre de mission annuelle** : chaque rentrée, le Ministère (ou le promoteur) fixe trois objectifs adaptés à votre établissement (examens, discipline, effectifs, trésorerie, équipements…). Prime pour chaque objectif atteint, dotation d’un million de FCFA si les trois le sont. Suivi en direct sur le tableau de bord.
+- **Anciens élèves** : vos meilleurs bacheliers sont suivis année après année (études, premiers emplois, métiers). Nouvel onglet « Anciens élèves » et cinq nouveaux événements : journée carrières, ancien devenu célèbre, stages, gala de l’association, proposition douteuse.
+- **Tournoi départemental de Génie en herbe jouable** (semaine 24) : un quiz en trois manches contre les lycées rivaux (Cameroun, Afrique, sciences, français, anglais, calcul mental). Le champion se qualifie pour le tournoi régional d’avril avec un avantage ; le club Génie en herbe offre un joker.
+- **Logement** : dix nouveaux objets (salon en cuir, lit king size, bibliothèque, console, aquarium avec poissons, piano, toile d’artiste, home cinéma, vélo d’appartement, cuisine équipée). Tous les achats sont visibles dans le logement en 3D.
+- Quatre nouveaux trophées.
+
 ## Nouveautés de la version 28 : graphismes réalistes (campus et ville)
 - **Matériaux photoréalistes** : sol en latérite rouge, cour en pavés de béton, terrazzo dans les salles, murs en enduit peint aux couleurs de la tenue, toits en tôle ondulée, asphalte, bois, vitres réfléchissantes.
 - **Lumière naturelle** : ciel HDR de midi qui éclaire toute la scène, soleil aligné sur le ciel, ombres douces, plafonds blancs dans les salles.
@@ -19,7 +26,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Plan libre du campus** : bâtiments en barre, en L ou en U, jusqu’à 4 niveaux, visitables en 3D par l’escalier.
 - **Discipline en 3D** : élèves marqués d’un « ! » (bagarre, téléphone, retard, tenue, sommeil, graffitis, jeux d’argent, cigarette) et sept sanctions possibles, avec leurs conséquences.
 
-Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 6 : les joueurs reçoivent la nouvelle version au prochain chargement.
+Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 11 : les joueurs reçoivent la nouvelle version au prochain chargement.
 
 ## Lancer en local
     node server.js        # puis ouvrir http://localhost:3000
