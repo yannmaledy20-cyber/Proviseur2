@@ -2,6 +2,15 @@
 
 Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligue en ligne, défis, salle des proviseurs, joueurs en ligne, applaudissements. Les codes de lycée (hors ligne) fonctionnent toujours.
 
+## Nouveautés de la version 31 : des gens tous différents, de vrais uniformes
+- **Nouveaux personnages réalistes** (Quaternius, licence CC0) : visages détaillés, yeux, sourcils, nombreux teints de peau, tailles et morphologies variées.
+- **Vrais uniformes scolaires** aux couleurs de l’établissement : chemise à manches courtes avec col, patte de boutonnage et poche, cravate, pantalon à pli avec ceinture pour les garçons, jupe plissée et chaussettes blanches pour les filles, chaussures noires.
+- **Adultes variés** : chemises à manches courtes ou longues, pantalons de plusieurs couleurs, jupes longues, tenues en pagne (wax) de quatre motifs, foulards, lunettes, barbes.
+- **Coiffures** : coupe courte, raie, chignons, cheveux longs ; chaque personne garde son apparence d’une visite à l’autre.
+- **Animations** : marche (démarche posée pour les adultes), course, position assise naturelle en classe, au maquis et dans les bureaux, conducteurs de moto en position de conduite.
+- **Bâtiment administratif** entièrement aménagé : hall au sol poli, canapés en cuir et tables basses en verre, comptoir d’accueil au nom du lycée, drapeaux, vitrine des trophées, tableau d’affichage pour les parents, fontaine à eau, secrétariat, salle de réunion, caisse vitrée, parents qui patientent.
+- **Maquis** : chaises en plastique sous les clients.
+
 ## Nouveautés de la version 30 : votre bureau de proviseur
 - **Bureau réaliste** : parquet, bureau de direction en bois avec ordinateur, fauteuil en cuir, fauteuils visiteurs, bibliothèque, coin salon, plantes, diplômes, baie vitrée.
 - **Asseyez-vous** (E près du fauteuil) et **utilisez l’ordinateur** (E une fois assis) : messagerie, tableau de bord, lettre de mission, convocations.
@@ -32,7 +41,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Plan libre du campus** : bâtiments en barre, en L ou en U, jusqu’à 4 niveaux, visitables en 3D par l’escalier.
 - **Discipline en 3D** : élèves marqués d’un « ! » (bagarre, téléphone, retard, tenue, sommeil, graffitis, jeux d’argent, cigarette) et sept sanctions possibles, avec leurs conséquences.
 
-Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 12 : les joueurs reçoivent la nouvelle version au prochain chargement.
+Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 13 : les joueurs reçoivent la nouvelle version au prochain chargement.
 
 ## Lancer en local
     node server.js        # puis ouvrir http://localhost:3000
