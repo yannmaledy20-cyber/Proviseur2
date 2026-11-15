@@ -2,6 +2,11 @@
 
 Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligue en ligne, défis, salle des proviseurs, joueurs en ligne, applaudissements. Les codes de lycée (hors ligne) fonctionnent toujours.
 
+## Nouveautés de la version 33 : menu en 3D, relevés de notes, majors nationaux
+- **Menu principal en 3D réaliste** : derrière le menu, le bureau du proviseur en pleine réception d’une mère et de son enfant. Personnages animés qui se parlent et se regardent, soleil qui entre par la baie vitrée, ventilateur, drapeau qui flotte dans la cour, horloge à l’heure réelle, cinq plans de caméra en lents travellings. L’éclairage suit l’ambiance choisie (aube, jour, soir, nuit). Désactivable dans Options ; absent en qualité légère ou en mode économie de données.
+- **Relevés de notes officiels** : après chaque session, le relevé de chaque candidat au BEPC, au Probatoire, au Baccalauréat et au GCE (épreuves, coefficients, notes, total, moyenne, décision du jury, mention), avec le cachet de l’Office du Baccalauréat du Cameroun pour le Probatoire et le Baccalauréat, de la DECC pour le BEPC et du GCE Board pour le GCE. Accessibles depuis la fenêtre des résultats et depuis l’onglet Examens. Ce sont des documents de jeu, sans valeur officielle.
+- **Majors nationaux** : à chaque examen, le nom, l’établissement et la moyenne du meilleur candidat du pays. Si votre meilleur élève le dépasse, il devient major national (réputation, félicitations du Ministre). Historique dans l’onglet Examens.
+
 ## Nouveautés de la version 32 : fini l’ennui
 - **Directeur d’intensité** : le jeu mesure le climat de l’établissement (calme plat, calme, agité, tendu, en crise, affiché sur la carte de la semaine). Quand tout va trop bien, les crises reviennent ; quand vous vous noyez, un répit peut arriver (don d’un ancien élève, subvention exceptionnelle).
 - **Événements systémiques** : les crises naissent de vos chiffres. Classe pléthorique qui chahute, toit qui cède sous la pluie quand les bâtiments sont délabrés, salaires en retard, motion de défiance des enseignants, bandes rivales, sit-in des parents, cours non assurés depuis un mois, afflux de recommandations quand le lycée devient célèbre, trésorerie qui attire les convoitises.
@@ -48,7 +53,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Plan libre du campus** : bâtiments en barre, en L ou en U, jusqu’à 4 niveaux, visitables en 3D par l’escalier.
 - **Discipline en 3D** : élèves marqués d’un « ! » (bagarre, téléphone, retard, tenue, sommeil, graffitis, jeux d’argent, cigarette) et sept sanctions possibles, avec leurs conséquences.
 
-Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 14 : les joueurs reçoivent la nouvelle version au prochain chargement.
+Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 15 : les joueurs reçoivent la nouvelle version au prochain chargement.
 
 ## Lancer en local
     node server.js        # puis ouvrir http://localhost:3000
