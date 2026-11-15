@@ -535,7 +535,7 @@ label.row>span{flex:1;min-width:0}
 .choice .btn b{font-weight:600}
 .te-panneau .mu-act{white-space:normal;text-align:left}.te-panneau .mu-act .btn{margin:2px 0}.te-panneau .multi .tbl{font-size:.88rem}
 .v3-real{position:absolute;left:50%;top:64px;transform:translateX(-50%);max-width:min(92vw,640px);padding:8px 14px;border-radius:10px;background:rgba(15,23,42,.82);color:#fef3c7;font-size:.9rem;text-align:center;z-index:5;pointer-events:none}.v3-real.err{background:rgba(127,29,29,.9);color:#fff}
-.v3-entretien{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);width:min(92vw,680px);background:rgba(15,23,42,.92);color:#f8fafc;border-radius:14px;padding:14px 16px;z-index:6;box-shadow:0 10px 30px rgba(0,0,0,.4)}.v3-entretien p{margin:.4em 0 .6em}.v3-choix{display:flex;flex-wrap:wrap;gap:8px}.ordi-mail{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:8px;background:var(--soft)}.ordi-mail.bad{border-left:3px solid #dc2626}.ordi-mail.good{border-left:3px solid #16a34a}.ordi-accueil{padding:14px;border-radius:10px;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#e0f2fe}
+.climat{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:9px;font-size:11px;font-weight:700;letter-spacing:0;text-transform:none}.climat.calme{background:#dcfce7;color:#166534}.climat.agite{background:#fef9c3;color:#854d0e}.climat.tendu{background:#ffedd5;color:#9a3412}.climat.crise{background:#fee2e2;color:#991b1b}.agenda .rdv{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--line,#d6dbe1);border-radius:8px}.agenda .rdv.fait{opacity:.6}.v3-entretien{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);width:min(92vw,680px);background:rgba(15,23,42,.92);color:#f8fafc;border-radius:14px;padding:14px 16px;z-index:6;box-shadow:0 10px 30px rgba(0,0,0,.4)}.v3-entretien p{margin:.4em 0 .6em}.v3-choix{display:flex;flex-wrap:wrap;gap:8px}.ordi-mail{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:8px;background:var(--soft)}.ordi-mail.bad{border-left:3px solid #dc2626}.ordi-mail.good{border-left:3px solid #16a34a}.ordi-accueil{padding:14px;border-radius:10px;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#e0f2fe}
 </style>
 
 <div id="app"></div>
@@ -866,7 +866,7 @@ function confirmerAdmissions(){
  }
  if(S.type==='public'&&S.frais>20000) rel('parents',-Math.round((S.frais-20000)/1500));
  S.pending=null;choisirFigures(2,neufs);
- S.mois='sept';mvt(`Dotation de l’État pour l’année ${S.annee}–${S.annee+1}`,10000000);log(`L’État verse la dotation annuelle de 10 000 000 FCFA.`,'good');financesMois('sept');S.semaine=1;S.pa=PA_MAX;S.acc=accVide();
+ S.mois='sept';mvt(`Dotation de l’État pour l’année ${S.annee}–${S.annee+1}`,10000000);log(`L’État verse la dotation annuelle de 10 000 000 FCFA.`,'good');financesMois('sept');S.semaine=1;S.pa=PA_MAX;S.acc=accVide();S.calme=0;S.chaud=0;try{agendaSemaine();}catch(e){}
  formerClasses();affecter();
  {const em=new Map(S.eleves.map(e=>[e.id,e]));for(const P of archive.pools)for(const x of P.liste)if(x.admis){const e=em.get(x.id);x.classe=e?e.div:'Aucune série adaptée';}}
  S.concours=[archive,...(S.concours||[])].slice(0,6);
@@ -1069,6 +1069,7 @@ function bilan(){
  if(S.dv) dr-=2;
  const pleth=S.divisions.filter(d=>d.ids.length>70).length;dr-=Math.min(3,pleth);
  dr+=(S.rel.parents-50)/25;
+ dr+=attentesV32(taux);
  dr=clamp(dr,-10,8)*(S.reputation>70&&dr>0?(100-S.reputation)/30:1);rep(dr);
  const cov=couverture();
  if(cov.ratio<.85){rel('inspection',-6);}else rel('inspection',2);
@@ -1745,8 +1746,9 @@ function semaineSuivante(){
  if(S.semaine<=36){const m=moisSem(S.semaine);if(m!==S.mois){S.mois=m;financesMois(m);classeDuMois();uneDuMois();}}
  for(const e of S.eleves) e.humeur=clamp((e.humeur??55)+(55-(e.humeur??55))*.05,0,100);
  if(S.semaine<=36&&R()<.3) nouveauMessage();
- tirerEvenement(.18);tirerFigure();tirerDiscipline();
+ dirIntensite();tirerFigure();tirerDiscipline();
  if(S.semaine<=36&&specialSem(S.semaine).pluie&&R()<.45){const L=['p_inond','p_retard',...(S.bat.groupe?[]:['p_courant'])].filter(x=>!S.evUsed.includes(x)&&!evRecent(x));if(L.length){const id=pick(L);S.evUsed.push(id);pushModal({type:'event',id,c:{}});}}
+ dirFinSemaine();
 }
 function defile(){
  const q=S.paradeQ+(S.tenueAn===S.annee?1:0)+(S.bat.terrain?1:0)+(S.discipline-50)/30+gauss(0,1.2);let r;
@@ -1774,15 +1776,16 @@ function timelineHtml(){
 function radios(name,obj,cur){return Object.entries(obj).map(([k,[l,h]])=>`<label class="opt" for="${name}-${k}"><input type="radio" id="${name}-${k}" name="${name}" value="${k}" data-in="hebdo" data-k="${name}" ${cur===k?'checked':''}><span>${l}<small>${h}</small></span></label>`).join('');}
 function renderSemaine(){
  const w=S.semaine,sp=specialSem(w),nx=prochainJalon();
- return`<section class="action week"><div class="what"><div class="eyebrow muted">Semaine ${w} sur 36 · ${fmtDate(dateSem(w))}</div><h2>${sp.titre||'Semaine de cours'}</h2>
+ return`<section class="action week"><div class="what"><div class="eyebrow muted">Semaine ${w} sur 36 · ${fmtDate(dateSem(w))} <span class="climat ${climatV32()[1]}" title="Climat de l’établissement : il change la fréquence des crises">Climat : ${climatV32()[0]}</span></div><h2>${sp.titre||'Semaine de cours'}</h2>
  <p class="small muted">${nx.w===w?`<b>En fin de semaine : ${nx.nom}.</b>`:`Prochaine étape : ${nx.nom}, dans ${nx.w-w} semaine${nx.w-w>1?'s':''}.`}${sp.pluie?' Les pluies de mars peuvent inonder les salles et retarder les enseignants.':''}</p>${S.derniere?`<p class="last">${esc(S.derniere)}</p>`:''}</div>
  <div class="weekgrid">
   ${fsSemaine(w)}<fieldset class="day"><legend>Lundi · Levée des couleurs</legend>${radios('discours',DISCOURS,S.hebdo.discours)}</fieldset>
   <fieldset class="day"><legend>Mercredi après-midi</legend>${radios('mercredi',MERCREDI,S.hebdo.mercredi)}</fieldset>
   ${sp.parade?`<fieldset class="day fort"><legend>Défilé du 11 février</legend>${radios('parade',PARADE,S.hebdo.parade)}</fieldset>`:''}
   <fieldset class="day"><legend>Points d’action · <span class="pa-dots">${'●'.repeat(Math.max(0,S.pa||0))}${'○'.repeat(Math.max(0,PA_MAX+bonusPA()-(S.pa||0)))}</span></legend><div class="pa-btns">${PA_ACTIONS.map(a=>`<button class="btn sm" data-act="pa" data-k="${a.k}" title="${esc(a.h)}" ${S.pa<1||S.pending?'disabled':''}>${a.l}</button>`).join('')}</div><p class="small muted" style="margin-top:6px">${Math.max(1,PA_MAX+bonusPA())} points par semaine, non cumulables. Les visites de l’onglet Réseau en coûtent aussi un.</p></fieldset>
+  ${renderAgendaV32()}
  </div>
- <div class="weekfoot"><span class="small muted">Les effets de la semaine comptent pour la prochaine séquence.</span><span class="row" style="gap:8px"><button class="btn" data-act="rapide" ${S.pending?'disabled':''} title="Les points d’action non utilisés sont perdus">Avancer jusqu’à : ${nx.nom}</button><button class="btn primary" data-act="avancer" ${S.pending?'disabled':''}>Terminer la semaine</button></span></div></section>`;
+ <div class="weekfoot"><span class="small muted">Les effets de la semaine comptent pour la prochaine séquence.</span><span class="row" style="gap:8px"><button class="btn" data-act="rapide" ${S.pending?'disabled':''} title="Le censeur utilise vos points d’action et reçoit les visiteurs ; arrêt dès qu’une décision vous attend">Avancer jusqu’à : ${nx.nom}</button><button class="btn primary" data-act="avancer" ${S.pending?'disabled':''}>Terminer la semaine</button></span></div></section>`;
 }
 
 /* ================= Parcours et vie scolaire ================= */
@@ -2052,13 +2055,6 @@ function genRegion(riv,nomEtab,region){
  return L;
 }
 function starBtn(e){return`<button class="starbtn ${e.star?'on':''}" data-act="star" data-id="${e.id}" aria-pressed="${!!e.star}" aria-label="${e.star?'Ne plus suivre':'Suivre'} ${esc(e.nom)}">${e.star?'★':'☆'}</button>`;}
-function avanceRapide(){
- if(S.pending||S.over||!(S.semaine>=1&&S.semaine<=36))return;
- const ph0=S.phase;let n=0;
- while(S.semaine>=1&&S.semaine<=36&&!S.pending&&S.phase===ph0&&n<15){semaineSuivante();n++;}
- S.derniere=`${n} semaine${n>1?'s':''} écoulée${n>1?'s':''} en avance rapide. ${S.derniere||''}`;
- save();render();
-}
 function searchRes(){
  const q=(UI.search||'').trim().toLowerCase();if(q.length<2)return'<p class="small muted">Tapez au moins deux lettres.</p>';
  const R0=S.eleves.filter(e=>e.nom.toLowerCase().includes(q)).slice(0,12);
@@ -4178,7 +4174,7 @@ function canvasCopie(cd,w){
 }
 
 /* ================= V22 : écran titre et menu principal ================= */
-const VERSION_JEU='Version 31';
+const VERSION_JEU='Version 32';
 const CLE_AMB='proviseur-ambiance',CLE_PALM='proviseur-cm-v1-palmares';
 const ASTUCES=[
  'Le BEPC se passe en 3e, le Probatoire en 1ère et le Baccalauréat en Terminale. Dans le sous-système anglophone : GCE O Level en Form Five, GCE A Level en Upper Sixth.',
@@ -5156,6 +5152,225 @@ function initVille(ov){
  setTimeout(()=>{const a=ov.querySelector('#vl-aide');if(a)a.classList.add('v3-fade');},10000);
 }
 
+/* ================= V32 : anti-ennui (directeur d’intensité, événements systémiques, agenda, avance rapide, attentes) ================= */
+/* --- Climat de l’établissement : 0 = calme plat, 100 = crise --- */
+function tensionV32(){
+ let t=50;const cm=coutMensuel();
+ t+=S.tresor<0?18:S.tresor>cm*6?-10:0;
+ t+=S.reputation>75?-12:S.reputation<30?14:0;
+ const mo=moral();t+=mo<40?12:mo>70?-6:0;
+ t+=S.discipline<35?12:S.discipline>70?-6:0;
+ t+=S.rel.parents<35?10:S.rel.parents>70?-6:0;
+ t+=Math.min(24,(S.chaud||0)*8);
+ t-=Math.max(0,(S.calme||0)-2)*7;
+ return clamp(Math.round(t),0,100);
+}
+function climatV32(){const t=tensionV32();return t<25?['Calme plat','calme']:t<45?['Calme','calme']:t<62?['Agité','agite']:t<80?['Tendu','tendu']:['En crise','crise'];}
+/* --- Directeur d’intensité : relance quand tout va trop bien, accorde un répit quand le joueur se noie --- */
+function dirIntensite(){
+ if(S.pending||S.over)return;
+ const t=tensionV32();
+ if(t>=78){tirerEvenement(.07);if(!S.pending&&S.repitAn!==S.annee&&R()<.3){const L=EVENTS.filter(e=>e.repit&&e.when()&&!S.evUsed.includes(e.id));if(L.length){const ev=pick(L);S.evUsed.push(ev.id);S.repitAn=S.annee;pushModal({type:'event',id:ev.id,c:ev.ctx?ev.ctx():{}});}}return;}
+ tirerEvenement(t<30?.45:.18);
+ if(!S.pending&&(S.calme||0)>=3){
+  const sys=EVENTS.filter(e=>e.sys&&!S.evUsed.includes(e.id)&&e.when());
+  if(sys.length){const ev=pick(sys);S.evUsed.push(ev.id);pushModal({type:'event',id:ev.id,c:ev.ctx?ev.ctx():{}});}
+  else tirerEvenement(1);
+ }
+}
+function dirFinSemaine(){
+ S.chaud=(S.chaud||0)*.7+(S.pending?1:0);S.calme=S.pending?0:(S.calme||0)+1;
+ S.negSem=S.tresor<0?(S.negSem||0)+1:0;
+ if(S.reputation>70)rep(-(S.reputation-70)*.012);
+ let cv=1;try{cv=couverture().ratio;}catch(e){}S.covBas=cv<.9?(S.covBas||0)+1:0;
+ if(S.semaine>=1&&S.semaine<=36)agendaSemaine();else S.agenda=[];
+}
+/* --- Événements systémiques : ils naissent des chiffres de l’établissement --- */
+const SYS_V32=[];
+const divPleine=()=>S.divisions.slice().sort((a,b)=>b.ids.length-a.ids.length)[0];
+SYS_V32.push(
+ {id:'sys_pleth',sys:true,w:2.5,when:()=>S.semaine>=2&&S.semaine<=34&&S.divisions.some(d=>d.ids.length>85),titre:'Chahut dans une classe pléthorique',
+  ctx:()=>{const d=divPleine();return{d:d.nom,n:d.ids.length};},
+  texte:c=>`En ${c.d}, ${c.n} élèves s’entassent à trois par table-banc. Ce matin, le cours d’anglais a tourné au chahut : impossible de se faire entendre au-delà du troisième rang.`,
+  choix:c=>[
+   {l:'Payer un vacataire pour dédoubler les cours principaux (150 000 FCFA)',f:()=>{mvt(`Dédoublement des cours en ${c.d}`,-150000);disc(3);S.acc.notes+=.1;return`Le vacataire prend la moitié de la ${c.d} en maths et en français. On s’entend enfin travailler.`;}},
+   {l:'Placer un surveillant en permanence dans la classe',f:()=>{S.surveillants=(S.surveillants||0)+1;disc(4);return'Un surveillant de plus est recruté. Le calme revient, mais la masse salariale augmente chaque mois.';}},
+   {l:'Laisser l’enseignant se débrouiller',f:()=>{disc(-5);humeurAll(-2);rel('parents',-3);return'Le chahut devient une habitude. Des parents commencent à demander des transferts.';}}]},
+ {id:'sys_toit',sys:true,w:2.5,when:()=>S.etat<35&&S.semaine>=1&&S.semaine<=36&&(specialSem(S.semaine).pluie||['sept','oct','avr','mai'].includes(moisSem(S.semaine))),titre:'Un toit cède sous la pluie',
+  ctx:()=>({d:pick(S.divisions)?.nom||'une salle'}),
+  texte:c=>`Après une nuit d’orage, une partie de la toiture de la salle de ${c.d} s’est effondrée. Personne n’a été blessé : les élèves n’étaient pas encore arrivés. Les bâtiments sont à ${Math.round(S.etat)} sur 100.`,
+  choix:c=>[
+   {l:'Réparations d’urgence (400 000 FCFA)',f:()=>{mvt('Réparation d’urgence de la toiture',-400000);S.etat=clamp(S.etat+8,0,100);rel('parents',2);return'Les tôles sont remplacées en trois jours. Les parents saluent la rapidité.';}},
+   {l:'Faire cours sous le manguier en attendant',f:()=>{S.acc.notes-=.15;humeurAll(-1);return'Les cours se font à l’ombre, entre les poules et les vendeuses. On apprend moins bien.';}},
+   {l:'Fermer la salle et regrouper les classes',f:()=>{disc(-3);rel('parents',-3);return'Deux classes partagent une salle. Les bancs manquent, la tension monte.';}}]},
+ {id:'sys_impayes',sys:true,w:3,when:()=>(S.negSem||0)>=6,titre:'Salaires en retard : la colère gronde',
+  texte:()=>`La trésorerie est négative depuis ${S.negSem} semaines. Les vacataires n’ont pas été payés et le délégué du personnel vous remet une lettre signée par la moitié de l’équipe.`,
+  choix:()=>[
+   {l:'Avance de la banque : 2 000 000 FCFA, 2 300 000 à rembourser au bilan',f:()=>{mvt('Avance bancaire',2000000);S.v32dette=(S.v32dette||0)+2300000;motivAll(4);return'Les salaires sont versés. Il faudra rembourser 2 300 000 FCFA en fin d’année.';}},
+   {l:'Payer la moitié et promettre le reste',f:()=>{motivAll(-3);return'L’équipe accepte à contrecœur. La patience a des limites.';}},
+   {l:'Demander encore un mois de patience',f:()=>{motivAll(-7);if(R()<.45&&EVENTS.some(e=>e.id==='greve')&&!S.evUsed.includes('greve')){S.evUsed.push('greve');pushModal({type:'event',id:'greve',c:{}});return'Le ton monte en salle des professeurs. Une grève se prépare.';}return'Les enseignants traînent les pieds. Les cours commencent en retard.';}}]},
+ {id:'sys_fronde',sys:true,w:2.5,when:()=>moral()<35&&S.semaine>=1,titre:'Motion de défiance en salle des professeurs',
+  texte:()=>`Le moral des enseignants est à ${Math.round(moral())} sur 100. Une motion circule : « Nous ne sommes plus écoutés. » Elle a déjà vingt signatures.`,
+  choix:()=>[
+   {l:'Assemblée générale et prime de motivation (300 000 FCFA)',f:()=>{mvt('Primes de motivation',-300000);motivAll(8);return'Vous écoutez chacun et annoncez une prime. La motion est retirée.';}},
+   {l:'Identifier et sanctionner les meneurs',f:()=>{motivAll(-5);disc(2);integ(-.5);return'Deux meneurs reçoivent une demande d’explication. Le calme revient en surface, pas dans les cœurs.';}},
+   {l:'Créer un conseil pédagogique élu',f:()=>{motivAll(4);rel('inspection',-1);return'Les enseignants élisent leurs représentants. L’Inspection trouve l’initiative audacieuse.';}}]},
+ {id:'sys_bandes',sys:true,w:2.5,when:()=>S.discipline<30&&S.semaine>=1,titre:'Deux bandes s’affrontent à la sortie',
+  texte:()=>`La discipline est tombée à ${Math.round(S.discipline)} sur 100. Hier soir, deux bandes d’élèves se sont battues devant le portail, sous les yeux des moto-taximen. La vidéo circule déjà.`,
+  choix:()=>[
+   {l:'Appeler la police et porter plainte',f:()=>{disc(6);rep(-2);rel('parents',2);return'Les agents dispersent les bandes. Le quartier parle de votre lycée, et pas en bien.';}},
+   {l:'Conseil de discipline et exclusions',f:()=>{disc(8);humeurAll(-3);return'Cinq meneurs sont exclus. La cour retrouve son calme.';}},
+   {l:'Médiation avec les familles et le chef de quartier (50 000 FCFA)',f:()=>{mvt('Médiation entre les familles',-50000);disc(4);humeurAll(2);rel('parents',3);return'Les familles se parlent autour d’une table. La paix est fragile, mais réelle.';}}]},
+ {id:'sys_sitin',sys:true,w:2.5,when:()=>S.rel.parents<30&&S.semaine>=1,titre:'Sit-in des parents devant le portail',
+  texte:()=>`Une cinquantaine de parents bloquent le portail avec des pancartes. Leur satisfaction est à ${Math.round(S.rel.parents)} sur 100. Une équipe de la radio locale est sur place.`,
+  choix:()=>[
+   {l:'Recevoir une délégation immédiatement',f:()=>{rel('parents',8);S.pa=Math.max(0,(S.pa||0)-1);return'Deux heures de discussion. Les parents repartent avec des engagements écrits. Vous y laissez un point d’action.';}},
+   {l:'Organiser une assemblée de l’APEE la semaine prochaine',f:()=>{rel('parents',3);return'Les parents acceptent d’attendre. L’assemblée sera houleuse.';}},
+   {l:'Faire disperser le rassemblement',f:()=>{rel('parents',-5);rep(-4);return'La radio diffuse les images. Le soir même, tout le quartier en parle.';}}]},
+ {id:'sys_piston',sys:true,w:2,when:()=>S.reputation>78&&S.semaine>=1&&S.semaine<=8,titre:'Le succès attire les recommandations',
+  texte:()=>`Votre lycée est devenu très demandé. Votre bureau croule sous quarante cartes de visite : un commissaire, deux magistrats, un neveu du député… Tous veulent « une petite place » pour un enfant aux notes moyennes.`,
+  choix:()=>[
+   {l:'Accepter dix recommandations',f:()=>{rez('depute',6);rez('maire',4);disc(-2);S.acc.notes-=.05;integ(-.5);return'Dix nouveaux élèves rejoignent les classes. Vos appuis politiques se renforcent.';}},
+   {l:'Tout refuser au nom du mérite',f:()=>{rez('depute',-6);rez('maire',-3);integ(.5);rel('parents',2);return'Les parents des élèves admis au mérite applaudissent. Certains appuis se refroidissent.';}},
+   {l:'Faire passer un test d’entrée à tous',f:()=>{rez('depute',-2);rel('parents',1);return'Trois candidats recommandés réussissent le test. Les autres repartent, vexés mais sans argument.';}}]},
+ {id:'sys_tresor',sys:true,w:1.5,when:()=>S.tresor>coutMensuel()*12&&S.semaine>=1,titre:'Votre trésorerie fait des envieux',
+  texte:()=>`Avec ${money(S.tresor)} en caisse, votre établissement est l’un des plus riches de la région. La Délégation vous « invite » à contribuer au projet régional de bibliothèques.`,
+  choix:()=>[
+   {l:'Contribuer (1 000 000 FCFA)',f:()=>{mvt('Contribution au projet régional',-1000000);rel('inspection',6);rez('prefet',4);return'Le Délégué régional cite votre lycée en exemple lors de la réunion des chefs d’établissement.';}},
+   {l:'Présenter un plan d’investissement chiffré',f:()=>{rel('inspection',1);return'Votre plan est accepté : l’argent doit maintenant servir à construire.';}},
+   {l:'Refuser poliment',f:()=>{rel('inspection',-6);return'Le Délégué prend note. Votre prochain dossier attendra peut-être un peu plus longtemps.';}}]},
+ {id:'sys_cours',sys:true,w:2.5,when:()=>(S.covBas||0)>=4,titre:'Des cours non assurés depuis un mois',
+  texte:()=>{let c=null;try{c=couverture();}catch(e){}return`${c?c.need-c.cov:'Plusieurs'} heures de cours ne sont pas assurées depuis quatre semaines. Des parents de 3e et de Terminale campent devant votre bureau : « Nos enfants passent un examen ! »`;},
+  choix:()=>[
+   {l:'Recruter un vacataire en urgence (200 000 FCFA)',f:()=>{mvt('Vacataire recruté en urgence',-200000);S.acc.notes+=.1;rel('parents',3);return'Un jeune diplômé de l’ENS accepte le poste dès lundi.';}},
+   {l:'Imposer des heures supplémentaires aux enseignants',f:()=>{motivAll(-3);S.acc.notes+=.05;return'Les heures sont réparties. Les enseignants sont épuisés.';}},
+   {l:'Promettre une solution au prochain trimestre',f:()=>{rel('parents',-4);return'Les parents repartent sceptiques. Certains parlent de transférer leurs enfants.';}}]},
+ /* Répits : le directeur d’intensité les accorde quand tout va mal */
+ {id:'sys_repit_ancien',repit:true,w:0,when:()=>S.semaine>=1,titre:'Un geste inattendu',
+  texte:()=>`${S.alumni&&S.alumni.length?`${pick(S.alumni).nom}, ancien élève de l’établissement`:'Une association de la diaspora'} a entendu parler de vos difficultés et vous fait parvenir un don « pour que le lycée tienne bon ».`,
+  choix:()=>[
+   {l:'Accepter et remercier publiquement',f:()=>{mvt('Don exceptionnel',1500000);rep(2);motivAll(3);return'1 500 000 FCFA arrivent sur le compte. Une cérémonie de remerciement remonte le moral de tous.';}},
+   {l:'Affecter le don aux bourses des élèves en difficulté',f:()=>{mvt('Don affecté aux bourses',1500000);humeurAll(4);rel('parents',4);integ(.5);return'Trente élèves reçoivent une bourse. Leurs familles ne l’oublieront pas.';}}]},
+ {id:'sys_repit_etat',repit:true,w:0,when:()=>S.semaine>=1,titre:'Une bonne nouvelle de la Délégation',
+  texte:()=>S.type==='public'?'La Délégation régionale débloque une subvention exceptionnelle pour les établissements en difficulté. Votre dossier est retenu.':'Un homme d’affaires du quartier, dont la fille est scolarisée chez vous, propose de financer une partie de vos dépenses.',
+  choix:()=>[
+   {l:'Accepter (1 200 000 FCFA)',f:()=>{mvt(S.type==='public'?'Subvention exceptionnelle':'Mécénat',1200000);motivAll(2);return'La trésorerie respire enfin. L’équipe sent que le vent tourne.';}}]}
+);
+EVENTS.push(...SYS_V32);for(const e of SYS_V32)EV_EXEMPT.add(e.id);
+Object.assign(EV_IMG,{sys_pleth:'ecole',sys_toit:'pluie',sys_impayes:'argent',sys_fronde:'reunion',sys_bandes:'ecole',sys_sitin:'reunion',sys_piston:'officiel',sys_tresor:'argent',sys_cours:'reunion',sys_repit_ancien:'fete',sys_repit_etat:'officiel'});
+/* --- Agenda du proviseur : des demandes de rendez-vous chaque semaine --- */
+const eleveFaible=()=>{const L=S.eleves.filter(e=>{const m=lastMoy(e);return m!=null&&m<9;});return L.length?pick(L):null;};
+const RDV_V32=[
+ {k:'parent',qui:c=>`Parents de ${c.nom}`,motif:c=>`Les notes de leur enfant (${c.div}) s’effondrent.`,ok:()=>!!eleveFaible(),ctx:()=>{const e=eleveFaible();return{id:e.id,nom:e.nom,div:e.div};},
+  texte:c=>`Les parents de ${c.nom} (${c.div}) s’assoient, inquiets. « Il ou elle n’a que ${f2(lastMoy(S.eleves.find(e=>e.id===c.id))??8)} de moyenne. Que pouvons-nous faire ? »`,
+  choix:c=>{const e=S.eleves.find(x=>x.id===c.id);return[
+   {l:'Mettre en place un tutorat avec un bon élève',f:()=>{if(e){e.base=clamp(e.base+.25,2,19);e.humeur=clamp((e.humeur??55)+5,0,100);}rel('parents',2);return'Un élève de Terminale le ou la prendra en charge deux soirs par semaine.';}},
+   {l:'Signer un contrat de travail et d’assiduité',f:()=>{if(e)e.assid=clamp(e.assid+.08,.3,1);rel('parents',1);return'Le contrat est signé. Le cahier de liaison sera visé chaque vendredi.';}},
+   {l:'Les rassurer simplement',f:()=>{rel('parents',1);return'Les parents repartent un peu soulagés, sans solution concrète.';}}];},
+  ignore:()=>{rel('parents',-1);return'des parents inquiets';}},
+ {k:'prof',qui:c=>c.nom,motif:c=>c.motif,ok:()=>S.profs.some(p=>p.motiv<55),ctx:()=>{const p=pick(S.profs.filter(x=>x.motiv<55));return{id:p.id,nom:p.nom,motif:pick(['Demande une avance sur salaire.','Veut changer de classe.','Se plaint de sa charge de travail.','Souhaite partir en formation.'])};},
+  texte:c=>`${c.nom} entre dans votre bureau. ${c.motif} Son moral est en berne.`,
+  choix:c=>{const p=S.profs.find(x=>x.id===c.id);return[
+   {l:'Accorder une prime (40 000 FCFA)',f:()=>{mvt(`Prime : ${c.nom}`,-40000);if(p)p.motiv=clamp(p.motiv+9,0,100);return'Un large sourire : la prime arrive au bon moment.';}},
+   {l:'Écouter et aménager son emploi du temps',f:()=>{if(p)p.motiv=clamp(p.motiv+4,0,100);return'Quelques heures déplacées, et beaucoup d’écoute. Cela suffit pour cette fois.';}},
+   {l:'Refuser fermement',f:()=>{if(p)p.motiv=clamp(p.motiv-4,0,100);disc(.5);return'La porte se referme un peu brusquement.';}}];},
+  ignore:c=>{const p=S.profs.find(x=>x.id===c.id);if(p)p.motiv=clamp(p.motiv-4,0,100);return c.nom;}},
+ {k:'fournisseur',qui:()=>'Un fournisseur',motif:()=>'Propose des tables-bancs et des manuels à prix cassé.',ok:()=>true,ctx:()=>({}),
+  texte:()=>'Un commerçant de Mokolo étale son catalogue : tables-bancs, manuels, craie, ventilateurs. « Prix spécial pour vous, Monsieur le Proviseur. »',
+  choix:()=>[
+   {l:'Commander des manuels pour la bibliothèque (250 000 FCFA)',f:()=>{mvt('Achat de manuels',-250000);S.acc.lettres+=.2;S.acc.sci+=.2;return'Les cartons arrivent la semaine suivante. Les élèves se les disputent.';}},
+   {l:'Commander des tables-bancs (300 000 FCFA)',f:()=>{mvt('Achat de tables-bancs',-300000);S.etat=clamp(S.etat+4,0,100);disc(1);return'Plus personne n’est assis à trois sur un banc prévu pour deux.';}},
+   {l:'Accepter une « commission » pour signer',f:()=>{integ(-1);try{mvtPerso('Commission d’un fournisseur',150000);}catch(e){}return'150 000 FCFA glissés dans une enveloppe. Le matériel livré sera… de qualité variable.';}},
+   {l:'Décliner',f:()=>'Le fournisseur range son catalogue et promet de repasser.'}],
+  ignore:()=>null},
+ {k:'journaliste',qui:()=>'Une journaliste de la radio locale',motif:()=>'Prépare un reportage sur votre établissement.',ok:()=>S.hist.length>0,ctx:()=>({}),
+  texte:()=>`Micro en main, la journaliste prépare une émission sur « les lycées qui bougent ». ${S.hist.at(-1)?.taux!=null?`Votre dernier taux de réussite était de ${Math.round(S.hist.at(-1).taux)} %.`:''}`,
+  choix:()=>{const bon=(S.hist.at(-1)?.taux??50)>=60;return[
+   {l:'Accorder une interview',f:()=>{if(bon){rep(3);return'L’émission est élogieuse. Le téléphone du secrétariat sonne toute la semaine.';}rep(-1);return'Les questions sur vos résultats sont gênantes. L’émission reste mitigée.';}},
+   {l:'Faire parler le major de l’établissement',f:()=>{rep(2);humeurAll(2);return'Le major parle avec aplomb. Les élèves sont fiers de leur camarade.';}},
+   {l:'Refuser',f:()=>'La journaliste range son micro, un peu déçue.'}];},
+  ignore:()=>{if(R()<.35){rep(-2);return'la journaliste (l’émission vous a égratigné)';}return'la journaliste';}},
+ {k:'delegues',qui:()=>'Le chef des délégués',motif:c=>c.motif,ok:()=>true,ctx:()=>({motif:pick(['Une pétition pour réparer les toilettes.','Une pétition contre la hausse des prix à la cantine.','Une demande de soirée culturelle.','Une plainte contre un enseignant trop sévère.'])}),
+  texte:c=>`Le chef des délégués se tient droit, une feuille couverte de signatures à la main. ${c.motif}`,
+  choix:c=>[
+   {l:'Accepter la demande (100 000 FCFA)',f:()=>{mvt('Demande des délégués',-100000);humeurAll(4);disc(1);return'La nouvelle se répand dans la cour en un quart d’heure. Votre popularité grimpe.';}},
+   {l:'Promettre d’étudier la question',f:()=>{humeurAll(1);return'Le délégué repart satisfait… pour l’instant.';}},
+   {l:'Refuser et rappeler le règlement',f:()=>{humeurAll(-3);disc(1);return'Le délégué baisse les yeux. Des murmures parcourent les classes.';}}],
+  ignore:()=>{humeurAll(-2);return'le chef des délégués';}},
+ {k:'apee',qui:()=>'Le président de l’APEE',motif:()=>'Veut discuter d’un projet financé par les parents.',ok:()=>true,ctx:()=>({p:pick(['un forage','un kit solaire','un car de ramassage','une salle informatique'])}),
+  texte:c=>`Le président de l’APEE propose que les parents cotisent pour ${c.p}. « Mais nous voulons un droit de regard sur les dépenses. »`,
+  choix:c=>[
+   {l:'Accepter, avec un comité de suivi des parents',f:()=>{mvt(`Cotisation APEE : ${c.p}`,400000);rel('parents',4);return'400 000 FCFA sont collectés. Le comité suivra chaque facture.';}},
+   {l:'Accepter, mais garder la main sur les dépenses',f:()=>{mvt(`Cotisation APEE : ${c.p}`,400000);rel('parents',-2);integ(-.3);return'L’argent arrive, mais certains parents murmurent.';}},
+   {l:'Refuser',f:()=>{rel('parents',-2);return'Le président repart vexé. L’assemblée générale sera tendue.';}}],
+  ignore:()=>{rel('parents',-2);return'le président de l’APEE';}},
+ {k:'ancien',qui:c=>c.nom,motif:()=>'Ancien élève, propose une conférence aux Terminales.',ok:()=>(S.alumni||[]).length>0,ctx:()=>{const a=pick(S.alumni);return{nom:a.nom};},
+  texte:c=>`${c.nom}, ancien élève de l’établissement, revient avec émotion dans la cour de son enfance. Il ou elle propose de parler aux classes d’examen.`,
+  choix:()=>[
+   {l:'Organiser une conférence dans la grande salle',f:()=>{S.acc.exam+=.15;humeurAll(3);return'Les élèves boivent ses paroles. Plusieurs veulent suivre le même chemin.';}},
+   {l:'Lui demander de parrainer une bourse',f:()=>{mvt('Bourse parrainée par un ancien',200000);rel('parents',1);return'Une bourse au nom de l’ancien élève est créée.';}}],
+  ignore:()=>null},
+ {k:'chef',qui:()=>'Le chef de quartier',motif:()=>'Se plaint des élèves qui traversent les champs.',ok:()=>true,ctx:()=>({}),
+  texte:()=>'Le chef de quartier, canne à la main, se plaint : « Vos élèves piétinent nos champs de maïs à la sortie, et certains volent des mangues. »',
+  choix:()=>[
+   {l:'Présenter des excuses et financer une haie (80 000 FCFA)',f:()=>{mvt('Haie le long des champs',-80000);rez('maire',3);disc(1);return'La haie est plantée. Le chef vous invite à la prochaine fête du village.';}},
+   {l:'Faire une annonce à la levée des couleurs',f:()=>{disc(1);return'L’annonce est faite. Les mangues restent tentantes.';}}],
+  ignore:()=>{rez('maire',-2);return'le chef de quartier';}},
+ {k:'vedette',qui:c=>c.nom,motif:c=>`Élève suivi·e (${c.div}), demande à vous voir.`,ok:()=>S.eleves.some(e=>e.star),ctx:()=>{const e=pick(S.eleves.filter(x=>x.star));return{id:e.id,nom:e.nom,div:e.div};},
+  texte:c=>`${c.nom} (${c.div}) frappe timidement à votre porte. « Monsieur le Proviseur, est-ce que je pourrais vous parler deux minutes ? »`,
+  choix:c=>{const e=S.eleves.find(x=>x.id===c.id);return[
+   {l:'L’écouter et l’encourager',f:()=>{if(e){e.humeur=clamp((e.humeur??55)+10,0,100);e.base=clamp(e.base+.1,2,19);}return'Ses yeux brillent en repartant. Vous venez peut-être de changer une trajectoire.';}},
+   {l:'Lui confier une responsabilité',f:()=>{if(e)e.humeur=clamp((e.humeur??55)+6,0,100);disc(1);return'Il ou elle devient responsable de la bibliothèque. Une fierté immense.';}}];},
+  ignore:c=>{const e=S.eleves.find(x=>x.id===c.id);if(e)e.humeur=clamp((e.humeur??55)-6,0,100);return c.nom;}}
+];
+for(const R0 of RDV_V32)EVENTS.push({id:'rdv_'+R0.k,w:0,when:()=>false,titre:'Rendez-vous',texte:R0.texte,choix:R0.choix});
+for(const R0 of RDV_V32)EV_EXEMPT.add('rdv_'+R0.k);
+Object.assign(EV_IMG,{rdv_parent:'reunion',rdv_prof:'reunion',rdv_fournisseur:'argent',rdv_journaliste:'radio',rdv_delegues:'ecole',rdv_apee:'reunion',rdv_ancien:'fete',rdv_chef:'officiel',rdv_vedette:'ecole'});
+function agendaSemaine(){
+ /* demandes non honorées de la semaine écoulée */
+ const ign=[];for(const a of S.agenda||[]){if(a.fait)continue;const T=RDV_V32.find(x=>x.k===a.k);if(!T)continue;try{const r=T.ignore(a.c);if(r)ign.push(r);}catch(e){}}
+ if(ign.length){const t=`Rendez-vous non honorés : ${ign.join(', ')}. Ils s’en souviendront.`;log(t);S.derniere=(S.derniere?S.derniere+' ':'')+t;}
+ /* nouvelles demandes */
+ const n=3+(R()<.4?1:0),L=RDV_V32.filter(x=>{try{return x.ok();}catch(e){return false;}}),out=[];
+ while(out.length<n&&L.length){const i=Math.floor(R()*L.length),T=L.splice(i,1)[0];try{out.push({k:T.k,c:T.ctx(),fait:false});}catch(e){}}
+ S.agenda=out;
+}
+function renderAgendaV32(){
+ const A=S.agenda||[];if(!A.length)return'';
+ return`<fieldset class="day agenda"><legend>Agenda · demandes de rendez-vous</legend><div class="stack" style="gap:6px">${A.map((a,i)=>{const T=RDV_V32.find(x=>x.k===a.k);if(!T)return'';return`<div class="rdv ${a.fait?'fait':''}"><span><b>${esc(T.qui(a.c))}</b><br><span class="small muted">${esc(T.motif(a.c))}</span></span>${a.fait?'<span class="small muted">Reçu ✓</span>':`<button class="btn sm" data-act="rdv" data-i="${i}" ${S.pa<1||S.pending?'disabled':''}>Recevoir · 1 pt</button>`}</div>`;}).join('')}</div><p class="small muted" style="margin-top:6px">Chaque rendez-vous coûte un point d’action. Ceux que vous ignorez s’en souviendront.</p></fieldset>`;
+}
+/* --- Avance rapide intelligente : le censeur dépense les points d’action, arrêt dès qu’une vraie décision se présente --- */
+function paAutoV32(){
+ const k=S.discipline<45?'ronde':S.rel.parents<45?'parents':moral()<50?'reunion':S.phase>=9?'examen':pick(['reunion','ronde','parents','examen']);
+ const a=PA_ACTIONS.find(x=>x.k===k);if(a){S.pa--;try{a.f();}catch(e){}return 1;}return 0;
+}
+function avanceRapide(){
+ if(S.pending||S.over||!(S.semaine>=1&&S.semaine<=36))return;
+ const ph0=S.phase,t0=S.tresor,r0=S.reputation,d0=S.discipline;let n=0,auto=0;
+ while(S.semaine>=1&&S.semaine<=36&&!S.pending&&S.phase===ph0&&n<15){
+  while((S.pa||0)>0)auto+=paAutoV32();
+  if(S.agenda)for(const a of S.agenda)a.fait=true;
+  semaineSuivante();n++;
+ }
+ const d=(x,y,u)=>{const v=Math.round(y-x);return v?`${u} ${v>0?'+':''}${u==='trésorerie'?moneyS(y-x):v}`:'';};
+ const bilanR=[d(t0,S.tresor,'trésorerie'),d(r0,S.reputation,'réputation'),d(d0,S.discipline,'discipline')].filter(Boolean).join(' · ');
+ const arret=S.pending?' Le jeu s’arrête : une décision vous attend.':S.phase!==ph0?' Étape atteinte.':'';
+ S.derniere=`${n} semaine${n>1?'s':''} en avance rapide. Le censeur a mené ${auto} action${auto>1?'s':''} et reçu les visiteurs à votre place.${bilanR?' Bilan : '+bilanR+'.':''}${arret}`;
+ save();render();
+}
+/* --- Attentes croissantes : les parents s’habituent aux bons résultats --- */
+function attentesV32(taux){
+ if(taux==null)return 0;const H=S.hist.slice(-3).map(h=>h.taux).filter(x=>x!=null);if(!H.length)return 0;
+ const hab=avg(H),best=Math.max(...H);let d=0;
+ if(taux<hab-3){d=-(hab-taux)/8;log(`Les parents s’étaient habitués à ${Math.round(hab)} % de réussite : ce recul les déçoit.`,'bad');}
+ else if(taux>best+2){d=Math.min(2,(taux-best)/6);log(`Nouveau record de l’établissement : ${Math.round(taux)} % de réussite !`,'good');}
+ if(S.v32dette){mvt('Remboursement de l’avance bancaire',-S.v32dette);S.v32dette=0;}
+ return d;
+}
+const ACTIONS_V32={
+ 'rdv':d=>{if((S.pa||0)<1||S.pending)return;const a=(S.agenda||[])[+d.i];if(!a||a.fait)return;a.fait=true;S.pa--;pushModal({type:'event',id:'rdv_'+a.k,c:a.c});save();render();}
+};
+
 /* ================= V28 : graphismes réalistes (visite du campus) =================
    Ressources libres servies depuis assets/ (application Render) : textures et ciel Poly Haven (CC0),
    mobilier Poly Haven (CC0), personnages animés (Mixamo / Ready Player Me, exemples three.js).
@@ -6122,7 +6337,7 @@ const A={
 };
 Object.assign(A,{
  'ville3d':()=>{if(V3)fermerVisite();ouvrirVille();},
- ...ACTIONS_V29,...ACTIONS_V30,'vie-logement':()=>{if(V3)fermerVisite();UI.entrerLogement=true;if(VL){fermerVille();setTimeout(ouvrirVille,60);}else ouvrirVille();},
+ ...ACTIONS_V29,...ACTIONS_V30,...ACTIONS_V32,'vie-logement':()=>{if(V3)fermerVisite();UI.entrerLogement=true;if(VL){fermerVille();setTimeout(ouvrirVille,60);}else ouvrirVille();},
  'vie-train':d=>{if(TRAINS[d.k]){vie().train=d.k;save();render();}},
  'vie-achat':d=>{UI.vieMsg=acheter(d.cat,d.k);save();try{if(VL&&VL.majVoiture&&d.cat==='voiture')VL.majVoiture();}catch(e){}render();},
  'vie-vendre':d=>{UI.vieMsg=vendre(d.cat,d.k);save();try{if(VL&&VL.majVoiture)VL.majVoiture();}catch(e){}render();},
