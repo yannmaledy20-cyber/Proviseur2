@@ -2,6 +2,12 @@
 
 Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligue en ligne, défis, salle des proviseurs, joueurs en ligne, applaudissements. Les codes de lycée (hors ligne) fonctionnent toujours.
 
+## Nouveautés de la version 34 : nouveau design, langues, tenues, langues locales
+- **Nouveau design « prestige »** : en-tête en dégradé profond avec indicateurs en verre dépoli, cartes à relief doux, onglets flottants, boutons en dégradé, fenêtres animées, barres de défilement fines. Thèmes clair et sombre.
+- **Langue du jeu** : français, anglais, espagnol ou portugais, au choix dans le menu principal et dans Options. Menus, onglets, boutons, tableaux et libellés sont traduits ; les récits (événements, dialogues, journal) restent en français pour l’instant.
+- **Tenues** : 20 modèles de couleurs (13 nouveaux) et un choix de coupe, manches courtes avec jupe plissée ou manches longues avec jupe longue, visible dans l’aperçu et sur les élèves en 3D.
+- **Langues locales** : nouvelle matière dans toutes les classes, de la 6e à la Terminale et de la Form One à l’Upper Sixth, présente aux examens officiels (BEPC, Probatoire, Baccalauréat, GCE) et sur les relevés. L’établissement choisit une à trois langues dans l’onglet Pédagogie (beti, bassa, duala, fe’fe’, yemba, ghomala’, medumba, bamoun, bulu, fulfulde, gbaya, maka, mafa, tupuri, lamnso’, mungaka) ; enseigner une langue de sa région aide les élèves. Les anciennes sauvegardes reçoivent la matière et ses enseignants automatiquement.
+
 ## Nouveautés de la version 33 : menu en 3D, relevés de notes, majors nationaux
 - **Menu principal en 3D réaliste** : derrière le menu, le bureau du proviseur en pleine réception d’une mère et de son enfant. Personnages animés qui se parlent et se regardent, soleil qui entre par la baie vitrée, ventilateur, drapeau qui flotte dans la cour, horloge à l’heure réelle, cinq plans de caméra en lents travellings. L’éclairage suit l’ambiance choisie (aube, jour, soir, nuit). Désactivable dans Options ; absent en qualité légère ou en mode économie de données.
 - **Relevés de notes officiels** : après chaque session, le relevé de chaque candidat au BEPC, au Probatoire, au Baccalauréat et au GCE (épreuves, coefficients, notes, total, moyenne, décision du jury, mention), avec le cachet de l’Office du Baccalauréat du Cameroun pour le Probatoire et le Baccalauréat, de la DECC pour le BEPC et du GCE Board pour le GCE. Accessibles depuis la fenêtre des résultats et depuis l’onglet Examens. Ce sont des documents de jeu, sans valeur officielle.
@@ -53,7 +59,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Plan libre du campus** : bâtiments en barre, en L ou en U, jusqu’à 4 niveaux, visitables en 3D par l’escalier.
 - **Discipline en 3D** : élèves marqués d’un « ! » (bagarre, téléphone, retard, tenue, sommeil, graffitis, jeux d’argent, cigarette) et sept sanctions possibles, avec leurs conséquences.
 
-Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 15 : les joueurs reçoivent la nouvelle version au prochain chargement.
+Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 16 : les joueurs reçoivent la nouvelle version au prochain chargement.
 
 ## Lancer en local
     node server.js        # puis ouvrir http://localhost:3000
