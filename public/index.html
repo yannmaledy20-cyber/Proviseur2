@@ -634,6 +634,127 @@ fieldset.day,.day{border-radius:16px;box-shadow:var(--ring)}
 .te-lang:hover{opacity:1}.te-lang.on{background:var(--btn-grad);color:#2a1600;border-color:transparent;opacity:1}
 @media (max-width:640px){.tabs{position:static}.kpi{padding:7px 11px}.kpi b{font-size:1.05rem}.card{padding:15px 15px}}
 @media (prefers-reduced-motion:reduce){.card:hover,.stat:hover,.kpi:hover,.btn:hover,.tab:hover,.te-btn:hover{transform:none}.form{animation:none}}
+
+/* ===== V35 : palettes de couleurs ===== */
+:root[data-palette="ocean"]{--board-grad:linear-gradient(125deg,#082f49 0%,#0e7490 40%,#2563eb 75%,#4338ca 100%);--btn-grad:linear-gradient(135deg,#a5f3fc 0%,#22d3ee 50%,#0ea5e9 100%);--tab-grad:linear-gradient(135deg,#0891b2 0%,#4f46e5 100%);--accent:#06b6d4;--accent-soft:#dff7fc;--accent-ink:#04222c;--bg-grad:radial-gradient(1200px 700px at -5% -10%,#cff4ff 0%,rgba(207,244,255,0) 58%),radial-gradient(1000px 620px at 105% 0%,#dbe4ff 0%,rgba(219,228,255,0) 60%),linear-gradient(180deg,#f2f8ff 0%,#eef6fb 100%)}
+:root[data-palette="savane"]{--board-grad:linear-gradient(125deg,#431407 0%,#9a3412 40%,#c2410c 70%,#a16207 100%);--btn-grad:linear-gradient(135deg,#fef08a 0%,#fbbf24 50%,#f59e0b 100%);--tab-grad:linear-gradient(135deg,#b45309 0%,#dc2626 100%);--accent:#f59e0b;--accent-soft:#fff3d6;--bg-grad:radial-gradient(1200px 700px at -5% -10%,#ffe4b5 0%,rgba(255,228,181,0) 58%),radial-gradient(1000px 620px at 105% 0%,#ffe1d2 0%,rgba(255,225,210,0) 60%),linear-gradient(180deg,#fff8ee 0%,#fbf3e6 100%)}
+:root[data-palette="royal"]{--board-grad:linear-gradient(125deg,#1e0638 0%,#4c1d95 40%,#7e22ce 72%,#a21caf 100%);--btn-grad:linear-gradient(135deg,#fde68a 0%,#fbbf24 50%,#f59e0b 100%);--tab-grad:linear-gradient(135deg,#7c3aed 0%,#db2777 100%);--accent:#a855f7;--accent-soft:#f3e8ff;--bg-grad:radial-gradient(1200px 700px at -5% -10%,#f3e1ff 0%,rgba(243,225,255,0) 58%),radial-gradient(1000px 620px at 105% 0%,#ffe0f0 0%,rgba(255,224,240,0) 60%),linear-gradient(180deg,#faf5ff 0%,#f8f1fb 100%)}
+:root[data-palette="foret"]{--board-grad:linear-gradient(125deg,#052e16 0%,#166534 40%,#3f6212 72%,#0f766e 100%);--btn-grad:linear-gradient(135deg,#d9f99d 0%,#a3e635 50%,#65a30d 100%);--tab-grad:linear-gradient(135deg,#15803d 0%,#0d9488 100%);--accent:#84cc16;--accent-soft:#ecfccb;--accent-ink:#1a2e05;--bg-grad:radial-gradient(1200px 700px at -5% -10%,#dcfce7 0%,rgba(220,252,231,0) 58%),radial-gradient(1000px 620px at 105% 0%,#e0f7ef 0%,rgba(224,247,239,0) 60%),linear-gradient(180deg,#f3fbf4 0%,#eef8f1 100%)}
+:root[data-palette="corail"]{--board-grad:linear-gradient(125deg,#4c0519 0%,#9f1239 38%,#e11d48 68%,#ea580c 100%);--btn-grad:linear-gradient(135deg,#ffe4e6 0%,#fda4af 45%,#fb7185 100%);--tab-grad:linear-gradient(135deg,#e11d48 0%,#f97316 100%);--accent:#fb7185;--accent-soft:#ffe4e6;--accent-ink:#3b0412;--bg-grad:radial-gradient(1200px 700px at -5% -10%,#ffe4e6 0%,rgba(255,228,230,0) 58%),radial-gradient(1000px 620px at 105% 0%,#ffedd5 0%,rgba(255,237,213,0) 60%),linear-gradient(180deg,#fff6f6 0%,#fff3ee 100%)}
+:root[data-palette="ardoise"]{--board-grad:linear-gradient(125deg,#020617 0%,#0f172a 40%,#1e293b 72%,#334155 100%);--btn-grad:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 50%,#cbd5e1 100%);--tab-grad:linear-gradient(135deg,#334155 0%,#0f172a 100%);--accent:#94a3b8;--accent-soft:#eef2f7;--accent-ink:#0f172a;--bg-grad:linear-gradient(180deg,#f5f7fa 0%,#eef1f5 100%)}
+:root[data-palette="sable"]{--board-grad:linear-gradient(125deg,#422006 0%,#78350f 40%,#a16207 70%,#0f766e 100%);--btn-grad:linear-gradient(135deg,#fef9c3 0%,#fde68a 50%,#facc15 100%);--tab-grad:linear-gradient(135deg,#0f766e 0%,#a16207 100%);--accent:#eab308;--accent-soft:#fef9c3;--bg-grad:radial-gradient(1200px 700px at -5% -10%,#fef3c7 0%,rgba(254,243,199,0) 58%),radial-gradient(1000px 620px at 105% 0%,#ccfbf1 0%,rgba(204,251,241,0) 60%),linear-gradient(180deg,#fffbeb 0%,#f7f5ec 100%)}
+@media (prefers-color-scheme: dark){:root[data-palette]:not([data-theme="light"]){--bg-grad:radial-gradient(1100px 650px at -5% -10%,#2a1d05 0%,rgba(42,29,5,0) 58%),radial-gradient(1000px 620px at 105% 0%,#0a2445 0%,rgba(10,36,69,0) 60%),linear-gradient(180deg,#0b1022 0%,#070d18 100%);--accent-soft:#2c2412}}
+:root[data-palette][data-theme="dark"]{--bg-grad:radial-gradient(1100px 650px at -5% -10%,#2a1d05 0%,rgba(42,29,5,0) 58%),radial-gradient(1000px 620px at 105% 0%,#0a2445 0%,rgba(10,36,69,0) 60%),linear-gradient(180deg,#0b1022 0%,#070d18 100%);--accent-soft:#2c2412}
+.pal-choix{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.pal{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:12px;border:1.5px solid var(--line);background:var(--sheet);color:var(--ink);font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;transition:transform .15s ease,border-color .15s ease}
+.pal i{width:22px;height:22px;border-radius:50%;flex:0 0 auto;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),0 2px 6px rgba(0,0,0,.25)}
+.pal:hover{transform:translateY(-1px)}.pal.on{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
+/* ===== V35 : boutons et disposition ===== */
+.btn{position:relative;overflow:hidden}
+.btn.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.45) 48%,transparent 66%);transform:translateX(-120%);transition:transform .7s ease}
+.btn.primary:hover::after{transform:translateX(120%)}
+.tab::before{display:inline-block;margin-right:7px;font-size:1em;filter:saturate(1.1)}
+.tab[data-tab="dash"]::before{content:"🏠"}.tab[data-tab="classes"]::before{content:"🏫"}.tab[data-tab="vie"]::before{content:"💬"}.tab[data-tab="tenue"]::before{content:"👔"}.tab[data-tab="peda"]::before{content:"📚"}.tab[data-tab="personnel"]::before{content:"👩‍🏫"}.tab[data-tab="reseau"]::before{content:"🤝"}.tab[data-tab="finances"]::before{content:"💰"}.tab[data-tab="infra"]::before{content:"🏗"}.tab[data-tab="examens"]::before{content:"📝"}.tab[data-tab="classement"]::before{content:"🏆"}.tab[data-tab="trophees"]::before{content:"🎖"}.tab[data-tab="perso"]::before{content:"🙂"}.tab[data-tab="anciens"]::before{content:"🎓"}.tab[data-tab="multi"]::before{content:"🌐"}.tab[data-tab="regles"]::before{content:"⚖"}.tab[data-tab="journal"]::before{content:"🗞"}
+@media (min-width:1260px){
+ .board .wrap{max-width:1420px}
+ main.wrap{max-width:1420px;display:grid;grid-template-columns:232px minmax(0,1fr);column-gap:26px;align-items:start}
+ main.wrap>.action{grid-column:1/-1}
+ main.wrap>.tabs{grid-column:1;flex-direction:column;align-items:stretch;border-radius:22px;padding:10px;gap:3px;position:sticky;top:14px;overflow:visible;max-height:calc(100vh - 28px);overflow-y:auto}
+ main.wrap>.tabs .tab{text-align:left;border-radius:13px;padding:.6rem .9rem;display:flex;align-items:center}
+ main.wrap>.tabs .tab .badge{margin-left:auto}
+ main.wrap>.panel{grid-column:2;min-width:0}
+ main.wrap>p{grid-column:1/-1}
+}
+/* ===== V35 : documents officiels A4 ===== */
+.doc-liste{display:flex;flex-wrap:wrap;gap:8px}
+.doc-btn{display:inline-flex;align-items:center;gap:8px;text-align:left}
+.doc-ic{display:inline-block;font-size:.62rem;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#ef4444,#b91c1c);padding:3px 5px;border-radius:4px;box-shadow:0 2px 6px rgba(185,28,28,.35)}
+.doc-vue{flex-direction:column;align-items:center;padding-top:0}
+.doc-barre{position:sticky;top:0;z-index:2;width:100%;max-width:880px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;margin-top:12px;border-radius:16px;background:rgba(15,23,42,.88);color:#f8fafc;backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.35);font-weight:600}
+.doc-pile{display:flex;flex-direction:column;align-items:center;gap:22px;padding:22px 0 40px;width:100%}
+.doc-a4{width:min(210mm,100%);min-height:297mm;background:#fffefa;color:#1a1a1a;padding:16mm 15mm 12mm;box-shadow:0 30px 80px -20px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.05);font-family:Georgia,"Times New Roman",serif;font-size:10.5pt;line-height:1.45;position:relative;border-radius:3px}
+.doc-a4::before{content:"";position:absolute;inset:7mm;border:1px solid #d9d2bf;pointer-events:none;border-radius:2px}
+.d-entete{display:grid;grid-template-columns:1fr 64px 1fr;gap:10px;align-items:center;text-align:center;font-size:7.6pt;text-transform:uppercase;letter-spacing:.04em;line-height:1.35}
+.d-entete i{text-transform:none}.d-arm svg{width:56px;height:56px}
+.d-etab{margin:10px 0 2px;text-align:center;border-top:2px solid #1a1a1a;border-bottom:1px solid #1a1a1a;padding:5px 0}
+.d-etab b{display:block;font-size:12.5pt;letter-spacing:.04em;text-transform:uppercase}.d-etab span{font-size:8.8pt;color:#444}
+.d-ref{font-size:8.5pt;color:#444;margin:6px 0 0}
+.d-titre{text-align:center;font-family:Georgia,serif;font-size:17pt;letter-spacing:.16em;text-transform:uppercase;margin:14px 0 2px;color:#111}
+.d-sous{text-align:center;font-style:italic;margin:0 0 12px;color:#333}
+.d-corps{margin:8px 0;text-align:justify}
+.d-h3{font-family:Georgia,serif;font-size:11pt;margin:12px 0 4px;text-transform:uppercase;letter-spacing:.06em;color:#14532d;border-bottom:1px solid #d9d2bf;padding-bottom:2px}
+.d-mini{margin:8px 0 3px;font-size:9.5pt}
+.d-ul{margin:4px 0 6px 18px;padding:0}.d-ul li{margin:2px 0}
+.d-t{width:100%;border-collapse:collapse;font-size:9.2pt;margin:4px 0 6px}
+.d-t th,.d-t td{border:1px solid #bdb5a0;padding:3px 7px;text-align:left;vertical-align:top}
+.d-t th{background:#efe9d8;font-family:system-ui,sans-serif;font-size:7.4pt;text-transform:uppercase;letter-spacing:.05em}
+.d-t .n{text-align:right;font-variant-numeric:tabular-nums}
+.d-t tbody tr:nth-child(even) td{background:#faf7ee}
+.d-lieu{margin:14px 0 4px;text-align:right;font-style:italic}
+.d-signe{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin-top:4px}
+.d-signe-t{display:flex;flex-direction:column;align-items:center;text-align:center;font-weight:700;font-size:9.5pt;min-width:200px}
+.d-signe .signature{width:190px;height:58px;margin:2px 0 -6px}
+.sig-nom{font-size:9.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.d-signe .cachet{width:120px;height:120px;margin-left:-36px;transform:rotate(-12deg);opacity:.78;mix-blend-mode:multiply;color:#1e3a8a}
+.d-signe .cachet.etab{color:#6d28d9}
+.d-pied{position:absolute;left:0;right:0;bottom:9mm;text-align:center;font-family:system-ui,sans-serif;font-size:6.6pt;letter-spacing:.08em;text-transform:uppercase;color:#a8a29e}
+@media (max-width:640px){.doc-a4{padding:9mm 6mm 12mm;font-size:9.5pt;min-height:0}.doc-a4::before{inset:3mm}.d-entete{grid-template-columns:1fr;gap:3px}.d-arm{order:-1}.d-signe{flex-direction:column;align-items:flex-end}.d-signe .cachet{margin:-30px 0 0}}
+@media print{
+ @page{size:A4;margin:0}
+ body.v35-imprime{background:#fff!important}
+ body.v35-imprime>*:not(#modal){display:none!important}
+ body.v35-imprime #modal .overlay{position:static!important;background:none!important;backdrop-filter:none!important;padding:0!important;overflow:visible!important;display:block!important}
+ body.v35-imprime .doc-barre{display:none!important}
+ body.v35-imprime .doc-pile{padding:0;gap:0;display:block}
+ body.v35-imprime .doc-a4{box-shadow:none;width:210mm;min-height:297mm;border-radius:0;break-after:page;page-break-after:always;margin:0}
+ body.v35-imprime .doc-a4 *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+/* ===== V35 : PROVISEUR-OS ===== */
+.os{position:fixed;inset:0;z-index:60;overflow:hidden;font-family:"Segoe UI",system-ui,sans-serif;color:#0f172a;user-select:none}
+.os.boot{animation:os-boot .9s ease both}@keyframes os-boot{0%{filter:brightness(0)}40%{filter:brightness(0)}100%{filter:none}}
+.os::before{content:"";position:absolute;inset:0;background:radial-gradient(900px 500px at 75% 30%,rgba(255,255,255,.16),transparent 65%);pointer-events:none}
+.os-logo{position:absolute;right:28px;bottom:70px;text-align:right;color:rgba(255,255,255,.88);text-shadow:0 2px 16px rgba(0,0,0,.35);pointer-events:none}
+.os-logo b{display:block;font-size:clamp(1.2rem,3vw,2rem);font-family:var(--f-display);letter-spacing:.02em}.os-logo span{font-size:.75rem;letter-spacing:.32em;opacity:.8}
+.os-icones{position:absolute;left:14px;top:14px;display:grid;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,92px);gap:6px 10px;max-height:calc(100% - 70px)}
+.os-ic{width:86px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 4px;border:0;border-radius:10px;background:transparent;color:#fff;font:inherit;cursor:pointer;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.os-ic span{font-size:1.75rem;width:46px;height:46px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(160deg,rgba(255,255,255,.32),rgba(255,255,255,.1));box-shadow:0 6px 16px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.4)}
+.os-ic b{font-size:.72rem;font-weight:600;text-align:center;line-height:1.15}
+.os-ic:hover{background:rgba(255,255,255,.14)}
+.os-win{position:absolute;display:flex;flex-direction:column;background:rgba(248,250,252,.97);border-radius:12px;box-shadow:0 30px 70px -10px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.4);overflow:hidden;min-width:240px;min-height:160px;user-select:text;animation:os-ouvre .18s ease both}
+.os-win.max{left:0!important;top:0!important;width:100%!important;height:calc(100% - 48px)!important;border-radius:0}
+@keyframes os-ouvre{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.os-win:not(.actif){filter:saturate(.85) brightness(.97)}
+.os-titre{display:flex;justify-content:space-between;align-items:center;padding:7px 8px 7px 14px;background:linear-gradient(180deg,#e2e8f0,#cbd5e1);font-size:.82rem;font-weight:700;cursor:grab;touch-action:none;color:#0f172a}
+.os-win.actif .os-titre{background:linear-gradient(180deg,#1e3a8a,#1d4ed8);color:#fff}
+.os-ctrl{display:flex;gap:4px}.os-ctrl button{width:28px;height:24px;border:0;border-radius:6px;background:rgba(255,255,255,.18);color:inherit;font-size:.9rem;cursor:pointer}.os-ctrl button:hover{background:rgba(255,255,255,.35)}.os-ctrl button.x:hover{background:#ef4444;color:#fff}
+.os-corps{flex:1;overflow:auto;padding:14px;color:#0f172a;background:#f8fafc;font-size:.9rem}
+.os-corps .card,.os-corps .stat{background:#fff;color:#0f172a}
+.os-barre{position:absolute;left:0;right:0;bottom:0;height:48px;display:flex;align-items:center;gap:6px;padding:0 10px;background:rgba(15,23,42,.82);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 -1px 0 rgba(255,255,255,.08)}
+.os-demarrer{width:40px;height:36px;border:0;border-radius:10px;background:var(--btn-grad);color:#2a1600;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.os-demarrer.on{filter:brightness(1.15)}
+.os-tache{height:34px;max-width:190px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border:0;border-radius:8px;padding:0 12px;background:rgba(255,255,255,.08);color:#e2e8f0;font:inherit;font-size:.8rem;cursor:pointer;border-bottom:2px solid transparent}
+.os-tache.on{background:rgba(255,255,255,.2);border-bottom-color:#38bdf8}.os-tache.min{opacity:.7}
+.os-zone{margin-left:auto;color:#e2e8f0;font-size:.78rem;white-space:nowrap}
+.os-start{position:absolute;left:10px;bottom:56px;width:min(360px,calc(100% - 20px));border-radius:16px;background:rgba(15,23,42,.94);backdrop-filter:blur(18px);color:#f8fafc;padding:14px;box-shadow:0 30px 60px rgba(0,0,0,.5);animation:os-ouvre .15s ease both}
+.os-start-t b{display:block;font-size:1rem}.os-start-t span{font-size:.78rem;opacity:.75}
+.os-start-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:12px 0}
+.os-start-g button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border:0;border-radius:10px;background:rgba(255,255,255,.07);color:inherit;font:inherit;font-size:.72rem;cursor:pointer}.os-start-g button span{font-size:1.4rem}.os-start-g button:hover{background:rgba(255,255,255,.16)}
+.os-off{width:100%;border:0;border-radius:10px;padding:8px;background:rgba(239,68,68,.18);color:#fecaca;font:inherit;font-weight:700;cursor:pointer}.os-off:hover{background:rgba(239,68,68,.35)}
+.os-mail{display:grid;grid-template-columns:minmax(150px,40%) 1fr;gap:10px;height:100%}
+.os-mail-l{display:flex;flex-direction:column;gap:4px;overflow:auto;border-right:1px solid #e2e8f0;padding-right:8px}
+.os-mail-it{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;padding:7px 9px;border:0;border-radius:8px;background:transparent;font:inherit;cursor:pointer;color:#0f172a}
+.os-mail-it span{font-size:.78rem;color:#334155}.os-mail-it i{font-size:.68rem;color:#64748b;font-style:normal}.os-mail-it b{font-size:.74rem}
+.os-mail-it.bad b{color:#b91c1c}.os-mail-it.good b{color:#047857}
+.os-mail-it:hover{background:#eef2ff}.os-mail-it.on{background:#dbeafe}
+.os-mail-r h4{margin:6px 0}
+.os-fichiers{display:flex;flex-direction:column;gap:6px}.os-fichier{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px;border-radius:8px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.os-web{display:flex;flex-direction:column;height:100%;margin:-14px}.os-url{padding:7px 12px;background:#e2e8f0;font-size:.75rem;color:#334155;font-family:var(--f-mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.os-web-c{padding:14px;overflow:auto}.os-web-c h4{margin:12px 0 4px;color:#1e3a8a}
+.os-notes{width:100%;height:calc(100% - 26px);min-height:180px;resize:none;border:0;border-radius:8px;padding:10px;background:#fffbeb;color:#422006;font:inherit;line-height:1.5;box-shadow:inset 0 0 0 1px #fde68a}
+.os-calc{display:flex;flex-direction:column;gap:10px}.os-calc-ecran{background:#0f172a;color:#f8fafc;border-radius:10px;padding:14px;text-align:right;font-family:var(--f-mono);font-size:1.5rem;min-height:56px;word-break:break-all}
+.os-calc-g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.os-calc-k{height:44px;border:0;border-radius:10px;background:#e2e8f0;font:inherit;font-size:1.05rem;font-weight:600;cursor:pointer;color:#0f172a}.os-calc-k:hover{background:#cbd5e1}.os-calc-k.op{background:#1d4ed8;color:#fff}.os-calc-k.op:hover{background:#1e40af}
+.os-fonds{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.os-fond{height:58px;border-radius:10px;border:2px solid transparent;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}.os-fond.on{border-color:#1d4ed8}
+@media (max-width:640px){.os-icones{grid-template-rows:repeat(auto-fill,84px)}.os-ic{width:74px}.os-mail{grid-template-columns:1fr}.os-mail-l{max-height:40%;border-right:0}.os-tache{max-width:110px}}
 .v3-entretien{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);width:min(92vw,680px);background:rgba(15,23,42,.92);color:#f8fafc;border-radius:14px;padding:14px 16px;z-index:6;box-shadow:0 10px 30px rgba(0,0,0,.4)}.v3-entretien p{margin:.4em 0 .6em}.v3-choix{display:flex;flex-wrap:wrap;gap:8px}.ordi-mail{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:8px;background:var(--soft)}.ordi-mail.bad{border-left:3px solid #dc2626}.ordi-mail.good{border-left:3px solid #16a34a}.ordi-accueil{padding:14px;border-radius:10px;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#e0f2fe}
 </style>
 
@@ -2389,7 +2510,7 @@ function admListe(i){
 function cardConcours(){
  const C=S.concours||[];if(!C.length)return'';
  const a=C[0];
- return`<div class="card t-violet"><div class="row between"><h3 style="margin:0">Résultats des concours d’entrée · rentrée ${a.annee}</h3><span class="small muted">${sum(a.pools.map(p=>p.admis))} admis sur ${sum(a.pools.map(p=>p.candidats))} candidats</span></div>
+ return`<div class="card t-violet"><div class="row between"><h3 style="margin:0">Résultats des concours d’entrée · rentrée ${a.annee}</h3><span class="small muted">${sum(a.pools.map(p=>p.admis))} admis sur ${sum(a.pools.map(p=>p.candidats))} candidats</span></div><div class="doc-liste" style="margin-top:8px">${docBoutonV35({k:'res-conc',i:0,t:'Communiqué des résultats'})}${docBoutonV35({k:'avis-conc',an:a.annee,t:'Avis de concours'})}</div>
  <div class="statgrid" style="margin:10px 0">${a.pools.map(p=>`<div class="stat"><span class="eyebrow">${esc(p.label)}</span><b>${p.admis} / ${p.candidats}</b><span class="small">Dernier admis : ${p.seuil!=null?f2(p.seuil)+'/20':'—'} · moyenne ${f2(p.moy)}</span></div>`).join('')}</div>
  ${a.pools.map(p=>`<details><summary class="small"><b>${esc(p.label)}</b> · liste des admis (${p.admis})</summary><div class="scroll rk"><table class="tbl"><thead><tr><th class="n">Rang</th><th>Nom et prénom</th><th>Sexe</th><th class="n">Note</th><th>Classe d’admission</th></tr></thead><tbody>
  ${p.liste.filter(x=>x.admis).map((x,j)=>`<tr><td class="n">${j+1}</td><td>${S.eleves.some(e=>e.id===x.id)?`<button class="btn sm" data-act="fiche" data-id="${x.id}" style="text-align:left">${esc(x.nom)}</button>`:esc(x.nom)}</td><td>${x.sexe}</td><td class="n">${f2(x.note)}</td><td>${esc(x.classe||'—')}</td></tr>`).join('')}</tbody></table></div></details>`).join('')}
@@ -3408,7 +3529,7 @@ function initVisite(ov){
   L.forEach((e,j)=>{const col=j%4,row=Math.floor(j/4);const u=-(R0.Wd/2-1.4)+col*((R0.Wd-2.8)/3);const v=R0.L/2-2.7-row*1.25;const [x,z]=pt(R0,u,v);const [dx,dz]=pt(R0,u,v+.42);pupitre(dx,y0,dz,rotF(R0.f));
    const g=perso3(x,z,{...eleveOpts(e),assis:true,rot:rotF(R0.f)});g.position.y+=y0;g.userData.etage=r.f;walls.push({a:dx-.45,b:dx+.45,c:dz-.25,d:dz+.25,f:r.f});});
   const fr=pm[S.affect[d.nom]?.[Object.keys(coefsOf(d.key))[0]]];
-  if(fr){const [tx,tz]=pt(R0,1.4,R0.L/2-1);const g=perso3(tx,tz,{...adulteOpts(fr.nom,MATIERES[fr.mat],fr.id),rot:rotF(R0.f)+Math.PI,id:fr.id,type3:'prof'});g.position.y+=y0;g.userData.etage=r.f;}
+  if(fr){const [tx,tz]=pt(R0,1.4,R0.L/2-1);const g=perso3(tx,tz,{...adulteOpts(fr.nom,MATIERES[fr.mat],fr.id),rot:rotF(R0.f)+Math.PI,id:fr.id,type3:'prof'});g.position.y+=y0;g.userData.etage=r.f;try{profClasseV35(g,{pt:(u,v)=>pt(R0,u,v),rot:rotF(R0.f),y0,R0,tab,scene,mat:fr.mat,div:d.nom,en:anglo(d.level),n:L.length});}catch(e){console.warn(e);}}try{decorSalleV35({T,scene,box,P:(u,v)=>pt(R0,u,v),rot:rotF(R0.f),y0,R0,tn});}catch(e){console.warn(e);}
   zones.unshift({nom:`Salle ${i+1} · ${d.nom}`,a:r.x0,b:r.x0+r.w,c:r.z0,d:r.z0+r.d,f:r.f});
  }
 
@@ -3426,7 +3547,7 @@ function initVisite(ov){
   const L=d.ids.map(id=>em.get(id)).filter(Boolean).slice(0,16);
   L.forEach((e,j)=>{const col=j%4,row=Math.floor(j/4);const u=-(R0.Wd/2-1.4)+col*((R0.Wd-2.8)/3);const v=R0.L/2-2.7-row*1.25;const [x,z]=pt(R0,u,v);const [dx,dz]=pt(R0,u,v+.42);pupitre(dx,0,dz,rotF(R0.f));perso3(x,z,{...eleveOpts(e),assis:true,rot:rotF(R0.f)});walls.push({a:dx-.45,b:dx+.45,c:dz-.25,d:dz+.25});});
   const fr=pm[S.affect[d.nom]?.[Object.keys(coefsOf(d.key))[0]]];
-  if(fr){const [tx,tz]=pt(R0,1.4,R0.L/2-1);perso3(tx,tz,{...adulteOpts(fr.nom,MATIERES[fr.mat],fr.id),rot:rotF(R0.f)+Math.PI,id:fr.id,type3:'prof'});}
+  if(fr){const [tx,tz]=pt(R0,1.4,R0.L/2-1);const g=perso3(tx,tz,{...adulteOpts(fr.nom,MATIERES[fr.mat],fr.id),rot:rotF(R0.f)+Math.PI,id:fr.id,type3:'prof'});try{profClasseV35(g,{pt:(u,v)=>pt(R0,u,v),rot:rotF(R0.f),y0:0,R0,tab,scene,mat:fr.mat,div:d.nom,en:anglo(d.level),n:L.length});}catch(e){console.warn(e);}}try{decorSalleV35({T,scene,box,P:(u,v)=>pt(R0,u,v),rot:rotF(R0.f),y0:0,R0,tn});}catch(e){console.warn(e);}
  });
  /* --- Équipements --- */
  if(S.bat.terrain){box(26,.03,16,'#22c55e',18,.03,2);box(.12,.04,16,'#ffffff',18,.06,2);for(const x of[5.2,30.8]){box(.12,2,.12,'#ffffff',x,1,-1.5);box(.12,2,.12,'#ffffff',x,1,5.5);box(.12,.12,7,'#ffffff',x,2,2);}zones.push({nom:'Terrain de sport',a:5,b:31,c:-6,d:10});}
@@ -4274,7 +4395,7 @@ function canvasCopie(cd,w){
 }
 
 /* ================= V22 : écran titre et menu principal ================= */
-const VERSION_JEU='Version 34';
+const VERSION_JEU='Version 35';
 const CLE_AMB='proviseur-ambiance',CLE_PALM='proviseur-cm-v1-palmares';
 const ASTUCES=[
  'Le BEPC se passe en 3e, le Probatoire en 1ère et le Baccalauréat en Terminale. Dans le sous-système anglophone : GCE O Level en Form Five, GCE A Level en Upper Sixth.',
@@ -4454,6 +4575,7 @@ function vueOptions(){
  <div class="stack" style="gap:6px"><span class="small" style="font-weight:600">Ambiance de l’écran titre</span><div class="pa-btns">${[['auto','Selon l’heure'],['aube','Aube'],['jour','Plein jour'],['soir','Coucher de soleil'],['nuit','Nuit étoilée']].map(([k,l])=>`<button class="btn sm ${a===k?'primary':''}" data-act="te-amb" data-a="${k}">${l}</button>`).join('')}</div></div>
  <div class="stack" style="gap:6px"><span class="small" style="font-weight:600">Langue du jeu</span>${langSelectV34()}<span class="small muted">Menus, onglets, boutons et tableaux sont traduits. Les récits (événements, dialogues, journal) restent en français pour l’instant.</span></div>
  <div class="stack" style="gap:6px"><span class="small" style="font-weight:600">Menu animé en 3D</span><div class="pa-btns">${(v=>[['1','Activé'],['0','Désactivé']].map(([k,l])=>`<button class="btn sm ${(v==='0'?'0':'1')===k?'primary':''}" data-act="te-m3d" data-v="${k}">${l}</button>`).join(''))((()=>{try{return localStorage.getItem(CLE_M3D);}catch(e){return null;}})())}</div><span class="small muted">Le bureau du proviseur en 3D derrière le menu. Demande les graphismes réalistes (qualité haute ou très élevée).</span></div>
+ <div class="stack" style="gap:6px"><span class="small" style="font-weight:600">Couleurs du jeu</span>${paletteChoixV35()}</div>
  <div class="stack" style="gap:6px"><span class="small" style="font-weight:600">Thème de l’interface</span><div class="pa-btns"><button class="btn sm" data-act="theme">Basculer clair / sombre</button></div></div>
  <div class="stack te-danger" style="gap:6px"><span class="small" style="font-weight:600">Données</span>${UI.teEff?`<p class="small rouge" style="margin:0">Effacer la partie en cours, les 3 emplacements et le palmarès ? Cette action est définitive.</p><div class="pa-btns"><button class="btn sm danger" data-act="te-effacer" data-ok="1">Oui, tout effacer</button><button class="btn sm" data-act="te-effacer" data-ok="0">Annuler</button></div>`:'<div class="pa-btns"><button class="btn sm danger" data-act="te-effacer">Effacer toutes les données</button></div>'}</div>`;
 }
@@ -5825,6 +5947,257 @@ const ACTIONS_V34={
  'te-lang':d=>{if(!LANGS[d.l])return;try{localStorage.setItem(CLE_LANG,d.l);}catch(e){}try{location.reload();}catch(e){render();}}
 };
 
+/* ================= V35 : documents officiels, ordinateur du proviseur, gestes des professeurs, salles, palettes ================= */
+/* ---------- Documents officiels (format A4, imprimables et enregistrables en PDF) ---------- */
+const JOURS_V35=['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+const dateLongV35=d=>`${JOURS_V35[d.getDay()]} ${d.getDate()} ${['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'][d.getMonth()]} ${d.getFullYear()}`;
+const jourApresV35=(an,mois,jour,wd)=>{const d=new Date(an,mois,jour);while(d.getDay()!==wd)d.setDate(d.getDate()+1);return d;};
+const plusJoursV35=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);if(x.getDay()===0)x.setDate(x.getDate()+1);return x;};
+const nomProviseurV35=()=>(S&&S.proviseur)||'Le Proviseur';
+function cachetEtabV35(uid){const nom=String(S.nom||'').toUpperCase().slice(0,44),v=String(REG().v||'').toUpperCase();
+ return`<svg class="cachet etab" viewBox="0 0 200 200" role="img" aria-label="Cachet de l’établissement"><defs><path id="ce${uid}" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"/></defs><g fill="none" stroke="currentColor"><circle cx="100" cy="100" r="95" stroke-width="4"/><circle cx="100" cy="100" r="89" stroke-width="1.2"/><circle cx="100" cy="100" r="56" stroke-width="2"/></g><text font-size="13" font-weight="700" fill="currentColor"><textPath href="#ce${uid}" textLength="452" lengthAdjust="spacing">${esc(nom)} ★ ${esc(v)} ★</textPath></text><text x="100" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">LE PROVISEUR</text><text x="100" y="108" text-anchor="middle" font-size="22" fill="currentColor">★</text><text x="100" y="126" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor">${S.type==='public'?'MINESEC':'PRIVÉ LAÏC'}</text></svg>`;}
+function signatureV35(nom,graine){const r=realAleaS(graine||7);let d='M8 46';let x=8;for(let i=0;i<7;i++){const a=10+r()*18,h=8+r()*26;d+=` q${(a/2).toFixed(1)} ${(-h).toFixed(1)} ${a.toFixed(1)} ${(r()*10-5).toFixed(1)}`;x+=a;}d+=` q 14 14 ${(40+r()*30).toFixed(0)} -10`;
+ return`<svg class="signature" viewBox="0 0 220 64" aria-label="Signature"><path d="${d}" fill="none" stroke="#1e3a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M${(20+r()*40).toFixed(0)} 54 L${(150+r()*40).toFixed(0)} 50" stroke="#1e3a8a" stroke-width="1.6" stroke-linecap="round"/></svg>${nom?`<div class="sig-nom">${esc(nom)}</div>`:''}`;}
+function enteteV35(droite){return`<div class="d-entete"><div>République du Cameroun<br><i>Paix – Travail – Patrie</i><br>————<br>Ministère des Enseignements secondaires<br>————<br>${droite||'Délégation régionale du '+esc(REG().r)}</div><div class="d-arm"><svg viewBox="0 0 60 60" aria-hidden="true"><rect x="4" y="10" width="17" height="40" fill="#007a5e"/><rect x="21" y="10" width="18" height="40" fill="#ce1126"/><rect x="39" y="10" width="17" height="40" fill="#fcd116"/><text x="30" y="37" text-anchor="middle" font-size="16" fill="#fcd116">★</text></svg></div><div>Republic of Cameroon<br><i>Peace – Work – Fatherland</i><br>————<br>Ministry of Secondary Education<br>————<br>Regional Delegation for ${esc(REG().r)}</div></div>`;}
+const etabLigneV35=()=>`<div class="d-etab"><b>${esc(S.nom)}</b><span>${S.type==='public'?'Établissement public':'Établissement privé laïc'} · ${esc(REG().v)}${S.devise?` · « ${esc(S.devise)} »`:''}</span></div>`;
+const piedV35=()=>`<p class="d-pied">Document de jeu · sans valeur officielle · Proviseur, ${esc(VERSION_JEU)}</p>`;
+const signBlocV35=(qualite,nom,cachet,graine)=>`<div class="d-signe"><div class="d-signe-t"><span>${esc(qualite)}</span>${signatureV35(nom,graine)}</div>${cachet}</div>`;
+/* Épreuves des concours d’entrée */
+const EPREUVES_CONC_V35={
+ '6e':[['Français : dictée, questions de compréhension, rédaction','2 h','3','Programme du CM2'],['Mathématiques : calcul, géométrie, problèmes','1 h 30','3','Programme du CM2'],['Culture générale : histoire, géographie, sciences, éducation civique','1 h','2','Programme du CM2'],['Anglais (bilinguisme)','45 min','1','Vocabulaire et compréhension'],['Langues locales (épreuve facultative)','30 min','1','Contes, proverbes, salutations']],
+ '2nde':[['Étude du dossier : bulletins de 3e et résultats au BEPC','—','4','—'],['Test de français','1 h','2','Programme de 3e'],['Test de mathématiques','1 h','2','Programme de 3e'],['Test d’anglais','45 min','1','Programme de 3e']],
+ '1ère':[['Étude du dossier : bulletins de 2nde','—','4','—'],['Entretien de motivation','15 min','1','—']],
+ 'Tle':[['Étude du dossier : bulletins de 1ère et relevé du Probatoire','—','4','—'],['Entretien de motivation','15 min','1','—']],
+ 'Form 1':[['English Language: dictation, comprehension, composition','1 h 30','3','Class 6 syllabus'],['Mathematics','1 h 30','3','Class 6 syllabus'],['General Knowledge','1 h','2','Class 6 syllabus'],['French (bilingualism)','45 min','1','Vocabulary and comprehension']],
+ 'Lower 6th':[['GCE O Level results (at least 4 papers)','—','4','—'],['Interview','15 min','1','—']]};
+const LIB_CONC_V35={'6e':'Concours d’entrée en classe de 6e','2nde':'Admission en classe de 2nde','1ère':'Admission par transfert en 1ère','Tle':'Admission par transfert en Terminale','Form 1':'Common Entrance · Form One','Lower 6th':'Admission into Lower Sixth'};
+function niveauxConcV35(){return['6e',...(S.bat.bloc?['2nde','1ère','Tle']:[]),...(S.bat.anglo?['Form 1','Lower 6th']:[])];}
+function docAvisConcours(an){
+ const conc=jourApresV35(an,7,22,6),depot=new Date(an,7,14),res=plusJoursV35(conc,5),rentree=semainesAnnee(an)[0],frais=S.type==='public'?2000:10000;
+ const places=lv=>Math.round(S.tailleMax*(anglo(lv)?(lv==='Form 1'?1.3:1):S.type==='public'?2:1.6)*(['1ère','Tle'].includes(lv)?.25:['2nde','Lower 6th'].includes(lv)?.6:1));
+ const L=niveauxConcV35();const ref=`N° ${String(an).slice(2)}/${String(Math.abs(S.nom.length*37+an)%900+100)}/${S.type==='public'?'MINESEC/DRES':'ETAB'}/PROV`;
+ return`<div class="doc-a4">${enteteV35()}${etabLigneV35()}<p class="d-ref">${ref}</p>
+ <h2 class="d-titre">Avis de concours</h2><p class="d-sous">Année scolaire ${an}–${an+1}</p>
+ <p class="d-corps">Le Proviseur du <b>${esc(S.nom)}</b> porte à la connaissance du public qu’il organise, au titre de l’année scolaire ${an}–${an+1}, les concours et admissions suivants :</p>
+ <table class="d-t"><thead><tr><th>Concours</th><th class="n">Places</th></tr></thead><tbody>${L.map(lv=>`<tr><td>${LIB_CONC_V35[lv]}</td><td class="n">${places(lv)}</td></tr>`).join('')}</tbody></table>
+ <h3 class="d-h3">1. Conditions de candidature</h3><ul class="d-ul"><li>Concours d’entrée en 6e : être âgé de 10 à 13 ans au 1er janvier ${an} et être élève de CM2.</li>${S.bat.bloc?'<li>Admission en 2nde : être titulaire du BEPC ; transferts en 1ère et en Terminale sur étude du dossier.</li>':''}${S.bat.anglo?'<li>Common Entrance: pupils of Class 6, aged 10 to 13; Lower Sixth: at least four papers at the GCE O Level.</li>':''}</ul>
+ <h3 class="d-h3">2. Pièces à fournir</h3><ul class="d-ul"><li>Une fiche de candidature retirée au secrétariat de l’établissement ;</li><li>Une copie certifiée conforme de l’acte de naissance ;</li><li>Deux photos d’identité 4 × 4 ;</li><li>Le dernier bulletin de notes ou le relevé du diplôme exigé ;</li><li>Une enveloppe timbrée portant l’adresse du candidat ;</li><li>Le reçu des frais de concours : <b>${money(frais)}</b>.</li></ul>
+ <h3 class="d-h3">3. Nature des épreuves</h3>${L.map(lv=>`<p class="d-mini"><b>${LIB_CONC_V35[lv]}</b></p><table class="d-t"><thead><tr><th>Épreuve</th><th>Durée</th><th class="n">Coef.</th><th>Programme</th></tr></thead><tbody>${EPREUVES_CONC_V35[lv].map(e=>`<tr><td>${e[0]}</td><td>${e[1]}</td><td class="n">${e[2]}</td><td>${e[3]}</td></tr>`).join('')}</tbody></table>`).join('')}
+ <h3 class="d-h3">4. Calendrier</h3><table class="d-t"><tbody><tr><td>Date limite de dépôt des dossiers</td><td><b>${dateLongV35(depot)}</b></td></tr><tr><td>Déroulement du concours</td><td><b>${dateLongV35(conc)}</b>, à partir de 7 h 30, dans l’enceinte de l’établissement</td></tr><tr><td>Publication des résultats</td><td><b>${dateLongV35(res)}</b>, par voie d’affichage et sur la ligue en ligne</td></tr><tr><td>Rentrée scolaire</td><td><b>${dateLongV35(rentree)}</b></td></tr></tbody></table>
+ <p class="d-corps">Les candidats se présenteront munis de leur convocation, d’une pièce d’identité ou d’un acte de naissance, et de leur matériel de composition. Toute fraude entraîne l’exclusion immédiate.</p>
+ <p class="d-lieu">Fait à ${esc(REG().v)}, le ${dateLongV35(new Date(an,5,15)).replace(/^\S+ /,'')}</p>
+ ${signBlocV35('Le Proviseur',nomProviseurV35(),cachetEtabV35('a'+an),an*3+7)}${piedV35()}</div>`;
+}
+function docResultatsConcours(i){
+ const a=(S.concours||[])[i||0];if(!a)return'<div class="doc-a4"><p>Aucun concours archivé.</p></div>';
+ const res=jourApresV35(a.annee,7,22,6);
+ return`<div class="doc-a4">${enteteV35()}${etabLigneV35()}
+ <h2 class="d-titre">Communiqué · résultats des concours</h2><p class="d-sous">Rentrée ${a.annee}–${a.annee+1}</p>
+ <p class="d-corps">Le Proviseur du <b>${esc(S.nom)}</b> publie la liste des candidats déclarés admis à l’issue des concours et admissions organisés le ${dateLongV35(res)}, par ordre de mérite.</p>
+ ${a.pools.map(p=>{const ad=p.liste.filter(x=>x.admis),att=p.liste.filter(x=>!x.admis).slice(0,8);return`<h3 class="d-h3">${esc(p.label)} · ${ad.length} admis sur ${p.candidats} candidats</h3>
+  <table class="d-t"><thead><tr><th class="n">Rang</th><th>Nom et prénom</th><th>Sexe</th><th class="n">Note /20</th><th>Classe d’affectation</th></tr></thead><tbody>${ad.map((x,j)=>`<tr><td class="n">${j+1}</td><td>${esc(x.nom)}</td><td>${x.sexe}</td><td class="n">${f2(x.note)}</td><td>${esc(x.classe||'—')}</td></tr>`).join('')}</tbody></table>
+  ${att.length?`<p class="d-mini"><b>Liste d’attente :</b> ${att.map(x=>`${esc(x.nom)} (${f2(x.note)})`).join(' · ')}</p>`:''}`;}).join('')}
+ <p class="d-corps">Les candidats admis sont priés de confirmer leur inscription au secrétariat dans un délai de quinze jours. Passé ce délai, ils seront remplacés par les candidats de la liste d’attente.</p>
+ <p class="d-lieu">Fait à ${esc(REG().v)}, le ${dateLongV35(plusJoursV35(res,5)).replace(/^\S+ /,'')}</p>
+ ${signBlocV35('Le Proviseur',nomProviseurV35(),cachetEtabV35('r'+a.annee),a.annee*5+3)}${piedV35()}</div>`;
+}
+/* Examens officiels : avis et calendrier des épreuves */
+const QUAL_ORG_V35={OBC:'Le Directeur de l’Office du Baccalauréat du Cameroun',DECC:'Le Directeur des Examens, des Concours et de la Certification',GCE:'The Registrar, Cameroon GCE Board'};
+function dureeV35(ex,s,k){if(s==='EPS')return'Épreuve pratique';if(/^GCE/.test(ex))return k>=4?'Paper 1 · 1 h 30 + Paper 2 · 2 h 30':'Paper 1 · 1 h + Paper 2 · 2 h';if(ex==='BEPC')return k>=3?'2 h':'1 h 30';return k>=5?'4 h':k>=3?'3 h':k>=2?'2 h':'1 h 30';}
+function docAvisExamen(ex,an){
+ const O=ORG_V33[ex],lv=O.lv,EN=!!O.en,deb={BEPC:jourApresV35(an,5,2,2),Probatoire:jourApresV35(an,5,9,1),'Baccalauréat':jourApresV35(an,5,22,1),'GCE O Level':jourApresV35(an,4,25,1),'GCE A Level':jourApresV35(an,4,25,1)}[ex];
+ const ser=SERIES_OF[lv]?SERIES_OF[lv].filter(x=>S.eleves.some(e=>e.level===lv&&e.serie===x)):[null];const LS=ser.length?ser:(SERIES_OF[lv]||[null]);
+ const cal=se=>{const C=coefsOf(gkey(lv,se));const L=Object.entries(C).filter(([s])=>s!=='EPS').sort((a,b)=>b[1]-a[1]);let d=new Date(deb),slot=0;
+  return L.map(([s,k])=>{const j=new Date(d),h=slot===0?'7 h 30':'14 h 00';if(slot===1){d=plusJoursV35(d,1);slot=0;}else slot=1;return`<tr><td>${dateLongV35(j)}</td><td>${h}</td><td>${esc((EN?MAT_EN:MATIERES)[s]||s)}</td><td>${dureeV35(ex,s,k)}</td><td class="n">${k}</td></tr>`;}).join('')+(C.EPS?`<tr><td colspan="3">${EN?'Physical Education':'Éducation physique et sportive'}</td><td>${EN?'Practical, centre timetable':'Épreuve pratique, calendrier du centre'}</td><td class="n">${C.EPS}</td></tr>`:'');};
+ return`<div class="doc-a4">${enteteV35(esc(O.org))}
+ <h2 class="d-titre">${EN?'Notice · examination timetable':'Communiqué · calendrier des épreuves'}</h2><p class="d-sous">${esc(O.dipl)} · ${EN?'Session':'Session'} ${an}</p>
+ <p class="d-corps">${EN?`The Registrar of the Cameroon GCE Board informs candidates, parents and heads of schools that the ${esc(ex)} examination, session ${an}, will be written according to the timetable below. Candidates of <b>${esc(S.nom)}</b> sit at the ${esc(REG().v)} centre.`:`${esc(QUAL_ORG_V35[O.sig])} informe les candidats, les parents et les chefs d’établissement que les épreuves écrites du <b>${esc(ex)}</b>, session ${an}, se dérouleront selon le calendrier ci-dessous. Les candidats du <b>${esc(S.nom)}</b> composent au centre d’examen de ${esc(REG().v)}.`}</p>
+ ${LS.map(se=>`${se?`<p class="d-mini"><b>${EN?'Stream':'Série'} ${esc(se)}</b></p>`:''}<table class="d-t"><thead><tr><th>${EN?'Date':'Date'}</th><th>${EN?'Time':'Heure'}</th><th>${EN?'Subject':'Épreuve'}</th><th>${EN?'Duration':'Durée'}</th><th class="n">Coef.</th></tr></thead><tbody>${cal(se)}</tbody></table>`).join('')}
+ <h3 class="d-h3">${EN?'Instructions to candidates':'Consignes aux candidats'}</h3><ul class="d-ul">${(EN?['Be at the centre 30 minutes before each paper, with your admission card and an identity document.','Mobile phones, smart watches and any documents are strictly forbidden in the examination hall.','Any candidate caught cheating will be disqualified and may be banned from future examinations.','Results will be published by the Board and displayed in each centre.']:['Se présenter au centre trente minutes avant chaque épreuve, muni de sa convocation et d’une pièce d’identité.','Les téléphones portables, montres connectées et documents sont strictement interdits dans les salles.','Toute fraude entraîne l’annulation de la composition et peut entraîner une interdiction de se présenter aux examens.','Les résultats seront publiés par voie d’affichage dans chaque centre et sur le site de l’organisme.']).map(x=>`<li>${x}</li>`).join('')}</ul>
+ <p class="d-lieu">${EN?`${esc(O.ville)}, 10 ${['January','February','March','April','May','June','July','August','September','October','November','December'][Math.max(0,deb.getMonth()-1)]} ${an}`:`Fait à ${esc(O.ville)}, le ${dateLongV35(new Date(an,deb.getMonth()-1,10)).replace(/^\S+ /,'')}`}</p>
+ ${signBlocV35(QUAL_ORG_V35[O.sig],'',cachetV33(O,'av'+an+ex.length),an+ex.length*11)}${piedV35()}</div>`;
+}
+function docResultatsExamen(ex,prec){
+ const res=prec?S.resultatsPrec:S.resultats,an=prec?S.annee:S.annee+1,o=res&&res[ex];if(!o)return'<div class="doc-a4"><p>Aucun résultat.</p></div>';
+ const O=ORG_V33[ex],EN=!!O.en,ad=o.liste.filter(c=>c.admis&&!c.fraude),mn=typeof majNatV33==='function'?majNatV33(an,ex):null;
+ return`<div class="doc-a4">${enteteV35(esc(O.org))}
+ <h2 class="d-titre">${EN?'Official list of successful candidates':'Liste officielle des admis'}</h2><p class="d-sous">${esc(O.dipl)} · Session ${an}</p>
+ <div class="d-etab"><b>${esc(S.nom)}</b><span>${EN?'Centre':'Centre d’examen'} : ${esc(REG().v)} · ${o.candidats} ${EN?'candidates':'candidats'} · ${ad.length} ${EN?'passed':'admis'} · ${Math.round(pct(ad.length,o.candidats))} %</span></div>
+ ${mn?`<p class="d-corps"><b>${EN?'National top candidate':'Major national'} :</b> ${esc(mn.nom)} (${esc(mn.etab)}) · ${f2(mn.moy)}/20</p>`:''}
+ <table class="d-t"><thead><tr><th class="n">N°</th><th>${EN?'Index no.':'N° de table'}</th><th>${EN?'Name':'Nom et prénom'}</th><th>${EN?'Stream':'Série'}</th><th class="n">${EN?'Average':'Moyenne'}</th><th>${EN?'Grade':'Mention'}</th></tr></thead><tbody>${ad.map((c,j)=>`<tr><td class="n">${j+1}</td><td>${typeof tableV33==='function'?tableV33(c,an):''}</td><td>${esc(c.nom)}</td><td>${esc(c.serie||'—')}</td><td class="n">${f2(c.moy)}</td><td>${esc(c.mention||'')}</td></tr>`).join('')||`<tr><td colspan="6">${EN?'No successful candidate.':'Aucun admis.'}</td></tr>`}</tbody></table>
+ <p class="d-corps">${EN?'This list is published subject to the deliberations of the examination board and to any legal remedies.':'La présente liste est publiée sous réserve des délibérations du jury et des recours réglementaires.'}</p>
+ <p class="d-lieu">${esc(O.ville)}, ${EN?`${an}`:`le 28 juillet ${an}`}</p>
+ ${signBlocV35(QUAL_ORG_V35[O.sig],'',cachetV33(O,'li'+an+ex.length),an*7+ex.length)}${piedV35()}</div>`;
+}
+/* Catalogue des documents disponibles */
+function docsDisposV35(){const D=[];const an=S.annee;
+ D.push({k:'avis-conc',an:S.phase===0?an:an+1,t:`Avis de concours · rentrée ${S.phase===0?an:an+1}`,o:'Établissement'});
+ (S.concours||[]).slice(0,4).forEach((a,i)=>D.push({k:'res-conc',i,t:`Résultats des concours · rentrée ${a.annee}`,o:'Établissement'}));
+ const ses=S.annee+1;for(const x of ORDRE_EX){if(/^GCE/.test(x)&&!S.bat.anglo)continue;if(!S.eleves.some(e=>EXAM_OF[e.level]===x))continue;D.push({k:'avis-ex',ex:x,an:ses,t:`${x} · calendrier des épreuves · session ${ses}`,o:ORG_V33[x].sig});}
+ if(S.resultats)for(const x of ORDRE_EX)if(S.resultats[x])D.push({k:'res-ex',ex:x,prec:'',t:`${x} · liste officielle des admis · session ${S.annee+1}`,o:ORG_V33[x].sig});
+ if(!S.resultats&&S.resultatsPrec)for(const x of ORDRE_EX)if(S.resultatsPrec[x])D.push({k:'res-ex',ex:x,prec:'1',t:`${x} · liste officielle des admis · session ${S.annee}`,o:ORG_V33[x].sig});
+ return D;}
+const docBoutonV35=(d,cls)=>`<button class="btn ${cls||'sm'} doc-btn" data-act="doc-open" data-k="${d.k}"${d.i!=null?` data-i="${d.i}"`:''}${d.ex?` data-ex="${esc(d.ex)}"`:''}${d.an?` data-an="${d.an}"`:''}${d.prec?` data-prec="1"`:''}><span class="doc-ic" aria-hidden="true">PDF</span>${esc(d.t)}</button>`;
+function cardDocsV35(){const D=docsDisposV35();return`<div class="card t-violet"><h3>Documents officiels</h3><p class="small muted" style="margin-bottom:10px">Avis de concours, résultats, calendriers et listes officielles des examens, avec cachets et signatures. Ouvrez-les puis « Enregistrer en PDF ».</p><div class="doc-liste">${D.map(d=>docBoutonV35(d)).join('')}</div></div>`;}
+function renderDocV35(m){
+ const html=m.k==='avis-conc'?docAvisConcours(+m.an||S.annee):m.k==='res-conc'?docResultatsConcours(+m.i||0):m.k==='avis-ex'?docAvisExamen(m.ex,+m.an||S.annee+1):m.k==='res-ex'?docResultatsExamen(m.ex,!!m.prec):'';
+ return`<div class="overlay doc-vue" role="dialog" aria-modal="true" aria-label="Document officiel"><div class="doc-barre"><span>${esc(m.titre||'Document officiel')}</span><span class="row" style="gap:8px"><button class="btn sm primary" data-act="doc-print">Enregistrer en PDF / Imprimer</button><button class="btn sm" data-act="doc-close">Fermer</button></span></div><div class="doc-pile">${html}</div></div>`;}
+
+/* ---------- PROVISEUR-OS : le vrai ordinateur du proviseur ---------- */
+const OS_APPS={
+ mail:{t:'Messagerie',ic:'✉',w:560,h:440},convoc:{t:'Convocations',ic:'☎',w:620,h:480},tableau:{t:'Tableau de bord',ic:'▦',w:600,h:430},docs:{t:'Documents officiels',ic:'🗎',w:560,h:440},
+ finances:{t:'Comptabilité',ic:'₣',w:600,h:440},intranet:{t:'Intranet MINESEC',ic:'🌐',w:620,h:460},notes:{t:'Bloc-notes',ic:'✎',w:440,h:360},calc:{t:'Calculatrice',ic:'⌗',w:280,h:390},params:{t:'Paramètres',ic:'⚙',w:420,h:360}};
+const OS_FONDS={vert:'linear-gradient(135deg,#064e3b,#0f766e 45%,#1e3a8a)',nuit:'radial-gradient(1200px 700px at 70% 20%,#1e3a8a,#0b1022 70%)',savane:'linear-gradient(160deg,#fbbf24,#ea580c 45%,#7c2d12)',drapeau:'linear-gradient(90deg,#007a5e 0 33.3%,#ce1126 33.3% 66.6%,#fcd116 66.6%)'};
+function osEtat(){const m=UI.modal;if(!m.os)m.os={wins:[],z:5,start:false,boot:true};return m.os;}
+function osOuvrir(app){const o=osEtat(),A0=OS_APPS[app];if(!A0)return;o.start=false;const w=o.wins.find(x=>x.app===app);if(w){w.min=false;w.z=++o.z;return;}
+ const n=o.wins.length,W=typeof innerWidth==='number'?innerWidth:1200,H=typeof innerHeight==='number'?innerHeight:800;
+ o.wins.push({app,x:Math.max(8,Math.min(W-A0.w-8,90+n*34)),y:Math.max(8,Math.min(H-A0.h-60,40+n*30)),w:Math.min(A0.w,W-16),h:Math.min(A0.h,H-70),z:++o.z,min:false,max:W<700});}
+function osContenu(app,m){
+ const pa=S.pa||0;
+ if(app==='mail'){const L=(S.journal||[]).slice(0,30),i=Math.min(m.mailSel||0,Math.max(0,L.length-1)),j=L[i];
+  return`<div class="os-mail"><div class="os-mail-l">${L.map((x,k)=>`<button class="os-mail-it ${k===i?'on':''} ${x.k||''}" data-act="os-mail" data-i="${k}"><b>${x.k==='bad'?'Urgent':x.k==='good'?'Bonne nouvelle':'Information'}</b><span>${esc(String(x.t).slice(0,70))}</span><i>${esc(x.d)}</i></button>`).join('')||'<p class="small muted">Boîte de réception vide.</p>'}</div><div class="os-mail-r">${j?`<p class="small muted">De : ${j.k==='bad'?'Censeur · alerte':'Secrétariat'} · ${esc(j.d)}</p><h4>${j.k==='bad'?'Urgent':j.k==='good'?'Bonne nouvelle':'Information'}</h4><p>${esc(j.t)}</p>`:''}</div></div>`;}
+ if(app==='convoc')return(m.note?`<p class="note">${esc(m.note)}</p>`:'')+(typeof V3!=='undefined'&&V3&&V3.convoquer?'':'<p class="note">Les personnes convoquées viennent s’asseoir face à vous dans votre bureau, pendant la visite 3D. Ouvrez l’ordinateur depuis votre fauteuil pour convoquer.</p>')+ordiCorpsV30({app:'convoc',filtre:m.filtre});
+ if(app==='tableau')return ordiCorpsV30({app:'tableau'});
+ if(app==='docs'){const D=docsDisposV35();return`<div class="os-fichiers">${D.map(d=>`<div class="os-fichier">${docBoutonV35(d,'sm')}<span class="small muted">${esc(d.o)}</span></div>`).join('')}</div>`;}
+ if(app==='finances'){const L=(S.ledger||[]).slice(0,40);return`<div class="statgrid"><div class="stat"><span class="eyebrow">Trésorerie</span><b>${moneyS(S.tresor)}</b></div><div class="stat"><span class="eyebrow">Coût mensuel</span><b>${moneyS(coutMensuel())}</b></div></div><div class="scroll" style="margin-top:10px"><table class="tbl"><thead><tr><th>Période</th><th>Opération</th><th class="n">Montant</th></tr></thead><tbody>${L.map(l=>`<tr><td class="small">${esc(l.ph)}</td><td>${esc(l.label)}</td><td class="n ${l.montant<0?'rouge':'vert'}">${moneyS(l.montant)}</td></tr>`).join('')}</tbody></table></div>`;}
+ if(app==='intranet'){const an=S.annee;const M=(S.majorsNat||[]).slice(-5).reverse();const c=S.classement;
+  return`<div class="os-web"><div class="os-url">https://intranet.minesec.cm/etablissements/${encodeURIComponent(String(S.nom).toLowerCase().replace(/\s+/g,'-'))}</div><div class="os-web-c"><h4>Portail des chefs d’établissement</h4><p class="small muted">Année scolaire ${an}–${an+1}</p>
+  ${typeof cardMission==='function'?cardMission():''}
+  ${c?`<p><b>Classement :</b> ${c.rangDep??'—'}e de la région, ${c.rangReg??'—'}e au niveau national (session ${c.annee+1}).</p>`:''}
+  ${M.length?`<h4>Majors nationaux récents</h4><ul>${M.map(x=>`<li>${x.annee} · ${esc(x.ex)} : ${esc(x.nom)} (${esc(x.etab)}) · ${f2(x.moy)}</li>`).join('')}</ul>`:''}
+  <h4>Communiqués</h4><ul><li>Le calendrier des examens officiels est disponible dans « Documents officiels ».</li><li>Rappel : la matière « Langues locales » est évaluée à tous les examens.</li><li>Les chefs d’établissement veilleront à la sécurité des épreuves.</li></ul></div></div>`;}
+ if(app==='notes')return`<textarea class="os-notes" data-in="osnote" spellcheck="true" placeholder="Vos notes personnelles…">${esc(S.notesOS||'')}</textarea><p class="small muted">Enregistré automatiquement.</p>`;
+ if(app==='calc'){const v=m.calc||'0';return`<div class="os-calc"><div class="os-calc-ecran">${esc(v)}</div><div class="os-calc-g">${['C','(',')','÷','7','8','9','×','4','5','6','−','1','2','3','+','0',',','⌫','='].map(k=>`<button class="os-calc-k ${'÷×−+='.includes(k)?'op':''}" data-act="os-calc" data-k="${k}">${k}</button>`).join('')}</div></div>`;}
+ if(app==='params'){const f=S.fondOS||'vert';return`<p class="small" style="font-weight:600">Fond d’écran</p><div class="os-fonds">${Object.entries(OS_FONDS).map(([k,v])=>`<button class="os-fond ${f===k?'on':''}" data-act="os-fond" data-k="${k}" style="background:${v}" aria-label="${k}"></button>`).join('')}</div><p class="small" style="font-weight:600;margin-top:12px">Couleurs du jeu</p>${paletteChoixV35()}`;}
+ return'';
+}
+function renderOS(m){
+ const o=osEtat(),boot=o.boot;o.boot=false;try{osHorlogeV35();}catch(e){}const f=OS_FONDS[S.fondOS||'vert']||OS_FONDS.vert,d=S.semaine>=1&&S.semaine<=36?dateSem(S.semaine):new Date(S.annee,8,1);
+ const W=o.wins.slice().sort((a,b)=>a.z-b.z),top=W.filter(w=>!w.min).at(-1);
+ const ic=Object.entries(OS_APPS).map(([k,a])=>`<button class="os-ic" data-act="os-open" data-app="${k}"><span>${a.ic}</span><b>${a.t}</b></button>`).join('');
+ const fen=W.map(w=>{const A0=OS_APPS[w.app];return`<section class="os-win ${w.max?'max':''} ${w===top?'actif':''}" data-win="${w.app}" style="left:${w.x}px;top:${w.y}px;width:${w.w}px;height:${w.h}px;z-index:${w.z};${w.min?'display:none':''}" role="dialog" aria-label="${A0.t}"><header class="os-titre" data-app="${w.app}"><span>${A0.ic} ${A0.t}</span><span class="os-ctrl"><button data-act="os-min" data-app="${w.app}" aria-label="Réduire">–</button><button data-act="os-max" data-app="${w.app}" aria-label="Agrandir">□</button><button class="x" data-act="os-close" data-app="${w.app}" aria-label="Fermer">×</button></span></header><div class="os-corps" data-act-scope="os">${osContenu(w.app,m)}</div></section>`;}).join('');
+ const sm=o.start?`<div class="os-start"><div class="os-start-t"><b>${esc(nomProviseurV35())}</b><span>${esc(S.nom)}</span></div><div class="os-start-g">${Object.entries(OS_APPS).map(([k,a])=>`<button data-act="os-open" data-app="${k}"><span>${a.ic}</span>${a.t}</button>`).join('')}</div><button class="os-off" data-act="close-ui">⏻ Éteindre</button></div>`:'';
+ return`<div class="os ${boot?'boot':''}" style="background:${f}"><div class="os-logo"><b>${esc(S.nom)}</b><span>PROVISEUR-OS</span></div><div class="os-icones">${ic}</div>${fen}${sm}
+ <footer class="os-barre"><button class="os-demarrer ${o.start?'on':''}" data-act="os-start" aria-label="Démarrer">◆</button>${W.map(w=>`<button class="os-tache ${w===top?'on':''} ${w.min?'min':''}" data-act="os-tache" data-app="${w.app}">${OS_APPS[w.app].ic} ${OS_APPS[w.app].t}</button>`).join('')}<span class="os-zone">${S.pa||0} pt d’action · <span class="os-heure">${new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span> · ${d.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}</span></footer></div>`;
+}
+const _ordiV30=renderOrdi;ordiCorpsV30=function(m){const o={...m};_ordiV30(o);return o.corps||'';};
+renderOrdi=function(m){if(!S)return'';return renderOS(m);};
+function osCalc(m,k){let v=m.calc||'0';if(k==='C')v='0';else if(k==='⌫')v=v.length>1?v.slice(0,-1):'0';else if(k==='='){try{const ex=v.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-').replace(/,/g,'.');if(!/^[0-9+\-*/().\s]+$/.test(ex))throw 0;const r=Function('"use strict";return('+ex+')')();v=Number.isFinite(r)?String(Math.round(r*1e6)/1e6).replace('.',','):'Erreur';}catch(e){v='Erreur';}}else v=(v==='0'||v==='Erreur')&&!'÷×−+,'.includes(k)?k:v+k;m.calc=v.slice(0,24);}
+/* déplacer les fenêtres à la souris ou au doigt */
+if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('pointerdown',ev=>{
+ const h=ev.target&&ev.target.closest&&ev.target.closest('.os-titre');if(!h||ev.target.closest('button'))return;const sec=h.parentElement,m=UI.modal;if(!m||m.type!=='ordi'||!m.os)return;
+ const w=m.os.wins.find(x=>x.app===h.dataset.app);if(!w||w.max)return;w.z=++m.os.z;sec.style.zIndex=w.z;const x0=ev.clientX-w.x,y0=ev.clientY-w.y;
+ const mv=e=>{w.x=Math.max(-w.w+80,Math.min(innerWidth-60,e.clientX-x0));w.y=Math.max(0,Math.min(innerHeight-80,e.clientY-y0));sec.style.left=w.x+'px';sec.style.top=w.y+'px';};
+ const up=()=>{document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);};document.addEventListener('pointermove',mv);document.addEventListener('pointerup',up);ev.preventDefault();});
+if(typeof document!=='undefined'&&document.addEventListener)document.addEventListener('input',ev=>{const t=ev.target;if(t&&t.dataset&&t.dataset.in==='osnote'&&S){S.notesOS=t.value.slice(0,5000);clearTimeout(window._osNoteT);window._osNoteT=setTimeout(()=>{try{save();}catch(e){}},600);}});
+function osHorlogeV35(){if(window._osH||typeof setInterval!=='function')return;window._osH=setInterval(()=>{const h=document.querySelector&&document.querySelector('.os-heure');if(h)h.textContent=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});},20000);}
+
+/* ---------- Gestes des professeurs en classe (visite 3D) ---------- */
+const LECONS_V35={
+ MATH:['Chapitre 4 : les fonctions affines','f(x) = 2x + 3','Exercice 1 : résoudre 2x + 3 = 11','2x = 8   donc   x = 4','À retenir : a est le coefficient directeur'],
+ FR:['Leçon : le discours rapporté','Discours direct : « Je viendrai », dit-il.','Discours indirect : Il dit qu’il viendra.','Exercice : transformez les phrases du texte'],
+ ANG:['Lesson 6: The present perfect','I have lived in Douala for ten years.','She has just finished her homework.','Homework: exercise 3, page 42'],
+ PCT:['Chapitre 3 : les forces','Le poids : P = m × g','g = 9,8 N/kg','Application : m = 5 kg  →  P = 49 N'],
+ SVT:['La photosynthèse','6 CO2 + 6 H2O  →  C6H12O6 + 6 O2','Lieu : les chloroplastes','Schéma de la feuille à compléter'],
+ HG:['Le Cameroun : relief et climat','Hautes terres de l’Ouest','Plateau de l’Adamaoua','Plaine côtière du Littoral'],
+ ECM:['Les symboles de l’État','Le drapeau : vert, rouge, jaune','La devise : Paix – Travail – Patrie','L’hymne national'],
+ LV2:['Lección 2: la familia','Mi padre se llama…','Tengo dos hermanos','Ejercicio: presenta a tu familia'],
+ LIT:['Étude d’œuvre : Une vie de boy','Ferdinand Oyono, 1956','Thème : la colonisation','Analyse du journal de Toundi'],
+ PHILO:['La conscience','« Je pense, donc je suis » — Descartes','La conscience morale','Sujet : peut-on se connaître soi-même ?'],
+ INFO:['Algorithmique : les boucles','Pour i de 1 à 10 faire','   Afficher i','Fin pour'],
+ EPS:['Athlétisme : le relais 4 × 100 m','Passage du témoin','Zone de transmission : 20 m'],
+ LL:['Leçon de langue : les salutations','Bonjour à l’aîné, au matin…','Les tons : haut, bas, montant','Conte du jour : la tortue et le léopard']};
+const LECONS_EN_V35={MATH:['Topic 4: Linear functions','f(x) = 2x + 3','Exercise 1: solve 2x + 3 = 11','2x = 8   so   x = 4'],FR:['Lesson 5: Le passé composé','J’ai mangé, tu as fini…','Exercise: conjugate « aller »'],ANG:['Comprehension passage','Read the text and answer the questions','Vocabulary: drought, harvest, village'],PCT:['Forces and motion','Weight: W = m × g','g = 9.8 N/kg'],SVT:['Photosynthesis','6CO2 + 6H2O → C6H12O6 + 6O2','Site: chloroplasts'],HG:['Cameroon: relief','The Western Highlands','The Adamawa Plateau'],LIT:['Things Fall Apart','Chinua Achebe, 1958','Theme: tradition and change'],INFO:['Algorithms: loops','For i from 1 to 10','   Print i'],ECM:['National symbols','The flag: green, red, yellow','Motto: Peace – Work – Fatherland'],EPS:['Athletics: 4 × 100 m relay','Baton exchange'],LL:['National languages: greetings','Tones: high, low, rising','Folk tale: the tortoise']};
+function tableauChalkV35(T,tab,titre){const cv=document.createElement('canvas');cv.width=1024;cv.height=392;const t=new T.CanvasTexture(cv);t.encoding=T.sRGBEncoding;t.anisotropy=4;
+ const st={cv,g:cv.getContext('2d'),t,lignes:[],titre};
+ st.dessine=(n)=>{const g=st.g,W=cv.width,H=cv.height;const gr=g.createLinearGradient(0,0,W,H);gr.addColorStop(0,'#1d4a35');gr.addColorStop(1,'#14382a');g.fillStyle=gr;g.fillRect(0,0,W,H);
+  g.globalAlpha=.06;g.fillStyle='#ffffff';for(let i=0;i<70;i++){g.fillRect((i*137)%W,(i*71)%H,90+(i%5)*30,2);}g.globalAlpha=1;
+  g.fillStyle='rgba(240,245,240,.92)';g.font='italic 30px "Segoe Print","Comic Sans MS",cursive';g.textBaseline='top';g.fillText(st.titre,26,16);
+  g.strokeStyle='rgba(240,245,240,.5)';g.lineWidth=2;g.beginPath();g.moveTo(26,58);g.lineTo(W-26,58);g.stroke();
+  let reste=n;g.font='34px "Segoe Print","Comic Sans MS",cursive';st.lignes.forEach((l,i)=>{if(reste<=0)return;const s=l.slice(0,reste);reste-=l.length;g.fillStyle=i===0?'rgba(253,230,138,.95)':'rgba(245,248,245,.93)';g.fillText(s,40,78+i*58);});
+  t.needsUpdate=true;};
+ st.dessine(0);if(tab&&tab.material){tab.material.map=t;tab.material.needsUpdate=true;}return st;}
+function profClasseV35(g,ctx){
+ if(!g||!ctx||typeof V3==='undefined'||!V3)return;const T=THREE;const P=ctx.pt,rot=ctx.rot,y0=ctx.y0||0,R0=ctx.R0;
+ const mat=ctx.mat||'MATH',EN=!!ctx.en,L=(EN?LECONS_EN_V35[mat]||LECONS_EN_V35.MATH:LECONS_V35[mat]||LECONS_V35.MATH).slice();
+ const chalk=tableauChalkV35(T,ctx.tab,`${ctx.div} · ${dateSem(Math.max(1,Math.min(36,S.semaine||1))).toLocaleDateString(EN?'en-GB':'fr-FR',{weekday:'long',day:'numeric',month:'long'})}`);chalk.lignes=L;
+ const n=ctx.n||0,cols=Math.min(4,Math.max(1,n)),rows=Math.ceil(n/4),pas=(R0.Wd-2.8)/3;
+ const desk=j=>{const c=j%4,r=Math.floor(j/4),u=-(R0.Wd/2-1.4)+c*pas,v=R0.L/2-2.7-r*1.25;return{u,v};};
+ const vFront=R0.L/2-1.75,vBack=R0.L/2-2.7-(rows-1)*1.25-.85;
+ /* trajet de remise des copies : allées entre les colonnes, en serpentin */
+ const tour=[];for(let c=0;c<cols;c++){const ua=-(R0.Wd/2-1.4)+c*pas+.68,ordre=[...Array(rows).keys()];if(c%2)ordre.reverse();tour.push({u:ua,v:c%2?vBack:vFront});for(const r of ordre){const j=r*4+c;if(j<n){const dk=desk(j);tour.push({u:ua,v:dk.v+.42,pose:j});}}tour.push({u:ua,v:c%2?vFront:vBack});}
+ const pile=new T.Mesh(new T.BoxGeometry(.24,.05,.32),new T.MeshStandardMaterial({color:0xf4f1e8,roughness:.9}));pile.position.set(.22,1.02,.32);pile.visible=false;pile.userData.dyn=true;g.add(pile);
+ const feuilles=[],mFeuille=new T.MeshStandardMaterial({color:0xfbf8ef,roughness:.95,side:T.DoubleSide});
+ const st={etat:'explique',t:0,dur:9,cible:null,chemin:[],i:0,n:0,pause:0,base:{u:1.4,v:R0.L/2-1}};
+ const vers=(u,v)=>{const [x,z]=P(u,v);return{x,z};};
+ const regle=()=>{const r=R();if(st.etat==='explique'){if(r<.45){st.etat='tableau';st.chemin=[vers(.2,R0.L/2-.62)];st.dur=11+R()*5;}else if(r<.75&&n>0){st.etat='copies';st.chemin=tour.map(p=>({...vers(p.u,p.v),pose:p.pose}));pile.visible=true;for(const f of feuilles)ctx.scene.remove(f);feuilles.length=0;st.dur=999;}else{st.etat='explique';st.chemin=[vers(R()*2.4-1.2,R0.L/2-1-R()*.4)];st.dur=7+R()*5;}}
+  else{st.etat='explique';st.chemin=[vers(st.base.u+R()*.8-.4,st.base.v)];st.dur=8+R()*5;g.userData.ecrit=false;}
+  st.i=0;st.t=0;};
+ V3.anims.push((t,dt)=>{
+  const pos=V3.pos;if(!pos||!g.parent)return;if(((V3.etage||0)!==(g.userData.etage||0))||Math.hypot(pos.x-g.position.x,pos.z-g.position.z)>26){g.userData.parle=false;return;}
+  st.t+=dt;
+  if(st.i<st.chemin.length){const c=st.chemin[st.i],dx=c.x-g.position.x,dz=c.z-g.position.z,d=Math.hypot(dx,dz);g.userData.parle=false;g.userData.ecrit=false;
+   if(st.pause>0){st.pause-=dt;return;}
+   if(d<.06){if(c.pose!=null){st.pause=.7;const dk=desk(c.pose),[fx,fz]=P(dk.u,dk.v+.42);const f=new T.Mesh(new T.PlaneGeometry(.21,.29),mFeuille);f.rotation.x=-Math.PI/2;f.rotation.z=R()*.6-.3;f.position.set(fx,y0+.755,fz);f.userData.dyn=true;ctx.scene.add(f);feuilles.push(f);}st.i++;return;}
+   const sp=Math.min(d,.95*dt);g.position.x+=dx/d*sp;g.position.z+=dz/d*sp;const cible=Math.atan2(dx,dz);let a=cible-g.rotation.y;a=Math.atan2(Math.sin(a),Math.cos(a));g.rotation.y+=a*Math.min(1,dt*8);return;}
+  /* arrivé : action de la phase */
+  if(st.etat==='tableau'){let a=rot-g.rotation.y;a=Math.atan2(Math.sin(a),Math.cos(a));g.rotation.y+=a*Math.min(1,dt*6);g.userData.ecrit=true;g.userData.parle=false;
+   const tot=L.reduce((s,l)=>s+l.length,0),k=Math.min(tot,Math.floor(st.t/st.dur*tot*1.15));if(k!==chalk.n){chalk.n=k;chalk.dessine(k);}}
+  else if(st.etat==='copies'){pile.visible=false;st.etat='explique';st.t=0;st.dur=4;st.chemin=[vers(st.base.u,st.base.v)];st.i=0;return;}
+  else{let a=rot+Math.PI-g.rotation.y;a=Math.atan2(Math.sin(a),Math.cos(a));g.rotation.y+=a*Math.min(1,dt*5);g.userData.parle=true;g.userData.ecrit=false;}
+  if(st.t>st.dur)regle();
+ });
+ chalk.n=Math.floor(L.reduce((s,l)=>s+l.length,0)*.4);chalk.dessine(chalk.n);
+}
+/* Décor des salles de classe : cadre du tableau, bureau du professeur, affiches, horloge */
+function decorSalleV35(c){
+ const {T,scene,box,P,rot,y0,R0,tn}=c;const yy=y0||0,lin=x=>x;
+ const [bx,bz]=P(0,R0.L/2-.1);
+ /* cadre bois et rebord à craie */
+ const [bx2,bz2]=P(0,R0.L/2-.07);const cad=box(3.62,1.5,.05,'#5b3a1a',bx2,yy+1.6,bz2);cad.rotation.y=rot;const [rx,rz]=P(0,R0.L/2-.2);const reb=box(3.4,.04,.12,'#5b3a1a',rx,yy+.92,rz);reb.rotation.y=rot;
+ for(const k of[-.6,-.1,.5]){const [cx,cz]=P(k,R0.L/2-.2);const cr=box(.07,.014,.014,'#f8fafc',cx,yy+.95,cz);cr.rotation.y=rot+.3;}
+ /* bureau et chaise du professeur, registre d'appel */
+ const [dx,dz]=P(-1.9,R0.L/2-1.15);const bu=box(1.3,.05,.65,'#7c4a1e',dx,yy+.76,dz);bu.rotation.y=rot;for(const [a,b] of[[-.6,-.28],[.6,-.28],[-.6,.28],[.6,.28]]){const [px,pz]=P(-1.9+a,R0.L/2-1.15+b);box(.05,.74,.05,'#5b3a1a',px,yy+.37,pz);}
+ const [fx,fz]=P(-1.9,R0.L/2-1.5);const fa=box(.44,.06,.42,'#2b2b2b',fx,yy+.46,fz);fa.rotation.y=rot;const [fbx,fbz]=P(-1.9,R0.L/2-1.7);const fb=box(.44,.52,.05,'#2b2b2b',fbx,yy+.74,fbz);fb.rotation.y=rot;for(const [a,b] of[[-.18,-.18],[.18,-.18],[-.18,.18],[.18,.18]]){const [qx,qz]=P(-1.9+a,R0.L/2-1.5+b);box(.04,.44,.04,'#334155',qx,yy+.22,qz);}
+ const [gx,gz]=P(-2.1,R0.L/2-1.1);const re=box(.32,.04,.24,'#7f1d1d',gx,yy+.8,gz);re.rotation.y=rot+.2;
+ /* affiches : carte du Cameroun, règlement intérieur */
+ const affiche=(u,v,ry,w,h,fn)=>{const cv=document.createElement('canvas');cv.width=256;cv.height=Math.round(256*h/w);fn(cv.getContext('2d'),cv.width,cv.height);const tx=new T.CanvasTexture(cv);tx.encoding=T.sRGBEncoding;const m=new T.Mesh(new T.PlaneGeometry(w,h),new T.MeshStandardMaterial({map:tx,roughness:.8}));const [x,z]=P(u,v);m.position.set(x,yy+1.75,z);m.rotation.y=ry;scene.add(m);return m;};
+ const lat=R0.Wd/2-.04;
+ affiche(-lat,R0.L/2-2.4,rot+Math.PI/2,.9,1.1,(g,W,H)=>{g.fillStyle='#fdfbf2';g.fillRect(0,0,W,H);g.fillStyle='#14532d';g.font='bold 18px sans-serif';g.textAlign='center';g.fillText('CAMEROUN',W/2,26);g.fillStyle='#86efac';g.beginPath();g.moveTo(W*.42,H*.15);g.lineTo(W*.62,H*.22);g.lineTo(W*.58,H*.45);g.lineTo(W*.72,H*.62);g.lineTo(W*.66,H*.86);g.lineTo(W*.3,H*.88);g.lineTo(W*.22,H*.64);g.lineTo(W*.36,H*.5);g.lineTo(W*.32,H*.3);g.closePath();g.fill();g.strokeStyle='#166534';g.lineWidth=2;g.stroke();g.fillStyle='#b91c1c';for(const [a,b] of[[.4,.78],[.33,.7],[.5,.6]]){g.beginPath();g.arc(W*a,H*b,4,0,6.3);g.fill();}});
+ affiche(lat,R0.L/2-2.4,rot-Math.PI/2,.8,1.05,(g,W,H)=>{g.fillStyle='#fff7ed';g.fillRect(0,0,W,H);g.fillStyle='#9a3412';g.font='bold 16px sans-serif';g.textAlign='center';g.fillText('RÈGLEMENT INTÉRIEUR',W/2,26);g.fillStyle='#1f2937';g.font='12px sans-serif';g.textAlign='left';['1. Ponctualité','2. Tenue correcte','3. Respect des enseignants','4. Pas de téléphone','5. Propreté des salles','6. Honnêteté aux devoirs'].forEach((l,i)=>g.fillText(l,16,62+i*28));});
+ affiche(-lat,R0.L/2-4.6,rot+Math.PI/2,.7,.9,(g,W,H)=>{g.fillStyle='#eff6ff';g.fillRect(0,0,W,H);g.fillStyle='#1e3a8a';g.font='bold 15px sans-serif';g.textAlign='center';g.fillText('EMPLOI DU TEMPS',W/2,24);g.strokeStyle='#93c5fd';for(let i=0;i<6;i++){g.strokeRect(14,40+i*30,W-28,30);}g.fillStyle='#1f2937';g.font='11px sans-serif';['Lun · Maths · Français','Mar · Anglais · SVT','Mer · HG · Sport','Jeu · PCT · Langues loc.','Ven · Maths · ECM','Sam · Devoirs'].forEach((l,i)=>g.fillText(l,W/2,59+i*30));});
+ /* horloge au-dessus du tableau */
+ const [hx,hz]=P(0,R0.L/2-.08);const hg=new T.Group();hg.position.set(hx,yy+2.68,hz);hg.rotation.y=rot+Math.PI;scene.add(hg);const disque=new T.Mesh(new T.CircleGeometry(.17,24),new T.MeshStandardMaterial({color:0xfbfaf5,roughness:.5}));hg.add(disque);const rim=new T.Mesh(new T.TorusGeometry(.17,.015,8,24),new T.MeshStandardMaterial({color:0x111111}));hg.add(rim);for(const [l,w,a] of[[.09,.012,-.9],[.13,.008,-2.4]]){const b=new T.Mesh(new T.BoxGeometry(w,l,.004),new T.MeshStandardMaterial({color:0x111111}));b.position.set(Math.sin(-a)*l/2,Math.cos(a)*l/2,.01);b.rotation.z=a;hg.add(b);}
+}
+/* pose « écrire au tableau » : bras levé, petit mouvement de craie */
+{const _pose=realPose;realPose=function(av,pose){if(pose!=='ecrit')return _pose(av,pose);const X=new THREE.Vector3(1,0,0),Z=new THREE.Vector3(0,0,1),o=av.os,r=av.root;av.tc=(av.tc||0)+.016;
+ realRot(r,o.RArm,X,-2.05+Math.sin(av.tc*7)*.06);realRot(r,o.RArm,Z,.25+Math.sin(av.tc*4.3)*.08);realRot(r,o.RFore,X,-.55);realRot(r,o.tete,X,-.12);};}
+
+/* ---------- Palettes de couleurs ---------- */
+const CLE_PAL='proviseur-palette';
+const PALETTES_V35={cameroun:['Cameroun','#065f46','#f59e0b','#1d4ed8'],ocean:['Océan','#0c4a6e','#22d3ee','#4f46e5'],savane:['Savane','#7c2d12','#fbbf24','#dc2626'],royal:['Royal','#3b0764','#fbbf24','#c026d3'],foret:['Forêt','#14532d','#a3e635','#0d9488'],corail:['Corail','#881337','#fb7185','#f97316'],ardoise:['Ardoise','#0f172a','#e2e8f0','#475569'],sable:['Sable','#78350f','#fde68a','#0f766e']};
+function paletteV35(){try{const v=localStorage.getItem(CLE_PAL);if(v&&PALETTES_V35[v])return v;}catch(e){}return'cameroun';}
+function appliquerPaletteV35(){try{document.documentElement.setAttribute('data-palette',paletteV35());}catch(e){}}
+function paletteChoixV35(){const p=paletteV35();return`<div class="pal-choix">${Object.entries(PALETTES_V35).map(([k,[l,a,b,c]])=>`<button class="pal ${k===p?'on':''}" data-act="pal-set" data-k="${k}" title="${l}"><i style="background:linear-gradient(135deg,${a} 0 50%,${b} 50% 75%,${c} 75%)"></i><span>${l}</span></button>`).join('')}</div>`;}
+appliquerPaletteV35();
+
+const ACTIONS_V35={
+ 'doc-open':d=>{const m={type:'doc',k:d.k,i:d.i,ex:d.ex,an:d.an,prec:d.prec};m.retour=UI.modal&&UI.modal.type!=='doc'?UI.modal:null;UI.modal=m;render();},
+ 'doc-close':()=>{const r=UI.modal&&UI.modal.retour;UI.modal=r||null;render();},
+ 'doc-print':()=>{const b=document.body;b.classList.add('v35-imprime');const fin=()=>{b.classList.remove('v35-imprime');window.removeEventListener('afterprint',fin);};window.addEventListener('afterprint',fin);try{window.print();}catch(e){}setTimeout(fin,60000);},
+ 'os-open':d=>{osOuvrir(d.app);render();},
+ 'os-close':d=>{const o=osEtat();o.wins=o.wins.filter(w=>w.app!==d.app);render();},
+ 'os-min':d=>{const w=osEtat().wins.find(x=>x.app===d.app);if(w)w.min=true;render();},
+ 'os-max':d=>{const o=osEtat(),w=o.wins.find(x=>x.app===d.app);if(w){w.max=!w.max;w.z=++o.z;}render();},
+ 'os-tache':d=>{const o=osEtat(),w=o.wins.find(x=>x.app===d.app);if(!w)return;const top=o.wins.filter(x=>!x.min).sort((a,b)=>b.z-a.z)[0];if(w===top&&!w.min)w.min=true;else{w.min=false;w.z=++o.z;}render();},
+ 'os-start':()=>{const o=osEtat();o.start=!o.start;o.boot=false;render();},
+ 'os-mail':d=>{UI.modal.mailSel=+d.i;render();},
+ 'os-calc':d=>{osCalc(UI.modal,d.k);render();},
+ 'os-fond':d=>{if(OS_FONDS[d.k]){S.fondOS=d.k;save();}render();},
+ 'pal-set':d=>{if(!PALETTES_V35[d.k])return;try{localStorage.setItem(CLE_PAL,d.k);}catch(e){}appliquerPaletteV35();render();},
+ 'pal-suiv':()=>{const K=Object.keys(PALETTES_V35),i=K.indexOf(paletteV35());try{localStorage.setItem(CLE_PAL,K[(i+1)%K.length]);}catch(e){}appliquerPaletteV35();render();}
+};
+
 /* ================= V28 : graphismes réalistes (visite du campus) =================
    Ressources libres servies depuis assets/ (application Render) : textures et ciel Poly Haven (CC0),
    mobilier Poly Haven (CC0), personnages animés (Mixamo / Ready Player Me, exemples three.js).
@@ -6184,7 +6557,7 @@ function realPool(c,R,K){
  const cpt0={G:0,F:0,H:0,FA:0};for(const g of persons){const u=g.userData;if(u.opts&&u.corps)cpt0[realLook(g).type]++;}
  const tot=Object.values(cpt0).reduce((a,b)=>a+b,0)||1,N=Math.round(K.pool*1.8),pool=[];
  for(const k in cpt0){if(!cpt0[k]||!P.T[k])continue;const nk=Math.max(2,Math.round(N*cpt0[k]/tot));for(let i=0;i<nk;i++){const av=realAvatar(T,P.T[k]);av.root.visible=false;scene.add(av.root);pool.push(av);}}
- const poseDe=g=>{const u=g.userData;if(u.moto)return'moto';if(u.assisFig||u.statique)return'assis';if(u.jambes&&u.jambes[0]&&u.jambes[0].rotation.x>1.2)return'genoux';return'debout';};
+ const poseDe=g=>{const u=g.userData;if(u.moto)return'moto';if(u.ecrit)return'ecrit';if(u.assisFig||u.statique)return'assis';if(u.jambes&&u.jambes[0]&&u.jambes[0].rotation.x>1.2)return'genoux';return'debout';};
  const liberer=av=>{const g=av.g;if(g){g.userData.corps.forEach(m=>m.visible=true);g.userData.av=null;}av.g=null;av.root.visible=false;};
  const assigner=()=>{const pos=c.pos();if(!pos)return;const et=c.etage();
   const C=persons.filter(g=>{const u=g.userData;return u.corps&&u.opts&&!u.statique&&g.visible!==false&&g.parent&&((u.etage||0)===et);}).map(g=>{const w=g.getWorldPosition(new T.Vector3());return{g,k:(w.x-pos.x)**2+(w.z-pos.z)**2};}).filter(a=>a.k<K.ray*K.ray).sort((a,b)=>a.k-b.k);
@@ -6489,8 +6862,9 @@ function renderOrdi(m){
  else if(m.app==='tableau'){const moys=S.eleves.map(lastMoy).filter(x=>x!=null);const h=S.hist.at(-1);
   corps=`<div class="statgrid"><div class="stat"><span class="eyebrow">Élèves</span><b>${S.eleves.length}</b></div><div class="stat"><span class="eyebrow">Moyenne générale</span><b>${moys.length?f2(avg(moys)):'—'}</b></div><div class="stat"><span class="eyebrow">Dernier taux de réussite</span><b>${h&&h.taux!=null?Math.round(h.taux)+' %':'—'}</b></div><div class="stat"><span class="eyebrow">Trésorerie</span><b>${moneyS(S.tresor)}</b></div><div class="stat"><span class="eyebrow">Moral des profs</span><b>${Math.round(moral())}</b></div><div class="stat"><span class="eyebrow">Discipline</span><b>${Math.round(S.discipline)}</b></div></div>${typeof cardMission==='function'?cardMission():''}`;}
  else corps=`<div class="ordi-accueil"><b>Bonjour, Monsieur le Proviseur.</b><p>${esc(S.nom)} · année scolaire ${S.annee}–${S.annee+1}${S.semaine>=1&&S.semaine<=36?' · semaine '+S.semaine:''}</p><p class="small muted">${(S.journal||[]).length} messages dans la messagerie · ${pa} point(s) d’action cette semaine.</p></div>`;
- return form('Ordinateur du proviseur','PROVISEUR-OS',`${nav}${m.note?`<p class="note">${esc(m.note)}</p>`:''}${corps}`,'<button class="btn primary" data-act="close-ui">Éteindre</button>');
+ m.corps=corps;return form('Ordinateur du proviseur','PROVISEUR-OS',`${nav}${m.note?`<p class="note">${esc(m.note)}</p>`:''}${corps}`,'<button class="btn primary" data-act="close-ui">Éteindre</button>');
 }
+function ordiCorpsV30(m){const o={...m};renderOrdi(o);return o.corps||'';}
 const ACTIONS_V30={
  'ordi':()=>{UI.modal={type:'ordi',app:'accueil'};render();},
  'ordi-app':d=>{if(UI.modal&&UI.modal.type==='ordi'){UI.modal.app=d.k;UI.modal.note='';render();}},
@@ -6791,7 +7165,7 @@ const A={
 };
 Object.assign(A,{
  'ville3d':()=>{if(V3)fermerVisite();ouvrirVille();},
- ...ACTIONS_V29,...ACTIONS_V30,...ACTIONS_V32,...ACTIONS_V33,...ACTIONS_V34,'vie-logement':()=>{if(V3)fermerVisite();UI.entrerLogement=true;if(VL){fermerVille();setTimeout(ouvrirVille,60);}else ouvrirVille();},
+ ...ACTIONS_V29,...ACTIONS_V30,...ACTIONS_V32,...ACTIONS_V33,...ACTIONS_V34,...ACTIONS_V35,'vie-logement':()=>{if(V3)fermerVisite();UI.entrerLogement=true;if(VL){fermerVille();setTimeout(ouvrirVille,60);}else ouvrirVille();},
  'vie-train':d=>{if(TRAINS[d.k]){vie().train=d.k;save();render();}},
  'vie-achat':d=>{UI.vieMsg=acheter(d.cat,d.k);save();try{if(VL&&VL.majVoiture&&d.cat==='voiture')VL.majVoiture();}catch(e){}render();},
  'vie-vendre':d=>{UI.vieMsg=vendre(d.cat,d.k);save();try{if(VL&&VL.majVoiture)VL.majVoiture();}catch(e){}render();},
@@ -6932,7 +7306,7 @@ function renderHeader(){
    <div class="kpi"><span class="eyebrow">Mon salaire</span><b>${moneyS(vie().salaire)}</b></div><div class="kpi"><span class="eyebrow">Élèves</span><b>${S.eleves.length}</b></div>
    <div class="kpi"><span class="eyebrow">Dernier taux</span><b>${last?.taux!=null?Math.round(last.taux)+' %':'—'}</b></div>
   </div>
-  <div class="menu"><button class="btn sm" data-act="menu">Menu</button><button class="btn sm" data-act="visite3d">Visite 3D</button><button class="btn sm" data-act="export">Sauvegarde</button><button class="btn sm" data-act="ask-new">Nouvelle partie</button><button class="btn sm" data-act="theme" aria-label="Changer de thème">◐</button></div>
+  <div class="menu"><button class="btn sm" data-act="menu">Menu</button><button class="btn sm" data-act="visite3d">Visite 3D</button><button class="btn sm" data-act="ordi">💻 Ordinateur</button><button class="btn sm" data-act="pal-suiv" aria-label="Changer les couleurs" title="Changer les couleurs">🎨</button><button class="btn sm" data-act="export">Sauvegarde</button><button class="btn sm" data-act="ask-new">Nouvelle partie</button><button class="btn sm" data-act="theme" aria-label="Changer de thème">◐</button></div>
  </div>
  <nav class="timeline" id="timeline" aria-label="Calendrier scolaire : 36 semaines">${timelineHtml()}</nav>
  </div></header>`;
@@ -7101,7 +7475,7 @@ function tExamens(){
  ${S.blancs?resBlock(S.blancs,'Examens blancs (prévision)'):''}
  ${!S.resultats&&S.resultatsPrec?resBlock(S.resultatsPrec,`Session officielle ${S.annee}`):''}
  ${!S.resultats&&!S.blancs&&!S.resultatsPrec?'<div class="card muted">Pas encore de résultats. Les examens blancs ont lieu en juin, les examens officiels en juillet.</div>':''}
- ${cardConcours()}${cardMajors()}${cardMajorsNatV33()}<div class="card"><h3>Historique</h3><div class="scroll"><table class="tbl"><thead><tr><th>Année</th><th class="n">BEPC</th><th class="n">Probatoire</th><th class="n">Bac</th>${S.bat.anglo?'<th class="n">O Level</th><th class="n">A Level</th>':''}<th class="n">Global</th><th class="n">Rang rég.</th><th class="n">Rang nat.</th><th class="n">Élèves</th><th class="n">Réputation</th></tr></thead><tbody>
+ ${cardDocsV35()}${cardConcours()}${cardMajors()}${cardMajorsNatV33()}<div class="card"><h3>Historique</h3><div class="scroll"><table class="tbl"><thead><tr><th>Année</th><th class="n">BEPC</th><th class="n">Probatoire</th><th class="n">Bac</th>${S.bat.anglo?'<th class="n">O Level</th><th class="n">A Level</th>':''}<th class="n">Global</th><th class="n">Rang rég.</th><th class="n">Rang nat.</th><th class="n">Élèves</th><th class="n">Réputation</th></tr></thead><tbody>
  ${h.map(r=>`<tr><td>${r.annee}–${r.annee+1}</td><td class="n">${p0(r.BEPC)}</td><td class="n">${p0(r.Probatoire)}</td><td class="n">${p0(r.Bac)}</td>${S.bat.anglo?`<td class="n">${p0(r['GCE O Level'])}</td><td class="n">${p0(r['GCE A Level'])}</td>`:''}<td class="n"><b>${p0(r.taux)}</b></td><td class="n">${r.rangDep??'—'}</td><td class="n">${r.rangReg??'—'}</td><td class="n">${r.eff}</td><td class="n">${Math.round(r.rep)}</td></tr>`).join('')||'<tr><td colspan="9" class="muted">Aucune année terminée.</td></tr>'}
  </tbody></table></div></div></div>`;
 }
@@ -7140,6 +7514,7 @@ function form(eyebrow,titre,body,footer){return`<div class="overlay" role="dialo
 function renderModal(){
  const el=document.getElementById('modal');
  const p=S.pending;
+ if(UI.modal&&UI.modal.type==='doc'){el.innerHTML=renderDocV35(UI.modal);return;}
  if(p){el.innerHTML=renderPending(p);return;}
  const m=UI.modal;
  if(!m){el.innerHTML='';return;}
@@ -7178,7 +7553,7 @@ function renderPending(p){
  if(p.type==='admissions'){
   const pub=S.type==='public';
   return form(`Rentrée ${S.annee}–${S.annee+1}`,'Admissions et frais',
-  `<div class="row"><button class="btn primary" data-act="c3d" data-k="concours">Voir le concours d’entrée en 3D</button></div><label class="f" for="adm-frais">${pub?'Frais d’APEE par élève (FCFA / an)':'Scolarité annuelle au 1er cycle (FCFA)'}<input id="adm-frais" type="number" step="500" value="${S.frais}" data-in="adm-frais"></label>
+  `<div class="row"><button class="btn primary" data-act="c3d" data-k="concours">Voir le concours d’entrée en 3D</button>${docBoutonV35({k:'avis-conc',an:S.annee,t:'Avis de concours'},'')}</div><label class="f" for="adm-frais">${pub?'Frais d’APEE par élève (FCFA / an)':'Scolarité annuelle au 1er cycle (FCFA)'}<input id="adm-frais" type="number" step="500" value="${S.frais}" data-in="adm-frais"></label>
    <p class="small muted">Les élèves déjà inscrits (${S.eleves.length}) passent en classe supérieure ou redoublent selon les décisions de l’an dernier. ${pub?'Au-delà de 20 000 FCFA, les parents protestent.':'Une scolarité élevée fait fuir les candidats l’an prochain.'}</p>
    ${p.pools.map((pool,i)=>{const ms=avg(pool.cands.map(c=>c.concours));return`<div class="pool"><div class="row between"><b>${pool.label}</b><span class="small muted">${pool.cands.length} candidats · moyenne ${f2(ms)}/20</span></div><p class="small muted">${pool.txt}</p>
    <label for="adm-r-${i}" class="small">Nombre d’admis</label><input id="adm-r-${i}" type="range" min="0" max="${pool.cands.length}" value="${pool.n}" data-in="adm" data-i="${i}"><div id="adm-${i}" class="small"></div><details><summary class="small"><b>Liste officielle des résultats</b> · ${pool.cands.length} candidats, classés par note</summary><div id="adm-list-${i}" class="scroll rk">${admListe(i)}</div></details></div>`;}).join('')}
@@ -7217,6 +7592,7 @@ function renderPending(p){
   ${ks.map(x=>{const o=S.resultats[x];return`<tr><td>${x}</td><td class="n">${o.candidats}</td><td class="n">${o.admis}</td><td class="n"><b>${Math.round(pct(o.admis,o.candidats))} %</b></td><td class="n">${(o.mentions.Bien||0)+(o.mentions['Très Bien']||0)+(o.mentions.Excellent||0)}</td><td class="n">${o.fraudes||''}</td></tr>`;}).join('')}</tbody></table></div>
   ${ks.map(x=>{const o=S.resultats[x];const top=o.liste.filter(c=>c.admis).slice(0,3);return top.length?`<p class="small"><b>Majors ${x} :</b> ${top.map(c=>`${esc(c.nom)} (${f2(c.moy)}, ${c.mention})`).join(' · ')}</p>`:'';}).join('')}
   ${majNatHtmlV33(S.annee+1)}
+  <div class="doc-liste">${ks.map(x=>docBoutonV35({k:'res-ex',ex:x,t:x+' · liste officielle des admis'})).join('')}</div>
   <div class="pool"><b>Recours</b>${S.recoursFait?`<p class="small">${esc(S.recoursMsg)}</p>`:nr?`<p class="small">${nr} candidat(s) ont échoué avec une moyenne entre 9,5 et 10. Vous pouvez déposer un recours pour chacun (10 000 FCFA de frais de dossier). Environ un tiers aboutissent.</p><div><button class="btn" data-act="recours">Déposer ${nr} recours · ${money(10000*nr)}</button></div>`:'<p class="small muted">Aucun candidat n’est éligible à un recours.</p>'}</div>`:'<p>Aucun candidat cette année.</p>'}`,
   `<button class="btn" data-act="c3d" data-k="resultats">Proclamation en 3D</button><button class="btn" data-act="rel-liste">Relevés de notes</button><button class="btn primary" data-act="conf-exam">Clore la session</button>`);
  }

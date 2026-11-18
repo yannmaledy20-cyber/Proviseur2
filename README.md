@@ -2,6 +2,13 @@
 
 Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligue en ligne, défis, salle des proviseurs, joueurs en ligne, applaudissements. Les codes de lycée (hors ligne) fonctionnent toujours.
 
+## Nouveautés de la version 35 : documents officiels, ordinateur, professeurs en action
+- **Documents officiels au format A4**, imprimables ou enregistrables en PDF depuis le navigateur : avis de concours d’entrée (matières, durée et coefficient des épreuves, conditions, pièces à fournir, calendrier, nombre de places), communiqué des résultats des concours (admis par ordre de mérite et liste d’attente), calendrier des épreuves du BEPC, du Probatoire, du Baccalauréat et du GCE par série, liste officielle des admis. Chaque document porte le cachet et la signature du proviseur ou de l’organisme (OBC, DECC, GCE Board). Ce sont des documents de jeu, sans valeur officielle.
+- **PROVISEUR-OS** : l’ordinateur du proviseur devient un vrai bureau d’ordinateur, avec fond d’écran, icônes, fenêtres déplaçables, réduites ou agrandies, barre des tâches, menu Démarrer et horloge. Applications : messagerie, convocations, tableau de bord, documents officiels, comptabilité, intranet du MINESEC, bloc-notes, calculatrice, paramètres. Accessible depuis le fauteuil du bureau en 3D et depuis le bouton « Ordinateur » de l’en-tête.
+- **Professeurs en action dans la visite 3D** : ils expliquent face à la classe avec des gestes, vont au tableau écrire la leçon à la craie (le texte apparaît au fur et à mesure, selon la matière), et passent dans les rangs pour remettre les copies, déposées une à une sur les tables.
+- **Salles de classe** : tableau encadré de bois avec rebord à craie, bureau et chaise du professeur, registre d’appel, carte du Cameroun, règlement intérieur, emploi du temps, horloge murale.
+- **Couleurs et disposition** : huit palettes (Cameroun, Océan, Savane, Royal, Forêt, Corail, Ardoise, Sable) en plus des thèmes clair et sombre, bouton 🎨 dans l’en-tête et choix dans Options ; menu latéral avec icônes sur grand écran ; boutons à reflet.
+
 ## Nouveautés de la version 34 : nouveau design, langues, tenues, langues locales
 - **Nouveau design « prestige »** : en-tête en dégradé profond avec indicateurs en verre dépoli, cartes à relief doux, onglets flottants, boutons en dégradé, fenêtres animées, barres de défilement fines. Thèmes clair et sombre.
 - **Langue du jeu** : français, anglais, espagnol ou portugais, au choix dans le menu principal et dans Options. Menus, onglets, boutons, tableaux et libellés sont traduits ; les récits (événements, dialogues, journal) restent en français pour l’instant.
@@ -59,7 +66,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Plan libre du campus** : bâtiments en barre, en L ou en U, jusqu’à 4 niveaux, visitables en 3D par l’escalier.
 - **Discipline en 3D** : élèves marqués d’un « ! » (bagarre, téléphone, retard, tenue, sommeil, graffitis, jeux d’argent, cigarette) et sept sanctions possibles, avec leurs conséquences.
 
-Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 16 : les joueurs reçoivent la nouvelle version au prochain chargement.
+Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 17 : les joueurs reçoivent la nouvelle version au prochain chargement.
 
 ## Lancer en local
     node server.js        # puis ouvrir http://localhost:3000
