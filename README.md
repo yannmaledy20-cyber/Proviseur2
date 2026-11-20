@@ -2,6 +2,13 @@
 
 Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligue en ligne, défis, salle des proviseurs, joueurs en ligne, applaudissements. Les codes de lycée (hors ligne) fonctionnent toujours.
 
+## Nouveautés de la version 36 : vraies voitures, conduite de l’intérieur, grande ville africaine
+- **Voitures détaillées** : berline, taxi jaune, berline de luxe, SUV, 4x4 V8, pick-up et minibus de voyage, avec carrosserie arrondie et vernie, vitres teintées, portières avec jointures, poignées et rétroviseurs, phares, feux arrière, calandre chromée, jantes à branches, disques de frein, plaques d’immatriculation camerounaises (LT, CE, OU…). On voit l’intérieur à travers les vitres : sièges, tableau de bord, volant, console. Les motos-taxis (benskins) ont fourche, guidon, réservoir, selle longue, pilote et parfois un passager.
+- **Se voir monter dans sa voiture** : touche F près du véhicule, le proviseur marche jusqu’à la portière, l’ouvre, s’assoit au volant et la referme (et l’inverse pour descendre).
+- **Conduire de l’intérieur** : vue intérieure avec les mains sur le volant qui tourne, compteur de vitesse et compte-tours animés, GPS, désodorisant qui se balance. Touche C : vue intérieure, poursuite, poursuite éloignée ; à pied, C bascule entre 1re et 3e personne.
+- **Conduite plus réaliste** : accélération par rapports, freinage, frein à main pour déraper (Espace), caisse qui penche dans les virages et plonge au freinage, moto qui se couche, feux stop, moteur et klaxon (H), poussière sur la latérite, compteur km/h à l’écran.
+- **Ville trois fois plus grande** : centre goudronné avec trottoirs, passages piétons et feux tricolores respectés par la circulation ; tout autour, des quartiers populaires en latérite (New-Bell, Ndokoti, Bépanda, Bonabéri…) avec maisons à toit de tôle, chantiers aux fers à béton, boutiques et enseignes peintes, bananiers, manguiers, linge qui sèche, citernes, poteaux et fils électriques, flaques. Nouveaux lieux : marché central, paroisse, mosquée, station-service, gare routière, terrain de football, chantier avec grue, école publique, hôpital. Plus de passants (bassines sur la tête), vendeurs de beignets et call-box, stations de benskins, panneaux publicitaires, taxis qui s’arrêtent pour prendre des clients.
+
 ## Nouveautés de la version 35 : documents officiels, ordinateur, professeurs en action
 - **Documents officiels au format A4**, imprimables ou enregistrables en PDF depuis le navigateur : avis de concours d’entrée (matières, durée et coefficient des épreuves, conditions, pièces à fournir, calendrier, nombre de places), communiqué des résultats des concours (admis par ordre de mérite et liste d’attente), calendrier des épreuves du BEPC, du Probatoire, du Baccalauréat et du GCE par série, liste officielle des admis. Chaque document porte le cachet et la signature du proviseur ou de l’organisme (OBC, DECC, GCE Board). Ce sont des documents de jeu, sans valeur officielle.
 - **PROVISEUR-OS** : l’ordinateur du proviseur devient un vrai bureau d’ordinateur, avec fond d’écran, icônes, fenêtres déplaçables, réduites ou agrandies, barre des tâches, menu Démarrer et horloge. Applications : messagerie, convocations, tableau de bord, documents officiels, comptabilité, intranet du MINESEC, bloc-notes, calculatrice, paramètres. Accessible depuis le fauteuil du bureau en 3D et depuis le bouton « Ordinateur » de l’en-tête.
@@ -66,7 +73,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Plan libre du campus** : bâtiments en barre, en L ou en U, jusqu’à 4 niveaux, visitables en 3D par l’escalier.
 - **Discipline en 3D** : élèves marqués d’un « ! » (bagarre, téléphone, retard, tenue, sommeil, graffitis, jeux d’argent, cigarette) et sept sanctions possibles, avec leurs conséquences.
 
-Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 17 : les joueurs reçoivent la nouvelle version au prochain chargement.
+Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 18 : les joueurs reçoivent la nouvelle version au prochain chargement.
 
 ## Lancer en local
     node server.js        # puis ouvrir http://localhost:3000
