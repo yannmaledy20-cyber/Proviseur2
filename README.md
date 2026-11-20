@@ -2,6 +2,13 @@
 
 Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligue en ligne, défis, salle des proviseurs, joueurs en ligne, applaudissements. Les codes de lycée (hors ligne) fonctionnent toujours.
 
+## Nouveautés de la version 37 : des passagers dans les véhicules, des chocs vivants
+- **Véhicules habités** : chaque voiture de la circulation a son chauffeur au volant et souvent des passagers assis à l’avant et à l’arrière ; les taxis sont bien remplis, les minibus de la gare routière chargent leurs voyageurs, certains taxis garés attendent avec leur chauffeur.
+- **Piéton renversé** : il est projeté, retombe au sol, y reste un instant, se relève puis proteste en gesticulant (« Aïe… mon dos ! », « Tu vas payer mon hôpital ! ») avant de regagner son trottoir.
+- **Esquives** : quand vous arrivez trop vite, les passants sautent de côté en criant (« Eh ! Chauffeur ! », « Doucement oh ! »).
+- **Accrochages** : la voiture heurtée est poussée et tourne sur elle-même, son chauffeur et ses passagers protestent dans une bulle (« Mon pare-choc ! », « On fait le constat ! ») et klaxonnent ; un benskin heurté se couche sur le côté puis se relève ; votre voiture encaisse le choc (secousse de la caisse).
+- Correction : les routes en latérite ne s’affichent plus en noir avec les graphismes réalistes.
+
 ## Nouveautés de la version 36 : vraies voitures, conduite de l’intérieur, grande ville africaine
 - **Voitures détaillées** : berline, taxi jaune, berline de luxe, SUV, 4x4 V8, pick-up et minibus de voyage, avec carrosserie arrondie et vernie, vitres teintées, portières avec jointures, poignées et rétroviseurs, phares, feux arrière, calandre chromée, jantes à branches, disques de frein, plaques d’immatriculation camerounaises (LT, CE, OU…). On voit l’intérieur à travers les vitres : sièges, tableau de bord, volant, console. Les motos-taxis (benskins) ont fourche, guidon, réservoir, selle longue, pilote et parfois un passager.
 - **Se voir monter dans sa voiture** : touche F près du véhicule, le proviseur marche jusqu’à la portière, l’ouvre, s’assoit au volant et la referme (et l’inverse pour descendre).
@@ -73,7 +80,7 @@ Un seul serveur Node (sans dépendance) sert le jeu **et** le multijoueur : ligu
 - **Plan libre du campus** : bâtiments en barre, en L ou en U, jusqu’à 4 niveaux, visitables en 3D par l’escalier.
 - **Discipline en 3D** : élèves marqués d’un « ! » (bagarre, téléphone, retard, tenue, sommeil, graffitis, jeux d’argent, cigarette) et sept sanctions possibles, avec leurs conséquences.
 
-Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 18 : les joueurs reçoivent la nouvelle version au prochain chargement.
+Mise à jour sur Render : remplacez le contenu du dépôt par ce dossier puis redéployez. Les sauvegardes des joueurs sont conservées (elles restent dans leur navigateur). Le cache hors ligne passe en version 19 : les joueurs reçoivent la nouvelle version au prochain chargement.
 
 ## Lancer en local
     node server.js        # puis ouvrir http://localhost:3000
